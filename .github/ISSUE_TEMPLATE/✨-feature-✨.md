@@ -1,0 +1,18 @@
+---
+name: "✨ Feature ✨"
+about: Feature 작업 사항을 입력해주세요 :D
+title: "✨ Feature: (제목)"
+labels: "✨ feat"
+assignees: ''
+
+---
+
+### Descrpiton
+(작업의 상세 설명을 적어주세요!)
+
+### Todo
+- [x] (todo1)
+
+### Information / ETC
+- 긴급도: `High` (High/Mid/Low로 적어주세요!)
+- 예상 소요 시간: `1h+` (시간은 h, 하루 이상 걸린다면 d!)
