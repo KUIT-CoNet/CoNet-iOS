@@ -8,5 +8,5 @@
 import Foundation
 
 enum SideBarMenu {
-    case editInfo, inviteCode, wait, decided, past, delete, out, showMainMeeting, afterMakePlan
+    case editInfo, inviteCode, wait, decided, delete, out, showMainMeeting, afterMakePlan
 }

@@ -98,8 +98,6 @@
 		51B526C82A6C3893009DBFB4 /* PlanDummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B526C72A6C3893009DBFB4 /* PlanDummyData.swift */; };
 		51B526CA2A6C3901009DBFB4 /* DecidedPlanListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B526C92A6C3901009DBFB4 /* DecidedPlanListViewController.swift */; };
 		51B526CC2A6C3988009DBFB4 /* DecidedPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B526CB2A6C3988009DBFB4 /* DecidedPlanCell.swift */; };
-		51B526CE2A6C4077009DBFB4 /* PastPlanListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B526CD2A6C4077009DBFB4 /* PastPlanListViewController.swift */; };
-		51B526D02A6C40F1009DBFB4 /* PastPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B526CF2A6C40F1009DBFB4 /* PastPlanCell.swift */; };
 		51DA64962A532CB300BBA4C0 /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 51DA64952A532CB300BBA4C0 /* KakaoSDK */; };
 		51DA64992A532CF800BBA4C0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 51DA64982A532CF800BBA4C0 /* SnapKit */; };
 		51F2A4682A54804100D134CC /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2A4672A54804100D134CC /* ColorExtension.swift */; };
@@ -203,8 +201,6 @@
 		51B526C72A6C3893009DBFB4 /* PlanDummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanDummyData.swift; sourceTree = "<group>"; };
 		51B526C92A6C3901009DBFB4 /* DecidedPlanListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecidedPlanListViewController.swift; sourceTree = "<group>"; };
 		51B526CB2A6C3988009DBFB4 /* DecidedPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecidedPlanCell.swift; sourceTree = "<group>"; };
-		51B526CD2A6C4077009DBFB4 /* PastPlanListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastPlanListViewController.swift; sourceTree = "<group>"; };
-		51B526CF2A6C40F1009DBFB4 /* PastPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastPlanCell.swift; sourceTree = "<group>"; };
 		51C29AF22B31DD7600B1A1BA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		51F2A4672A54804100D134CC /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		51F2A4692A548A1000D134CC /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
@@ -400,7 +396,6 @@
 			children = (
 				5199BCD52A72422600CE585C /* WaitingPlan */,
 				5199BCD62A72423A00CE585C /* DecidedPlan */,
-				5199BCD72A72424900CE585C /* PastPlan */,
 				5199BCD82A7242AD00CE585C /* PlanDetail */,
 			);
 			path = PlanList;
@@ -472,15 +467,6 @@
 				51B526CB2A6C3988009DBFB4 /* DecidedPlanCell.swift */,
 			);
 			path = DecidedPlan;
-			sourceTree = "<group>";
-		};
-		5199BCD72A72424900CE585C /* PastPlan */ = {
-			isa = PBXGroup;
-			children = (
-				51B526CD2A6C4077009DBFB4 /* PastPlanListViewController.swift */,
-				51B526CF2A6C40F1009DBFB4 /* PastPlanCell.swift */,
-			);
-			path = PastPlan;
 			sourceTree = "<group>";
 		};
 		5199BCD82A7242AD00CE585C /* PlanDetail */ = {
@@ -719,7 +705,6 @@
 				23F6F9062A6FE9A300772AFF /* TimeShareBottomSheetViewController.swift in Sources */,
 				512856372A81671100C1FBA7 /* FixPlanPopUpViewController.swift in Sources */,
 				51F2A46A2A548A1000D134CC /* FontExtension.swift in Sources */,
-				51B526CE2A6C4077009DBFB4 /* PastPlanListViewController.swift in Sources */,
 				51046AA92A6147F500AD543D /* ChangeNameViewController.swift in Sources */,
 				512856352A8110A100C1FBA7 /* DeletePlanPopUpViewController.swift in Sources */,
 				2387E7542A7F84F50003044E /* MeetingMainAPI.swift in Sources */,
@@ -786,7 +771,6 @@
 				23ED93962A6D427A007B0E63 /* DayPlanCell.swift in Sources */,
 				51A3DA132A72BF4D00CAEE2A /* ArrowList.swift in Sources */,
 				5126758D2A82156D00AFC46C /* PlanInfoRow.swift in Sources */,
-				51B526D02A6C40F1009DBFB4 /* PastPlanCell.swift in Sources */,
 				239B625D2A738CEE00C48CBE /* TimeInputViewController.swift in Sources */,
 				51B526CC2A6C3988009DBFB4 /* DecidedPlanCell.swift in Sources */,
 				512675932A83EC7100AFC46C /* SelectMemberCollectionViewCell.swift in Sources */,
