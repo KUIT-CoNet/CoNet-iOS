@@ -181,7 +181,6 @@ class PlanAPI {
                     guard let serverPlans = response.result else { return }
                     print(serverPlans)
                     completion(serverPlans)
-                    
                 case .failure(let error):
                     print("DEBUG(약속 상세 정보 조회 api) error: \(error)")
             }

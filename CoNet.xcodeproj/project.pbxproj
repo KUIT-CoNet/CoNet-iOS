@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1A3AD0132A6958B400975427 /* InvitationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3AD0122A6958B400975427 /* InvitationCodeViewController.swift */; };
-		1A3AD0182A6E8A2B00975427 /* PlanInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3AD0172A6E8A2B00975427 /* PlanInfoViewController.swift */; };
 		1A99CFE02A70CE220080091B /* MeetingOutPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A99CFDF2A70CE220080091B /* MeetingOutPopUpViewController.swift */; };
 		1A99CFE22A70D4650080091B /* MeetingDelPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A99CFE12A70D4650080091B /* MeetingDelPopUpViewController.swift */; };
 		1A99CFE42A7233580080091B /* PlanTimePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A99CFE32A7233580080091B /* PlanTimePickerViewController.swift */; };
@@ -59,7 +58,6 @@
 		51046AAB2A62F60200AD543D /* PreviewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51046AAA2A62F60200AD543D /* PreviewExtension.swift */; };
 		5126758A2A82100300AFC46C /* DecidedPlanInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512675892A82100300AFC46C /* DecidedPlanInfoViewController.swift */; };
 		5126758D2A82156D00AFC46C /* PlanInfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5126758C2A82156D00AFC46C /* PlanInfoRow.swift */; };
-		5126758F2A821DDD00AFC46C /* PastPlanInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5126758E2A821DDD00AFC46C /* PastPlanInfoViewController.swift */; };
 		512675912A83D71600AFC46C /* EditMemberCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512675902A83D71600AFC46C /* EditMemberCollectionViewCell.swift */; };
 		512675932A83EC7100AFC46C /* SelectMemberCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512675922A83EC7100AFC46C /* SelectMemberCollectionViewCell.swift */; };
 		512856352A8110A100C1FBA7 /* DeletePlanPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512856342A8110A100C1FBA7 /* DeletePlanPopUpViewController.swift */; };
@@ -110,7 +108,6 @@
 
 /* Begin PBXFileReference section */
 		1A3AD0122A6958B400975427 /* InvitationCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitationCodeViewController.swift; sourceTree = "<group>"; };
-		1A3AD0172A6E8A2B00975427 /* PlanInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanInfoViewController.swift; sourceTree = "<group>"; };
 		1A99CFDF2A70CE220080091B /* MeetingOutPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingOutPopUpViewController.swift; sourceTree = "<group>"; };
 		1A99CFE12A70D4650080091B /* MeetingDelPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingDelPopUpViewController.swift; sourceTree = "<group>"; };
 		1A99CFE32A7233580080091B /* PlanTimePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanTimePickerViewController.swift; sourceTree = "<group>"; };
@@ -159,7 +156,6 @@
 		51046AAA2A62F60200AD543D /* PreviewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewExtension.swift; sourceTree = "<group>"; };
 		512675892A82100300AFC46C /* DecidedPlanInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecidedPlanInfoViewController.swift; sourceTree = "<group>"; };
 		5126758C2A82156D00AFC46C /* PlanInfoRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanInfoRow.swift; sourceTree = "<group>"; };
-		5126758E2A821DDD00AFC46C /* PastPlanInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastPlanInfoViewController.swift; sourceTree = "<group>"; };
 		512675902A83D71600AFC46C /* EditMemberCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemberCollectionViewCell.swift; sourceTree = "<group>"; };
 		512675922A83EC7100AFC46C /* SelectMemberCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectMemberCollectionViewCell.swift; sourceTree = "<group>"; };
 		512675962A84119E00AFC46C /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -308,8 +304,6 @@
 			isa = PBXGroup;
 			children = (
 				512675892A82100300AFC46C /* DecidedPlanInfoViewController.swift */,
-				5126758E2A821DDD00AFC46C /* PastPlanInfoViewController.swift */,
-				1A3AD0172A6E8A2B00975427 /* PlanInfoViewController.swift */,
 			);
 			path = InfoVC;
 			sourceTree = "<group>";
@@ -711,7 +705,6 @@
 				518F55F22A6BC172002D8F0F /* WaitingPlanCell.swift in Sources */,
 				23DE37C52A72A6A700F1DFE0 /* TimeTableViewCell.swift in Sources */,
 				23CAB74E2A82A06F000F05D3 /* FixPlanInfoViewController.swift in Sources */,
-				1A3AD0182A6E8A2B00975427 /* PlanInfoViewController.swift in Sources */,
 				518F55DF2A6868C2002D8F0F /* LogoutPopUpViewController.swift in Sources */,
 				518F55E22A6870CB002D8F0F /* MyPageAPI.swift in Sources */,
 				1AA197BB2A73C54B001064F8 /* PlanMemberBottonSheetViewController.swift in Sources */,
@@ -724,7 +717,6 @@
 				1A99CFE22A70D4650080091B /* MeetingDelPopUpViewController.swift in Sources */,
 				234428702A5E99BE006A4D66 /* BaseResponse.swift in Sources */,
 				519FC3592A700FED002EF91C /* MeetingMainViewController.swift in Sources */,
-				5126758F2A821DDD00AFC46C /* PastPlanInfoViewController.swift in Sources */,
 				2387E75C2A8018430003044E /* PlanTime.swift in Sources */,
 				514D73D42A59D19A00404E64 /* NoticeViewController.swift in Sources */,
 				23C9BF712A7C126A00B3D9C9 /* CalendarViewController.swift in Sources */,
