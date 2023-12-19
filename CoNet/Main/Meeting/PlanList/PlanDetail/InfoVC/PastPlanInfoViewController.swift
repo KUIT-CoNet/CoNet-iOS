@@ -144,16 +144,8 @@ class PastPlanInfoViewController: UIViewController {
         let barButtonItem = UIBarButtonItem(customView: bottomSheetButton)
         navigationItem.rightBarButtonItem = barButtonItem
         
-        historyAddButton.addTarget(self, action: #selector(showAddHistory), for: .touchUpInside)
-        
         layoutConstraints()
         setupCollectionView()
-    }
-    
-    @objc private func showAddHistory() {
-        let nextVC = HistoryAddViewController()
-        nextVC.planId = self.planId
-        navigationController?.pushViewController(nextVC, animated: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

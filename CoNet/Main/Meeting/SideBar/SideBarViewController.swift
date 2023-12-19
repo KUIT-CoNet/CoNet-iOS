@@ -124,7 +124,6 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
         closeButton.addTarget(self, action: #selector(dismissPopUp), for: .touchUpInside)
         editMeetingInfoButton.addTarget(self, action: #selector(showEditMeetingInfo), for: .touchUpInside)
         inviteCodeButton.addTarget(self, action: #selector(showInviteCodePopUp), for: .touchUpInside)
-        historyButton.addTarget(self, action: #selector(showHistory), for: .touchUpInside)
         
         deleteMeetingButton.addTarget(self, action: #selector(showDeleteMeeting), for: .touchUpInside)
         leaveMeetingButton.addTarget(self, action: #selector(showLeaveMeeting), for: .touchUpInside)
@@ -153,11 +152,6 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
     // 초대코드 버튼 동작
     @objc func showInviteCodePopUp() {
         self.sideBarListButtonTapped(title: .inviteCode)
-    }
-    
-    // 히스토리 버튼 동작
-    @objc func showHistory() {
-        self.sideBarListButtonTapped(title: .history)
     }
     
     @objc func showDeleteMeeting() {
