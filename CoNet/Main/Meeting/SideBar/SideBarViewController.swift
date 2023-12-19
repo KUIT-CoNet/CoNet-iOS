@@ -62,19 +62,6 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
         $0.setTitle("지난 약속")
         $0.setBottomBorder()
     }
-
-    // 히스토리 카테고리
-    let historyLabel = UILabel().then {
-        $0.text = "히스토리"
-        $0.font = UIFont.body2Medium
-        $0.textColor = UIColor.purpleMain
-    }
-    
-    // 히스토리
-    let historyButton = SideBarList().then {
-        $0.setTitle("히스토리")
-        $0.setBottomBorder()
-    }
     
     // 하단 divider
     let bottomButtonDivider = Divider().then { $0.setColor(UIColor.gray100!) }
@@ -136,7 +123,6 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
         waitingPlanButton.delegate = self
         decidedPlanButton.delegate = self
         pastPlanButton.delegate = self
-        historyButton.delegate = self
     }
     
     // 사이드바 팝업 닫기
@@ -182,7 +168,6 @@ extension SideBarViewController {
         meetingInfoConstraints()
         inviteCodeConstraints()
         planConstraints()
-        historyConstraints()
         bottomButtonsConstraints()
     }
     
@@ -289,22 +274,6 @@ extension SideBarViewController {
         sideBarBackground.addSubview(pastPlanButton)
         pastPlanButton.snp.makeConstraints { make in
             listConstraints(make: make, previousView: decidedPlanButton, isFirstList: false)
-        }
-    }
-    
-    // 히스토리 Constraints
-    private func historyConstraints() {
-        sideBarBackground.addSubview(historyLabel)
-        historyLabel.snp.makeConstraints { make in
-            make.height.equalTo(18)
-            make.top.equalTo(pastPlanButton.snp.bottom).offset(30)
-            make.leading.equalTo(sideBarBackground.snp.leading).offset(18)
-        }
-        
-        // 히스토리
-        sideBarBackground.addSubview(historyButton)
-        historyButton.snp.makeConstraints { make in
-            listConstraints(make: make, previousView: historyLabel, isFirstList: true)
         }
     }
     
