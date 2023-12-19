@@ -80,7 +80,6 @@
 		515E53BF2A77D16D00536C6D /* Meeting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515E53BE2A77D16D00536C6D /* Meeting.swift */; };
 		517C28C62A7E8F0600D2CE50 /* PlanAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517C28C52A7E8F0600D2CE50 /* PlanAPI.swift */; };
 		517C28C92A7EBBB000D2CE50 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 517C28C82A7EBBB000D2CE50 /* Kingfisher */; };
-		517C28D02A7F402600D2CE50 /* HistoryAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517C28CF2A7F402600D2CE50 /* HistoryAPI.swift */; };
 		518F55D52A683780002D8F0F /* SignOutPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F55D42A683780002D8F0F /* SignOutPopUpViewController.swift */; };
 		518F55D92A683F68002D8F0F /* PopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F55D82A683F68002D8F0F /* PopUpView.swift */; };
 		518F55DD2A685F2A002D8F0F /* CompleteSignOutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F55DC2A685F2A002D8F0F /* CompleteSignOutViewController.swift */; };
@@ -185,7 +184,6 @@
 		515E53BC2A77CF9400536C6D /* MeetingAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingAPI.swift; sourceTree = "<group>"; };
 		515E53BE2A77D16D00536C6D /* Meeting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meeting.swift; sourceTree = "<group>"; };
 		517C28C52A7E8F0600D2CE50 /* PlanAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanAPI.swift; sourceTree = "<group>"; };
-		517C28CF2A7F402600D2CE50 /* HistoryAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryAPI.swift; sourceTree = "<group>"; };
 		518F55D42A683780002D8F0F /* SignOutPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignOutPopUpViewController.swift; sourceTree = "<group>"; };
 		518F55D82A683F68002D8F0F /* PopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpView.swift; sourceTree = "<group>"; };
 		518F55DC2A685F2A002D8F0F /* CompleteSignOutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteSignOutViewController.swift; sourceTree = "<group>"; };
@@ -435,7 +433,6 @@
 				51F2A4702A5497A500D134CC /* AuthAPI.swift */,
 				515E53BC2A77CF9400536C6D /* MeetingAPI.swift */,
 				517C28C52A7E8F0600D2CE50 /* PlanAPI.swift */,
-				517C28CF2A7F402600D2CE50 /* HistoryAPI.swift */,
 				2387E7532A7F84F50003044E /* MeetingMainAPI.swift */,
 				2387E7592A8014890003044E /* PlanTimeAPI.swift */,
 			);
@@ -790,7 +787,6 @@
 				51A3DA132A72BF4D00CAEE2A /* ArrowList.swift in Sources */,
 				5126758D2A82156D00AFC46C /* PlanInfoRow.swift in Sources */,
 				51B526D02A6C40F1009DBFB4 /* PastPlanCell.swift in Sources */,
-				517C28D02A7F402600D2CE50 /* HistoryAPI.swift in Sources */,
 				239B625D2A738CEE00C48CBE /* TimeInputViewController.swift in Sources */,
 				51B526CC2A6C3988009DBFB4 /* DecidedPlanCell.swift in Sources */,
 				512675932A83EC7100AFC46C /* SelectMemberCollectionViewCell.swift in Sources */,
