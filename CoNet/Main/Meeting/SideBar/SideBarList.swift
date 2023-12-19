@@ -47,8 +47,6 @@ class SideBarList: UIButton {
         switch label.text {
         case "대기중인 약속": title = .wait
         case "확정된 약속": title = .decided
-        case "지난 약속": title = .past
-        case "히스토리": title = .history
         default: title = .wait
         }
         

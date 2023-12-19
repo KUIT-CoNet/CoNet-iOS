@@ -1,5 +1,5 @@
 //
-//  HistoryBottomSheetViewController.swift
+//  TimeShareBottomSheetViewController.swift
 //  CoNet
 //
 //  Created by 가은 on 2023/07/25.

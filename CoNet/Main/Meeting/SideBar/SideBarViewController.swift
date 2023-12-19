@@ -50,29 +50,15 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
         $0.textColor = UIColor.textHigh
     }
     
-    // 약속 카테고리 - 대기중인 약속, 확정된 약속, 지난 약속
+    // 약속 카테고리 - 대기중인 약속, 확정된 약속
     let planLabel = UILabel().then {
         $0.text = "약속"
         $0.font = UIFont.body2Medium
         $0.textColor = UIColor.purpleMain
     }
     let waitingPlanButton = SideBarList().then { $0.setTitle("대기중인 약속") }
-    let decidedPlanButton = SideBarList().then { $0.setTitle("확정된 약속") }
-    let pastPlanButton = SideBarList().then {
-        $0.setTitle("지난 약속")
-        $0.setBottomBorder()
-    }
-
-    // 히스토리 카테고리
-    let historyLabel = UILabel().then {
-        $0.text = "히스토리"
-        $0.font = UIFont.body2Medium
-        $0.textColor = UIColor.purpleMain
-    }
-    
-    // 히스토리
-    let historyButton = SideBarList().then {
-        $0.setTitle("히스토리")
+    let decidedPlanButton = SideBarList().then {
+        $0.setTitle("확정된 약속")
         $0.setBottomBorder()
     }
     
@@ -124,7 +110,6 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
         closeButton.addTarget(self, action: #selector(dismissPopUp), for: .touchUpInside)
         editMeetingInfoButton.addTarget(self, action: #selector(showEditMeetingInfo), for: .touchUpInside)
         inviteCodeButton.addTarget(self, action: #selector(showInviteCodePopUp), for: .touchUpInside)
-        historyButton.addTarget(self, action: #selector(showHistory), for: .touchUpInside)
         
         deleteMeetingButton.addTarget(self, action: #selector(showDeleteMeeting), for: .touchUpInside)
         leaveMeetingButton.addTarget(self, action: #selector(showLeaveMeeting), for: .touchUpInside)
@@ -136,8 +121,6 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
     func buttonsDelegate() {
         waitingPlanButton.delegate = self
         decidedPlanButton.delegate = self
-        pastPlanButton.delegate = self
-        historyButton.delegate = self
     }
     
     // 사이드바 팝업 닫기
@@ -153,11 +136,6 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
     // 초대코드 버튼 동작
     @objc func showInviteCodePopUp() {
         self.sideBarListButtonTapped(title: .inviteCode)
-    }
-    
-    // 히스토리 버튼 동작
-    @objc func showHistory() {
-        self.sideBarListButtonTapped(title: .history)
     }
     
     @objc func showDeleteMeeting() {
@@ -188,7 +166,6 @@ extension SideBarViewController {
         meetingInfoConstraints()
         inviteCodeConstraints()
         planConstraints()
-        historyConstraints()
         bottomButtonsConstraints()
     }
     
@@ -289,28 +266,6 @@ extension SideBarViewController {
         sideBarBackground.addSubview(decidedPlanButton)
         decidedPlanButton.snp.makeConstraints { make in
             listConstraints(make: make, previousView: waitingPlanButton, isFirstList: false)
-        }
-        
-        // 지난 약속
-        sideBarBackground.addSubview(pastPlanButton)
-        pastPlanButton.snp.makeConstraints { make in
-            listConstraints(make: make, previousView: decidedPlanButton, isFirstList: false)
-        }
-    }
-    
-    // 히스토리 Constraints
-    private func historyConstraints() {
-        sideBarBackground.addSubview(historyLabel)
-        historyLabel.snp.makeConstraints { make in
-            make.height.equalTo(18)
-            make.top.equalTo(pastPlanButton.snp.bottom).offset(30)
-            make.leading.equalTo(sideBarBackground.snp.leading).offset(18)
-        }
-        
-        // 히스토리
-        sideBarBackground.addSubview(historyButton)
-        historyButton.snp.makeConstraints { make in
-            listConstraints(make: make, previousView: historyLabel, isFirstList: true)
         }
     }
     

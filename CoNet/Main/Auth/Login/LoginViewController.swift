@@ -28,7 +28,7 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
-//        tempButtonUI()
+        tempButtonUI()
         
         showSignUpButton.addTarget(self, action: #selector(showSignUp(_:)), for: .touchUpInside)
         showMainButton.addTarget(self, action: #selector(showMain(_:)), for: .touchUpInside)

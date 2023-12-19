@@ -149,3 +149,7 @@ class PlanEditDelBottomSheetViewController: UIViewController {
         }
     }
 }
+
+protocol PlanInfoViewControllerDelegate: AnyObject {
+    func sendDataBack(data: String)
+}
