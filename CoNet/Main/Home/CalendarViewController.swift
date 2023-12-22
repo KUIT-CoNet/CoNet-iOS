@@ -58,10 +58,14 @@ class CalendarViewController: UIViewController {
         view.layer.borderColor = UIColor.gray300?.cgColor
 
         updateCalendarData()
+        addView()
         layoutConstraints()
         
         // 버튼 클릭 이벤트
         btnEvents()
+        
+        calendarCollectionView.dataSource = self
+        calendarCollectionView.delegate = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByMeetingMain(notification:)), name: NSNotification.Name("ToCalendarVC"), object: nil)
         
@@ -132,6 +136,14 @@ class CalendarViewController: UIViewController {
         nextBtn.addTarget(self, action: #selector(didClickNextBtn), for: .touchUpInside)
     }
     
+    func addView() {
+        view.addSubview(prevBtn)
+        view.addSubview(yearMonth)
+        view.addSubview(nextBtn)
+        view.addSubview(weekStackView)
+        view.addSubview(calendarCollectionView)
+    }
+    
     // layout
     func layoutConstraints() {
         headerConstraints()
@@ -142,7 +154,6 @@ class CalendarViewController: UIViewController {
     // 헤더 constraints
     func headerConstraints() {
         // 이전 달로 이동 버튼
-        view.addSubview(prevBtn)
         prevBtn.snp.makeConstraints { make in
             make.width.equalTo(24)
             make.height.equalTo(24)
@@ -151,7 +162,6 @@ class CalendarViewController: UIViewController {
         }
         
         // 날짜
-        view.addSubview(yearMonth)
         yearMonth.snp.makeConstraints { make in
             make.height.equalTo(26)
             make.centerX.equalTo(view.snp.centerX)
@@ -159,7 +169,6 @@ class CalendarViewController: UIViewController {
         }
         
         // 다음 달로 이동 버튼
-        view.addSubview(nextBtn)
         nextBtn.snp.makeConstraints { make in
             make.width.equalTo(24)
             make.height.equalTo(24)
@@ -170,13 +179,13 @@ class CalendarViewController: UIViewController {
     
     // 요일
     func weekConstraints() {
-        view.addSubview(weekStackView)
         weekStackView.snp.makeConstraints { make in
             make.height.equalTo(48)
             make.leading.trailing.equalTo(view).inset(28)
             make.top.equalTo(yearMonth.snp.bottom).offset(21)
         }
         
+        // 요일 설정
         let dayOfWeek = ["일", "월", "화", "수", "목", "금", "토"]
         
         dayOfWeek.forEach {
@@ -186,6 +195,7 @@ class CalendarViewController: UIViewController {
             label.textAlignment = .center
             self.weekStackView.addArrangedSubview(label)
             
+            // 일요일: red, 나머지: black
             if $0 == "일" {
                 label.textColor = UIColor.error
             } else {
@@ -196,11 +206,6 @@ class CalendarViewController: UIViewController {
     
     // 날짜
     func calendarConstraints() {
-        view.addSubview(calendarCollectionView)
-        
-        calendarCollectionView.dataSource = self
-        calendarCollectionView.delegate = self
-        
         calendarCollectionView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view).inset(28)
             make.top.equalTo(weekStackView.snp.bottom).offset(0)
@@ -369,3 +374,13 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
         return cell
     }
 }
+
+#if canImport(SwiftUI) && DEBUG
+ import SwiftUI
+
+ struct ViewControllerPreview: PreviewProvider {
+     static var previews: some View {
+         CalendarViewController().showPreview(.iPhone14Pro)
+     }
+ }
+ #endif
