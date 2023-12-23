@@ -215,47 +215,34 @@ class CalendarViewController: UIViewController {
     
     // 이전 달로 이동 버튼
     @objc func didClickPrevBtn() {
-        var header = calendarDateFormatter.minusMonth()
-        updateCalendarData() // days 배열 update
-        calendarCollectionView.reloadData() // collectionView reload
-        yearMonth.setTitle(header, for: .normal) // yearMonth update
-        
-        // 날짜 포맷 변경: yyyy-MM
-        header = header.replacingOccurrences(of: "년 ", with: "-")
-        header = header.replacingOccurrences(of: "월", with: "")
-        
-        // api: 특정 달 약속 조회
-        getMonthPlanAPI(date: header)
+        let header = calendarDateFormatter.minusMonth()
+        updateCalendar(header: header)
     }
     
     // 다음 달로 이동 버튼
     @objc func didClickNextBtn() {
         var header = calendarDateFormatter.plusMonth()
-        updateCalendarData()
-        calendarCollectionView.reloadData()
-        yearMonth.setTitle(header, for: .normal)
-        
-        // 날짜 포맷 변경: yyyy-MM
-        header = header.replacingOccurrences(of: "년 ", with: "-")
-        header = header.replacingOccurrences(of: "월", with: "")
-        
-        // api: 특정 달 약속 조회
-        getMonthPlanAPI(date: header)
+        updateCalendar(header: header)
     }
   
     // 달 이동
     func moveMonth(year: Int, month: Int) {
         var header = calendarDateFormatter.moveDate(year: year, month: month)
-        updateCalendarData()
-        calendarCollectionView.reloadData()
-        yearMonth.setTitle(header, for: .normal)
+        updateCalendar(header: header)
+    }
+    
+    // 달 이동 후 캘린더 업데이트
+    func updateCalendar(header: String) {
+        updateCalendarData() // days 배열 update
+        calendarCollectionView.reloadData() // collectionView reload
+        yearMonth.setTitle(header, for: .normal) // yearMonth update
         
         // 날짜 포맷 변경: yyyy-MM
-        header = header.replacingOccurrences(of: "년 ", with: "-")
-        header = header.replacingOccurrences(of: "월", with: "")
+        var changedHeader = header.replacingOccurrences(of: "년 ", with: "-")
+        changedHeader = header.replacingOccurrences(of: "월", with: "")
         
         // api: 특정 달 약속 조회
-        getMonthPlanAPI(date: header)
+        getMonthPlanAPI(date: changedHeader)
     }
 }
 
@@ -374,13 +361,3 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
         return cell
     }
 }
-
-#if canImport(SwiftUI) && DEBUG
- import SwiftUI
-
- struct ViewControllerPreview: PreviewProvider {
-     static var previews: some View {
-         CalendarViewController().showPreview(.iPhone14Pro)
-     }
- }
- #endif
