@@ -13,46 +13,60 @@ class MeetingAddViewController: UIViewController {
     let xButton = UIButton().then {
         $0.setImage(UIImage(named: "closeBtn"), for: .normal)
     }
+
+    // label: 모임추가 타이틀
     let gatherAddLabel = UILabel().then {
         $0.text = "모임 추가하기"
         $0.font = UIFont.headline3Bold
         $0.textColor = UIColor.black
         $0.numberOfLines = 0
     }
+    
     let completionButton = UIButton().then {
         $0.setTitle("완료", for: .normal)
         $0.titleLabel?.font = UIFont.headline3Medium
         $0.setTitleColor(.textDisabled, for: .normal)
     }
+    
+    // label: 모임이름
     let gathernameLabel = UILabel().then {
         $0.text = "모임 이름"
         $0.font = UIFont.body2Bold
         $0.textColor = UIColor.textDisabled
         $0.numberOfLines = 0
     }
+    
     let xnameButton = UIButton().then {
         $0.setImage(UIImage(named: "clearBtn"), for: .normal)
         $0.isHidden = true
     }
+    
     let gathernameTextField = UITextField().then {
         $0.placeholder = "모임 이름 입력"
         $0.font = UIFont.headline3Regular
         $0.tintColor = UIColor.textDisabled
         $0.becomeFirstResponder()
     }
+    
+    // textfield 하단 선
     let grayLine = UIView().then {
         $0.backgroundColor = UIColor.iconDisabled
     }
-    let textCountLabel = UILabel().then {
+    
+    // label: 입력된 text수
+    let textcountLabel = UILabel().then {
         $0.font = UIFont.caption
         $0.textColor = UIColor.textDisabled
     }
+    
+    // label: 모임 대표 사진
     let gatherphotoLabel = UILabel().then {
         $0.text = "모임 대표 사진"
         $0.font = UIFont.body2Bold
         $0.textColor = UIColor.textDisabled
         $0.numberOfLines = 0
     }
+    
     let photoImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
@@ -60,16 +74,20 @@ class MeetingAddViewController: UIViewController {
         $0.layer.borderColor = UIColor.gray200?.cgColor
         $0.layer.borderWidth = 1
     }
+    
     let photoUploadImage = UIImageView().then {
         $0.image = UIImage(named: "imageplus")
         $0.tintColor = UIColor.iconDisabled
     }
+    
+    // label: 업로드
     let photoUploadLabel = UILabel().then {
         $0.text = "업로드할 이미지를 첨부해주세요.\n1:1의 정방향 이미지를 추천합니다."
         $0.font = UIFont.body3Medium
         $0.textColor = UIColor.textDisabled
         $0.numberOfLines = 0
     }
+    
     let photoUploadButton = UIButton().then {
         $0.setTitle("첨부", for: .normal)
         $0.titleLabel?.font = UIFont.body3Medium
@@ -81,40 +99,40 @@ class MeetingAddViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         
+        addView()
+        layoutConstriants()
+        buttonClicks()
+    }
+    
+    func addView() {
         self.view.addSubview(xButton)
         self.view.addSubview(gatherAddLabel)
         self.view.addSubview(completionButton)
-        applyConstraintsToTopSection()
-        
         self.view.addSubview(gathernameLabel)
         self.view.addSubview(xnameButton)
         self.view.addSubview(gathernameTextField)
         self.view.addSubview(grayLine)
-        self.view.addSubview(textCountLabel)
-        applyConstraintsToGathername()
-        
+        self.view.addSubview(textcountLabel)
         self.view.addSubview(gatherphotoLabel)
         self.view.addSubview(photoImageView)
         self.view.addSubview(photoUploadImage)
         self.view.addSubview(photoUploadLabel)
         self.view.addSubview(photoUploadButton)
+    }
+    
+    func layoutConstriants() {
+        applyConstraintsToTopSection()
+        applyConstraintsToGathername()
         applyConstraintsToGatherphoto()
-        
+    }
+    
+    // 버튼 addTarget
+    func buttonClicks() {
         xButton.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
         photoUploadButton.addTarget(self, action: #selector(uploadButtonTapped), for: .touchUpInside)
         gathernameTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
         xnameButton.addTarget(self, action: #selector(xnameButtonTapped), for: .touchUpInside)
         completionButton.addTarget(self, action: #selector(createMeeting), for: .touchUpInside)
-    }
-    
-    @objc func createMeeting() {
-        guard let newName = gathernameTextField.text else { return }
-        guard let selectedImage = photoImageView.image else { return }
-        MeetingAPI().createMeeting(name: newName, image: selectedImage) { isSuccess in
-            if isSuccess {
-                self.dismiss(animated: true)
-            }
-        }
     }
     
     func applyConstraintsToTopSection() {
@@ -160,7 +178,7 @@ class MeetingAddViewController: UIViewController {
             make.leading.equalTo(safeArea.snp.leading).offset(24)
             make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
         }
-        textCountLabel.snp.makeConstraints { make in
+        textcountLabel.snp.makeConstraints { make in
             make.height.equalTo(16)
             make.top.equalTo(grayLine.snp.bottom).offset(4)
             make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
@@ -208,6 +226,7 @@ class MeetingAddViewController: UIViewController {
         }
     }
     
+    // 텍스트 필드 내용 변경 시
     @objc private func textFieldEditingChanged() {
         guard let text = gathernameTextField.text else { return }
         let nameCount = text.count
@@ -221,9 +240,10 @@ class MeetingAddViewController: UIViewController {
         }
         completionButton.setTitleColor(completionButton.isEnabled ? .purpleMain : .textDisabled, for: .normal)
         
-        textCountLabel.text = "\(nameCount)/30"
+        textcountLabel.text = "\(nameCount)/30"
     }
     
+    // x버튼 클릭 시
     @objc private func xnameButtonTapped() {
         gathernameTextField.text = ""
         textFieldEditingChanged()
@@ -234,6 +254,17 @@ class MeetingAddViewController: UIViewController {
         imagePicker.delegate = self
         imagePicker.sourceType = .photoLibrary
         present(imagePicker, animated: true, completion: nil)
+    }
+    
+    // 모임 생성
+    @objc func createMeeting() {
+        guard let newName = gathernameTextField.text else { return }
+        guard let selectedImage = photoImageView.image else { return }
+        MeetingAPI().createMeeting(name: newName, image: selectedImage) { isSuccess in
+            if isSuccess {
+                self.dismiss(animated: true)
+            }
+        }
     }
 }
 

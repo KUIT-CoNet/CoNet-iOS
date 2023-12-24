@@ -14,7 +14,7 @@
 		1AA197BB2A73C54B001064F8 /* PlanMemberBottonSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA197BA2A73C54B001064F8 /* PlanMemberBottonSheetViewController.swift */; };
 		1AA197BD2A7F7430001064F8 /* PlanEditDelBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA197BC2A7F7430001064F8 /* PlanEditDelBottomSheetViewController.swift */; };
 		1AA197C12A816432001064F8 /* MemberCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA197C02A816432001064F8 /* MemberCollectionViewCell.swift */; };
-		1ABF8C862A69150900023A8D /* MeetingPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF8C852A69150900023A8D /* MeetingPopUpViewController.swift */; };
+		1ABF8C862A69150900023A8D /* MeetingCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF8C852A69150900023A8D /* MeetingCodeViewController.swift */; };
 		1ABF8C882A694B3800023A8D /* MeetingInfoEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF8C872A694B3800023A8D /* MeetingInfoEditViewController.swift */; };
 		1AC014262A6F7B3100E3E9C9 /* PlanDateButtonSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC014252A6F7B3100E3E9C9 /* PlanDateButtonSheetViewController.swift */; };
 		1AC014282A70A75700E3E9C9 /* PlanConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC014272A70A75700E3E9C9 /* PlanConfirmViewController.swift */; };
@@ -23,6 +23,7 @@
 		1AE23DBB2A59837F000D498F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE23DBA2A59837F000D498F /* LoginViewController.swift */; };
 		1AE5C7892A6F683D001B88D1 /* PlanInfoEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE5C7882A6F683D001B88D1 /* PlanInfoEditViewController.swift */; };
 		1AE5C78B2A6F6957001B88D1 /* MakePlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE5C78A2A6F6957001B88D1 /* MakePlanViewController.swift */; };
+		1AF858082B381E63005D058B /* MeetingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF858072B381E63005D058B /* MeetingCollectionViewCell.swift */; };
 		231E97CF2A6BCA04000BB2AD /* MonthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231E97CE2A6BCA04000BB2AD /* MonthViewController.swift */; };
 		231E97D12A6BD3F8000BB2AD /* MonthCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231E97D02A6BD3F8000BB2AD /* MonthCollectionViewCell.swift */; };
 		231EA9D02A587DE700138628 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 231EA9CF2A587DE700138628 /* Then */; };
@@ -114,7 +115,7 @@
 		1AA197BA2A73C54B001064F8 /* PlanMemberBottonSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanMemberBottonSheetViewController.swift; sourceTree = "<group>"; };
 		1AA197BC2A7F7430001064F8 /* PlanEditDelBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanEditDelBottomSheetViewController.swift; sourceTree = "<group>"; };
 		1AA197C02A816432001064F8 /* MemberCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCollectionViewCell.swift; sourceTree = "<group>"; };
-		1ABF8C852A69150900023A8D /* MeetingPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingPopUpViewController.swift; sourceTree = "<group>"; };
+		1ABF8C852A69150900023A8D /* MeetingCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingCodeViewController.swift; sourceTree = "<group>"; };
 		1ABF8C872A694B3800023A8D /* MeetingInfoEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingInfoEditViewController.swift; sourceTree = "<group>"; };
 		1AC014252A6F7B3100E3E9C9 /* PlanDateButtonSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanDateButtonSheetViewController.swift; sourceTree = "<group>"; };
 		1AC014272A70A75700E3E9C9 /* PlanConfirmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanConfirmViewController.swift; sourceTree = "<group>"; };
@@ -123,6 +124,7 @@
 		1AE23DBA2A59837F000D498F /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		1AE5C7882A6F683D001B88D1 /* PlanInfoEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanInfoEditViewController.swift; sourceTree = "<group>"; };
 		1AE5C78A2A6F6957001B88D1 /* MakePlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakePlanViewController.swift; sourceTree = "<group>"; };
+		1AF858072B381E63005D058B /* MeetingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingCollectionViewCell.swift; sourceTree = "<group>"; };
 		231E97CE2A6BCA04000BB2AD /* MonthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthViewController.swift; sourceTree = "<group>"; };
 		231E97D02A6BD3F8000BB2AD /* MonthCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthCollectionViewCell.swift; sourceTree = "<group>"; };
 		2344286F2A5E99BE006A4D66 /* BaseResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseResponse.swift; sourceTree = "<group>"; };
@@ -408,8 +410,9 @@
 			isa = PBXGroup;
 			children = (
 				236054F92A593F5400CA991E /* MeetingViewController.swift */,
+				1AF858072B381E63005D058B /* MeetingCollectionViewCell.swift */,
 				1ADA54952A65161F00609041 /* MeetingAddViewController.swift */,
-				1ABF8C852A69150900023A8D /* MeetingPopUpViewController.swift */,
+				1ABF8C852A69150900023A8D /* MeetingCodeViewController.swift */,
 			);
 			path = MeetingTable;
 			sourceTree = "<group>";
@@ -714,6 +717,7 @@
 				515E53BF2A77D16D00536C6D /* Meeting.swift in Sources */,
 				512675912A83D71600AFC46C /* EditMemberCollectionViewCell.swift in Sources */,
 				51F72C5B2A592C0E0055E8C4 /* MyPageViewController.swift in Sources */,
+				1AF858082B381E63005D058B /* MeetingCollectionViewCell.swift in Sources */,
 				1A99CFE22A70D4650080091B /* MeetingDelPopUpViewController.swift in Sources */,
 				234428702A5E99BE006A4D66 /* BaseResponse.swift in Sources */,
 				519FC3592A700FED002EF91C /* MeetingMainViewController.swift in Sources */,
@@ -737,7 +741,7 @@
 				231E97CF2A6BCA04000BB2AD /* MonthViewController.swift in Sources */,
 				51B526CA2A6C3901009DBFB4 /* DecidedPlanListViewController.swift in Sources */,
 				515E53B82A77B48000536C6D /* ShadowWaitingPlanCell.swift in Sources */,
-				1ABF8C862A69150900023A8D /* MeetingPopUpViewController.swift in Sources */,
+				1ABF8C862A69150900023A8D /* MeetingCodeViewController.swift in Sources */,
 				1AE5C78B2A6F6957001B88D1 /* MakePlanViewController.swift in Sources */,
 				236054FA2A593F5400CA991E /* MeetingViewController.swift in Sources */,
 				23F6F9082A700F4700772AFF /* HomeAPI.swift in Sources */,
@@ -913,7 +917,7 @@
 				CODE_SIGN_ENTITLEMENTS = CoNet/CoNet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = 99KH3TLG9V;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CoNet/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -944,7 +948,7 @@
 				CODE_SIGN_ENTITLEMENTS = CoNet/CoNet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = 99KH3TLG9V;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CoNet/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

@@ -1,5 +1,5 @@
 //
-//  GatherPopUpViewController.swift
+//  MeetingCodeViewController.swift
 //  CoNet
 //
 //  Created by 정아현 on 2023/07/20.
@@ -9,7 +9,7 @@ import SnapKit
 import Then
 import UIKit
 
-class MeetingPopUpViewController: UIViewController {
+class MeetingCodeViewController: UIViewController {
     // 검은색 배경 - 투명도 50%
     let background = UIView().then { $0.backgroundColor = UIColor.black.withAlphaComponent(0.5) }
     // 팝업 하얀색 배경
@@ -36,11 +36,12 @@ class MeetingPopUpViewController: UIViewController {
         $0.becomeFirstResponder()
     }
     
-    // 회색 text field 하단 선
+    // textfield 하단 선
     let grayLine = UIView().then { $0.backgroundColor = UIColor.gray100 }
     
     // 안내 문구의 ! 아이콘
     let infoView = UIImageView().then { $0.image = UIImage(named: "emarkRed") }
+    
     // 안내 문구
     let infoLabel = UILabel().then {
         $0.textColor = .red
@@ -63,22 +64,43 @@ class MeetingPopUpViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .clear
         
+        addView()
+        layoutConstriants()
         buttonClicks()
-        layoutConstraints()
-        
         infoView.isHidden = true
     }
     
+    func addView() {
+        self.view.addSubview(background)
+        self.view.addSubview(popUpView)
+        self.view.addSubview(xButton)
+        self.view.addSubview(inviteLabel)
+        self.view.addSubview(codeTextField)
+        self.view.addSubview(grayLine)
+        self.view.addSubview(participateButton)
+        self.view.addSubview(infoView)
+        self.view.addSubview(infoLabel)
+    }
+    
+    func layoutConstriants() {
+        backgroundConstraints()
+        applyConstraintsToComponents()
+    }
+    
     // 버튼 addTarget
-    private func buttonClicks() {
+    func buttonClicks() {
         codeTextField.addTarget(self, action: #selector(codeTextFieldDidChange), for: .editingChanged)
         participateButton.addTarget(self, action: #selector(participateMeeting), for: .touchUpInside)
-        xButton.addTarget(self, action: #selector(dismissPopUp), for: .touchUpInside)
+        xButton.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
     }
     
     // 팝업창 닫기
-    @objc private func dismissPopUp() {
-        dismiss(animated: true)
+    @objc private func xButtonTapped() {
+        dismiss(animated: true) {
+            if let tabBarController = self.presentingViewController as? TabbarViewController {
+                tabBarController.selectedIndex = 1
+            }
+        }
     }
     
     // 코드가 입력되었을 때, 하단 선 색상 변경
@@ -100,7 +122,7 @@ class MeetingPopUpViewController: UIViewController {
         
         MeetingAPI().postParticipateMeeting(code: code) { isSuccess, status in
             if isSuccess {
-                self.dismissPopUp()
+                self.xButtonTapped()
             } else {
                 switch status {
                 case .valid:
@@ -160,24 +182,8 @@ class MeetingPopUpViewController: UIViewController {
 }
 
 // layout
-extension MeetingPopUpViewController {
-    // 전체 layout
-    private func layoutConstraints() {
-        self.view.addSubview(background)
-        self.view.addSubview(popUpView)
-        self.view.addSubview(xButton)
-        self.view.addSubview(inviteLabel)
-        self.view.addSubview(codeTextField)
-        self.view.addSubview(grayLine)
-        self.view.addSubview(participateButton)
-        self.view.addSubview(infoView)
-        self.view.addSubview(infoLabel)
-        
-        backgroundConstraints()
-        applyConstraintsToComponents()
-    }
-    
-    private func backgroundConstraints() {
+extension MeetingCodeViewController {
+    func backgroundConstraints() {
         background.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(0)
         }
