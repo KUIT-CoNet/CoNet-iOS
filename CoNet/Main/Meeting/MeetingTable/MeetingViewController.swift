@@ -53,7 +53,7 @@ class MeetingViewController: UIViewController {
         return stackView
     }()
     
-    // tab 선택시
+    // tab 선택 indicator
     let selectedTabIndicator = UIView().then {
         $0.backgroundColor = UIColor.purpleMain
     }
@@ -71,7 +71,7 @@ class MeetingViewController: UIViewController {
         $0.isScrollEnabled = true
     }
     
-    // 플로팅버튼
+    // 플로팅버튼: plus
     let plusButton = UIButton().then {
         $0.setImage(UIImage(named: "plus"), for: .normal)
     }
@@ -185,20 +185,10 @@ class MeetingViewController: UIViewController {
         addButton.addTarget(self, action: #selector(didTapparticipateButton), for: .touchUpInside)
         participateButton.addTarget(self, action: #selector(didTapPeopleButton), for: .touchUpInside)
     }
+    
     func applyConstraintsToCollectionView() {
         let safeArea = view.safeAreaLayoutGuide
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(selectedTabIndicator.snp.bottom).offset(16)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
-            make.bottom.equalTo(plusButton.snp.bottom).offset(16)
-        }
-    }
-    
-    func applyConstraintsToFavCollectionView() {
-        let safeArea = view.safeAreaLayoutGuide
-        
-        favcollectionView.snp.makeConstraints { make in
             make.top.equalTo(selectedTabIndicator.snp.bottom).offset(16)
             make.leading.equalTo(safeArea.snp.leading).offset(24)
             make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
@@ -270,7 +260,6 @@ class MeetingViewController: UIViewController {
         favcollectionView.register(MeetingCollectionViewCell.self, forCellWithReuseIdentifier: MeetingCollectionViewCell.identifier)
     }
     
-    // 팝업 표시
     func presentPopUpViewController(_ viewController: UIViewController) {
         dismissPopUp()
         viewController.modalPresentationStyle = .overFullScreen
