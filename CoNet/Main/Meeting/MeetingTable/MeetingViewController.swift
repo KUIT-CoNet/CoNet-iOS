@@ -5,10 +5,10 @@
 //  Created by 정아현 on 2023/08/01.
 //
 
-import UIKit
 import Kingfisher
 import SnapKit
 import Then
+import UIKit
 
 class MeetingViewController: UIViewController {
 

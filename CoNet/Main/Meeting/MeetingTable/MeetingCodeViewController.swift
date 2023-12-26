@@ -10,15 +10,22 @@ import Then
 import UIKit
 
 class MeetingCodeViewController: UIViewController {
+
     // 검은색 배경 - 투명도 50%
-    let background = UIView().then { $0.backgroundColor = UIColor.black.withAlphaComponent(0.5) }
+    let background = UIView().then {
+        $0.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+    }
+    
     // 팝업 하얀색 배경
     let popUpView = UIView().then {
         $0.backgroundColor = UIColor.white
         $0.layer.cornerRadius = 10
     }
+    
     // X 버튼 - 팝업 닫기
-    let xButton = UIButton().then { $0.setImage(UIImage(named: "closeBtn"), for: .normal) }
+    let xButton = UIButton().then {
+        $0.setImage(UIImage(named: "closeBtn"), for: .normal)
+    }
     
     // "전달받은 초대코드를 입력해주세요" label
     let inviteLabel = UILabel().then {
@@ -37,10 +44,14 @@ class MeetingCodeViewController: UIViewController {
     }
     
     // textfield 하단 선
-    let grayLine = UIView().then { $0.backgroundColor = UIColor.gray100 }
+    let grayLine = UIView().then {
+        $0.backgroundColor = UIColor.gray100
+    }
     
     // 안내 문구의 ! 아이콘
-    let infoView = UIImageView().then { $0.image = UIImage(named: "emarkRed") }
+    let infoView = UIImageView().then {
+        $0.image = UIImage(named: "emarkRed")
+    }
     
     // 안내 문구
     let infoLabel = UILabel().then {
@@ -70,30 +81,13 @@ class MeetingCodeViewController: UIViewController {
         infoView.isHidden = true
     }
     
-    func addView() {
-        self.view.addSubview(background)
-        self.view.addSubview(popUpView)
-        self.view.addSubview(xButton)
-        self.view.addSubview(inviteLabel)
-        self.view.addSubview(codeTextField)
-        self.view.addSubview(grayLine)
-        self.view.addSubview(participateButton)
-        self.view.addSubview(infoView)
-        self.view.addSubview(infoLabel)
-    }
-    
-    func layoutConstriants() {
-        backgroundConstraints()
-        applyConstraintsToComponents()
-    }
-    
     // 버튼 addTarget
     func buttonClicks() {
         codeTextField.addTarget(self, action: #selector(codeTextFieldDidChange), for: .editingChanged)
         participateButton.addTarget(self, action: #selector(participateMeeting), for: .touchUpInside)
         xButton.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
     }
-    
+
     // 팝업창 닫기
     @objc private func xButtonTapped() {
         dismiss(animated: true) {
@@ -181,8 +175,24 @@ class MeetingCodeViewController: UIViewController {
     }
 }
 
-// layout
 extension MeetingCodeViewController {
+    func addView() {
+        self.view.addSubview(background)
+        self.view.addSubview(popUpView)
+        self.view.addSubview(xButton)
+        self.view.addSubview(inviteLabel)
+        self.view.addSubview(codeTextField)
+        self.view.addSubview(grayLine)
+        self.view.addSubview(participateButton)
+        self.view.addSubview(infoView)
+        self.view.addSubview(infoLabel)
+    }
+    
+    func layoutConstriants() {
+        backgroundConstraints()
+        applyConstraintsToComponents()
+    }
+    
     func backgroundConstraints() {
         background.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(0)
@@ -191,13 +201,13 @@ extension MeetingCodeViewController {
     
     func applyConstraintsToComponents() {
         let safeArea = view.safeAreaLayoutGuide
+        let screenWidth = UIScreen.main.bounds.size.width
+        let screenHeight = UIScreen.main.bounds.size.height
         
         popUpView.snp.makeConstraints { make in
-            make.width.equalTo(257)
-            make.height.equalTo(332)
-            make.centerY.equalTo(view.snp.centerY)
-            make.leading.equalTo(safeArea.snp.leading).offset(68)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-68)
+            make.width.equalTo(screenWidth*0.6)
+            make.height.equalTo(screenHeight*0.5)
+            make.center.equalTo(view.snp.center)
         }
         xButton.snp.makeConstraints { make in
             make.width.height.equalTo(24)
@@ -232,6 +242,7 @@ extension MeetingCodeViewController {
             make.leading.equalTo(popUpView.snp.leading).offset(45)
         }
         participateButton.snp.makeConstraints { make in
+            make.height.equalTo(54)
             make.top.equalTo(grayLine.snp.bottom).offset(32)
             make.bottom.equalTo(popUpView.snp.bottom).offset(-32)
             make.leading.equalTo(popUpView.snp.leading).offset(33)
