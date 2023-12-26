@@ -205,11 +205,9 @@ extension MeetingCodeViewController {
         let screenHeight = UIScreen.main.bounds.size.height
         
         popUpView.snp.makeConstraints { make in
-            make.width.equalTo(screenWidth*0.4)
+            make.width.equalTo(screenWidth*0.6)
             make.height.equalTo(screenHeight*0.5)
-            make.centerY.equalTo(view.snp.centerY)
-            make.leading.equalTo(safeArea.snp.leading).offset(68)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-68)
+            make.center.equalTo(view.snp.center)
         }
         xButton.snp.makeConstraints { make in
             make.width.height.equalTo(24)
