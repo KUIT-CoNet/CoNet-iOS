@@ -60,12 +60,10 @@ class CalendarViewController: UIViewController {
         updateCalendarData()
         addView()
         layoutConstraints()
+        setupCollectionView()
         
         // 버튼 클릭 이벤트
         btnEvents()
-        
-        calendarCollectionView.dataSource = self
-        calendarCollectionView.delegate = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByMeetingMain(notification:)), name: NSNotification.Name("ToCalendarVC"), object: nil)
         
@@ -115,9 +113,10 @@ class CalendarViewController: UIViewController {
     
     // yearMonth 클릭
     @objc func didClickYearBtn(_ sender: UIView) {
-        let popupVC = MonthViewController(year: calendarDateFormatter.currentYear())
-        popupVC.modalPresentationStyle = .overCurrentContext
-        popupVC.modalTransitionStyle = .crossDissolve
+        let popupVC = MonthViewController(year: calendarDateFormatter.currentYear()).then {
+            $0.modalPresentationStyle = .overCurrentContext
+            $0.modalTransitionStyle = .crossDissolve
+        }
         
         // 데이터 받는 부분
         popupVC.calendarClosure = { year, month in
@@ -134,6 +133,11 @@ class CalendarViewController: UIViewController {
     func btnEvents() {
         prevBtn.addTarget(self, action: #selector(didClickPrevBtn), for: .touchUpInside)
         nextBtn.addTarget(self, action: #selector(didClickNextBtn), for: .touchUpInside)
+    }
+    
+    private func setupCollectionView() {
+        calendarCollectionView.dataSource = self
+        calendarCollectionView.delegate = self
     }
     
     func addView() {
@@ -221,13 +225,13 @@ class CalendarViewController: UIViewController {
     
     // 다음 달로 이동 버튼
     @objc func didClickNextBtn() {
-        var header = calendarDateFormatter.plusMonth()
+        let header = calendarDateFormatter.plusMonth()
         updateCalendar(header: header)
     }
   
     // 달 이동
     func moveMonth(year: Int, month: Int) {
-        var header = calendarDateFormatter.moveDate(year: year, month: month)
+        let header = calendarDateFormatter.moveDate(year: year, month: month)
         updateCalendar(header: header)
     }
     
