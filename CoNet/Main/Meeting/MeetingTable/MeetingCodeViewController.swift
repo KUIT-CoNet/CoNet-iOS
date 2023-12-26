@@ -23,7 +23,9 @@ class MeetingCodeViewController: UIViewController {
     }
     
     // X 버튼 - 팝업 닫기
-    let xButton = UIButton().then { $0.setImage(UIImage(named: "closeBtn"), for: .normal) }
+    let xButton = UIButton().then {
+        $0.setImage(UIImage(named: "closeBtn"), for: .normal)
+    }
     
     // "전달받은 초대코드를 입력해주세요" label
     let inviteLabel = UILabel().then {
@@ -42,10 +44,14 @@ class MeetingCodeViewController: UIViewController {
     }
     
     // textfield 하단 선
-    let grayLine = UIView().then { $0.backgroundColor = UIColor.gray100 }
+    let grayLine = UIView().then {
+        $0.backgroundColor = UIColor.gray100
+    }
     
     // 안내 문구의 ! 아이콘
-    let infoView = UIImageView().then { $0.image = UIImage(named: "emarkRed") }
+    let infoView = UIImageView().then {
+        $0.image = UIImage(named: "emarkRed")
+    }
     
     // 안내 문구
     let infoLabel = UILabel().then {

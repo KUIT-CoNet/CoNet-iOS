@@ -14,7 +14,9 @@ class MeetingCollectionViewCell: UICollectionViewCell {
     var meetingId: Int = 0
     var onStarButtonTapped: (() -> Void)?
 
-    let imageView = UIImageView().then { $0.image = UIImage(named: "uploadImageWithNoDescription") }
+    let imageView = UIImageView().then {
+        $0.image = UIImage(named: "uploadImageWithNoDescription")
+    }
     
     // label: 모임제목
     let titleLabel = UILabel().then {
