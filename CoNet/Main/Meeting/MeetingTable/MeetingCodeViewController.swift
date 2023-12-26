@@ -10,8 +10,11 @@ import Then
 import UIKit
 
 class MeetingCodeViewController: UIViewController {
+
     // 검은색 배경 - 투명도 50%
-    let background = UIView().then { $0.backgroundColor = UIColor.black.withAlphaComponent(0.5) }
+    let background = UIView().then {
+        $0.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+    }
     
     // 팝업 하얀색 배경
     let popUpView = UIView().then {
@@ -72,84 +75,11 @@ class MeetingCodeViewController: UIViewController {
         infoView.isHidden = true
     }
     
-    func addView() {
-        self.view.addSubview(background)
-        self.view.addSubview(popUpView)
-        self.view.addSubview(xButton)
-        self.view.addSubview(inviteLabel)
-        self.view.addSubview(codeTextField)
-        self.view.addSubview(grayLine)
-        self.view.addSubview(participateButton)
-        self.view.addSubview(infoView)
-        self.view.addSubview(infoLabel)
-    }
-    
-    func layoutConstriants() {
-        backgroundConstraints()
-        applyConstraintsToComponents()
-    }
-    
     // 버튼 addTarget
     func buttonClicks() {
         codeTextField.addTarget(self, action: #selector(codeTextFieldDidChange), for: .editingChanged)
         participateButton.addTarget(self, action: #selector(participateMeeting), for: .touchUpInside)
         xButton.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
-    }
-    
-    func backgroundConstraints() {
-        background.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(0)
-        }
-    }
-    
-    func applyConstraintsToComponents() {
-        let safeArea = view.safeAreaLayoutGuide
-        
-        popUpView.snp.makeConstraints { make in
-            make.width.equalTo(257)
-            make.height.equalTo(332)
-            make.centerY.equalTo(view.snp.centerY)
-            make.leading.equalTo(safeArea.snp.leading).offset(68)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-68)
-        }
-        xButton.snp.makeConstraints { make in
-            make.width.height.equalTo(24)
-            make.top.equalTo(popUpView.snp.top).offset(18)
-            make.trailing.equalTo(popUpView.snp.trailing).offset(-18)
-        }
-        inviteLabel.snp.makeConstraints { make in
-            make.height.equalTo(52)
-            make.top.equalTo(popUpView.snp.top).offset(66)
-            make.leading.equalTo(popUpView.snp.leading).offset(33)
-            make.trailing.equalTo(popUpView.snp.trailing).offset(66)
-        }
-        codeTextField.snp.makeConstraints { make in
-            make.top.equalTo(inviteLabel.snp.bottom).offset(66)
-            make.leading.equalTo(popUpView.snp.leading).offset(33)
-            make.trailing.equalTo(popUpView.snp.trailing).offset(-33)
-        }
-        grayLine.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.top.equalTo(inviteLabel.snp.bottom).offset(96)
-            make.leading.equalTo(popUpView.snp.leading).offset(33)
-            make.trailing.equalTo(popUpView.snp.trailing).offset(-33)
-        }
-        infoView.snp.makeConstraints { make in
-            make.width.height.equalTo(8)
-            make.top.equalTo(grayLine.snp.bottom).offset(6)
-            make.leading.equalTo(popUpView.snp.leading).offset(33)
-            make.centerY.equalTo(infoLabel)
-        }
-        infoLabel.snp.makeConstraints { make in
-            make.top.equalTo(infoView)
-            make.leading.equalTo(popUpView.snp.leading).offset(45)
-        }
-        participateButton.snp.makeConstraints { make in
-            make.top.equalTo(grayLine.snp.bottom).offset(32)
-            make.bottom.equalTo(popUpView.snp.bottom).offset(-32)
-            make.leading.equalTo(popUpView.snp.leading).offset(33)
-            make.trailing.equalTo(popUpView.snp.trailing).offset(-32)
-        }
     }
 
     // 팝업창 닫기
@@ -236,6 +166,84 @@ class MeetingCodeViewController: UIViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+    }
+}
+
+extension MeetingCodeViewController {
+    func addView() {
+        self.view.addSubview(background)
+        self.view.addSubview(popUpView)
+        self.view.addSubview(xButton)
+        self.view.addSubview(inviteLabel)
+        self.view.addSubview(codeTextField)
+        self.view.addSubview(grayLine)
+        self.view.addSubview(participateButton)
+        self.view.addSubview(infoView)
+        self.view.addSubview(infoLabel)
+    }
+    
+    func layoutConstriants() {
+        backgroundConstraints()
+        applyConstraintsToComponents()
+    }
+    
+    func backgroundConstraints() {
+        background.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(0)
+        }
+    }
+    
+    func applyConstraintsToComponents() {
+        let safeArea = view.safeAreaLayoutGuide
+        let screenWidth = UIScreen.main.bounds.size.width
+        let screenHeight = UIScreen.main.bounds.size.height
+        
+        popUpView.snp.makeConstraints { make in
+            make.width.equalTo(screenWidth*0.4)
+            make.height.equalTo(screenHeight*0.5)
+            make.centerY.equalTo(view.snp.centerY)
+            make.leading.equalTo(safeArea.snp.leading).offset(68)
+            make.trailing.equalTo(safeArea.snp.trailing).offset(-68)
+        }
+        xButton.snp.makeConstraints { make in
+            make.width.height.equalTo(24)
+            make.top.equalTo(popUpView.snp.top).offset(18)
+            make.trailing.equalTo(popUpView.snp.trailing).offset(-18)
+        }
+        inviteLabel.snp.makeConstraints { make in
+            make.height.equalTo(52)
+            make.top.equalTo(popUpView.snp.top).offset(66)
+            make.leading.equalTo(popUpView.snp.leading).offset(33)
+            make.trailing.equalTo(popUpView.snp.trailing).offset(66)
+        }
+        codeTextField.snp.makeConstraints { make in
+            make.top.equalTo(inviteLabel.snp.bottom).offset(66)
+            make.leading.equalTo(popUpView.snp.leading).offset(33)
+            make.trailing.equalTo(popUpView.snp.trailing).offset(-33)
+        }
+        grayLine.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.top.equalTo(inviteLabel.snp.bottom).offset(96)
+            make.leading.equalTo(popUpView.snp.leading).offset(33)
+            make.trailing.equalTo(popUpView.snp.trailing).offset(-33)
+        }
+        infoView.snp.makeConstraints { make in
+            make.width.height.equalTo(8)
+            make.top.equalTo(grayLine.snp.bottom).offset(6)
+            make.leading.equalTo(popUpView.snp.leading).offset(33)
+            make.centerY.equalTo(infoLabel)
+        }
+        infoLabel.snp.makeConstraints { make in
+            make.top.equalTo(infoView)
+            make.leading.equalTo(popUpView.snp.leading).offset(45)
+        }
+        participateButton.snp.makeConstraints { make in
+            make.height.equalTo(54)
+            make.top.equalTo(grayLine.snp.bottom).offset(32)
+            make.bottom.equalTo(popUpView.snp.bottom).offset(-32)
+            make.leading.equalTo(popUpView.snp.leading).offset(33)
+            make.trailing.equalTo(popUpView.snp.trailing).offset(-32)
+        }
     }
 }
     
