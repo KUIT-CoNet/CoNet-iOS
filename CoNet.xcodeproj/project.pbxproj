@@ -56,6 +56,7 @@
 		51046AA72A5D7E4100AD543D /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 51046AA62A5D7E4100AD543D /* Pretendard-Regular.otf */; };
 		51046AA92A6147F500AD543D /* ChangeNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51046AA82A6147F500AD543D /* ChangeNameViewController.swift */; };
 		51046AAB2A62F60200AD543D /* PreviewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51046AAA2A62F60200AD543D /* PreviewExtension.swift */; };
+		510B7BDD2B3C027C00CB7ADA /* SideBarListButtonDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510B7BDC2B3C027C00CB7ADA /* SideBarListButtonDelegate.swift */; };
 		5126758A2A82100300AFC46C /* DecidedPlanInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512675892A82100300AFC46C /* DecidedPlanInfoViewController.swift */; };
 		5126758D2A82156D00AFC46C /* PlanInfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5126758C2A82156D00AFC46C /* PlanInfoRow.swift */; };
 		512675912A83D71600AFC46C /* EditMemberCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512675902A83D71600AFC46C /* EditMemberCollectionViewCell.swift */; };
@@ -154,6 +155,7 @@
 		51046AA62A5D7E4100AD543D /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		51046AA82A6147F500AD543D /* ChangeNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNameViewController.swift; sourceTree = "<group>"; };
 		51046AAA2A62F60200AD543D /* PreviewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewExtension.swift; sourceTree = "<group>"; };
+		510B7BDC2B3C027C00CB7ADA /* SideBarListButtonDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideBarListButtonDelegate.swift; sourceTree = "<group>"; };
 		512675892A82100300AFC46C /* DecidedPlanInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecidedPlanInfoViewController.swift; sourceTree = "<group>"; };
 		5126758C2A82156D00AFC46C /* PlanInfoRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanInfoRow.swift; sourceTree = "<group>"; };
 		512675902A83D71600AFC46C /* EditMemberCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemberCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -508,6 +510,7 @@
 				518F55E32A68EF7B002D8F0F /* SideBarViewController.swift */,
 				51B526C32A6C2F76009DBFB4 /* SideBarList.swift */,
 				51B526C52A6C324D009DBFB4 /* SideBarMenu.swift */,
+				510B7BDC2B3C027C00CB7ADA /* SideBarListButtonDelegate.swift */,
 			);
 			path = SideBar;
 			sourceTree = "<group>";
@@ -749,6 +752,7 @@
 				518F55DD2A685F2A002D8F0F /* CompleteSignOutViewController.swift in Sources */,
 				1A99CFE42A7233580080091B /* PlanTimePickerViewController.swift in Sources */,
 				518F55EE2A6BA5AE002D8F0F /* WaitingPlanListViewController.swift in Sources */,
+				510B7BDD2B3C027C00CB7ADA /* SideBarListButtonDelegate.swift in Sources */,
 				2387E75A2A8014890003044E /* PlanTimeAPI.swift in Sources */,
 				23DE37C32A72A40C00F1DFE0 /* TimeTableView.swift in Sources */,
 				514D73D02A59839200404E64 /* MyPageList.swift in Sources */,

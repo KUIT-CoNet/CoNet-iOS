@@ -9,10 +9,6 @@ import SnapKit
 import Then
 import UIKit
 
-protocol SideBarListButtonDelegate: AnyObject {
-    func sideBarListButtonTapped(title: SideBarMenu)
-}
-
 class SideBarViewController: UIViewController, SideBarListButtonDelegate {
     var meetingId: Int = 0
     
