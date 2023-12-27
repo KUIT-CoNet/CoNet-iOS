@@ -21,7 +21,7 @@
 
 ## What is this PR? 📝
 
-### Related Issue Numbeer
+### Related Issue Number
 <!-- 연관된 이슈 번호를 모두 작성해 주세요. ex, #23, #24 -->
 - #23
 <br>
