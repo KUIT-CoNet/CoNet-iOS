@@ -47,7 +47,7 @@ class DecidedPlanCell: UICollectionViewCell {
     
     // 약속 이름
     let planTitleLabel = UILabel().then {
-        $0.numberOfLines = 2
+        $0.numberOfLines = 0
         $0.text = "제목은 최대 두 줄, 더 늘어나면 말줄임표로"
         $0.font = UIFont.body1Medium
         $0.textColor = UIColor.textHigh
@@ -56,15 +56,30 @@ class DecidedPlanCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        addView()
         layoutContraints()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        
+        addView()
         layoutContraints()
     }
     
-    // 전체 constraints
+    // 전체 addView
+    private func addView() {
+        addSubview(background)
+        dateView.addSubview(dateLabel)
+        dateView.addSubview(timeLabel)
+        background.addSubview(dateView)
+        background.addSubview(verticalDivider)
+        background.addSubview(leftDateLabel)
+        background.addSubview(planTitleLabel)
+    }
+    
+    // 전체 layoutContraints
     private func layoutContraints() {
         backgroundConstraints()
         dateViewConstraints()
@@ -73,28 +88,24 @@ class DecidedPlanCell: UICollectionViewCell {
     }
     
     private func backgroundConstraints() {
-        addSubview(background)
         background.snp.makeConstraints { make in
             make.edges.equalTo(0)
         }
     }
     
     private func dateViewConstraints() {
-        dateView.addSubview(dateLabel)
         dateLabel.snp.makeConstraints { make in
             make.height.equalTo(16)
             make.top.equalTo(dateView.snp.top)
             make.centerX.equalToSuperview()
         }
         
-        dateView.addSubview(timeLabel)
         timeLabel.snp.makeConstraints { make in
             make.height.equalTo(16)
             make.top.equalTo(dateLabel.snp.bottom).offset(4)
             make.centerX.equalTo(dateLabel.snp.centerX)
         }
         
-        background.addSubview(dateView)
         dateView.snp.makeConstraints { make in
             make.height.equalTo(36)
             make.width.equalTo(84)
@@ -104,7 +115,6 @@ class DecidedPlanCell: UICollectionViewCell {
     }
     
     private func verticalDividerConstraints() {
-        background.addSubview(verticalDivider)
         verticalDivider.snp.makeConstraints { make in
             make.height.equalTo(26)
             make.width.equalTo(1)
@@ -114,16 +124,14 @@ class DecidedPlanCell: UICollectionViewCell {
     }
     
     private func planTitleConstraints() {
-        background.addSubview(leftDateLabel)
         leftDateLabel.snp.makeConstraints { make in
             make.height.equalTo(18)
             make.top.equalTo(background.snp.top).offset(20)
             make.leading.equalTo(verticalDivider.snp.trailing).offset(20)
         }
         
-        background.addSubview(planTitleLabel)
         planTitleLabel.snp.makeConstraints { make in
-            make.height.equalTo(48)
+            make.top.equalTo(leftDateLabel.snp.bottom).offset(4)
             make.leading.equalTo(verticalDivider.snp.trailing).offset(20)
             make.trailing.equalTo(background.snp.trailing).offset(-20)
             make.bottom.equalTo(background.snp.bottom).offset(-20)
