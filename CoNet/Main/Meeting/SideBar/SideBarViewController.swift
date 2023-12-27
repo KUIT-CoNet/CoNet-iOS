@@ -94,8 +94,6 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
         }
     }
     
-    // MARK: viewDidLoad()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -106,6 +104,7 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
         addView()
         layoutConstraints()
         
+        // button 동작
         buttonActions()
     }
     
@@ -127,9 +126,11 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
         bottomButtonsConstraints()
     }
     
+    // 이전 ViewController로 데이터를 전달하는 delegate
+    weak var delegate: MeetingMainViewControllerDelegate?
+    // button 동작
     func buttonActions() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopUp))
-        background.addGestureRecognizer(tapGesture)
+        tapBackground()
         
         closeButton.addTarget(self, action: #selector(dismissPopUp), for: .touchUpInside)
         editMeetingInfoButton.addTarget(self, action: #selector(showEditMeetingInfo), for: .touchUpInside)
@@ -140,45 +141,6 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
         
         // custom UIView 사용에 따른 delegate 지정
         buttonsDelegate()
-    }
-    
-    func buttonsDelegate() {
-        waitingPlanButton.delegate = self
-        decidedPlanButton.delegate = self
-    }
-    
-    // 사이드바 팝업 닫기
-    @objc func dismissPopUp() {
-        dismiss(animated: true)
-    }
-    
-    // 모임 정보 수정 버튼 동작
-    @objc func showEditMeetingInfo() {
-        sideBarListButtonTapped(title: .editInfo)
-    }
-    
-    // 초대코드 버튼 동작
-    @objc func showInviteCodePopUp() {
-        sideBarListButtonTapped(title: .inviteCode)
-    }
-    
-    @objc func showDeleteMeeting() {
-        sideBarListButtonTapped(title: .delete)
-    }
-    
-    @objc func showLeaveMeeting() {
-        sideBarListButtonTapped(title: .out)
-    }
-    
-    // 이전 ViewController로 데이터를 전달하는 delegate
-    weak var delegate: MeetingMainViewControllerDelegate?
-    
-    // 사이드바의 리스트를 tap 하면
-    // 이전 ViewController로 어떤 버튼이 tap 되었는지 전달하는 함수
-    func sideBarListButtonTapped(title: SideBarMenu) {
-        dismiss(animated: true) {
-            self.delegate?.sendDataBack(data: title)
-        }
     }
 }
 
@@ -379,5 +341,50 @@ extension SideBarViewController {
         make.height.equalTo(50)
         make.width.equalTo(sideBarBackground.snp.width)
         make.top.equalTo(previousView.snp.bottom).offset(isFirstList ? 16 : 0)
+    }
+}
+
+// button actions
+extension SideBarViewController {
+    // 검은 배경 탭 -> 사이드바 닫기
+    private func tapBackground() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopUp))
+        background.addGestureRecognizer(tapGesture)
+    }
+    
+    // 사이드바 팝업 닫기
+    @objc func dismissPopUp() {
+        dismiss(animated: true)
+    }
+    
+    // 모임 정보 수정 버튼 동작
+    @objc func showEditMeetingInfo() {
+        sideBarListButtonTapped(title: .editInfo)
+    }
+    
+    // 초대코드 버튼 동작
+    @objc func showInviteCodePopUp() {
+        sideBarListButtonTapped(title: .inviteCode)
+    }
+    
+    @objc func showDeleteMeeting() {
+        sideBarListButtonTapped(title: .delete)
+    }
+    
+    @objc func showLeaveMeeting() {
+        sideBarListButtonTapped(title: .out)
+    }
+    
+    // 사이드바의 리스트를 tap 하면
+    // 이전 ViewController로 어떤 버튼이 tap 되었는지 전달하는 함수
+    func sideBarListButtonTapped(title: SideBarMenu) {
+        dismiss(animated: true) {
+            self.delegate?.sendDataBack(data: title)
+        }
+    }
+    
+    func buttonsDelegate() {
+        waitingPlanButton.delegate = self
+        decidedPlanButton.delegate = self
     }
 }
