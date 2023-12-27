@@ -12,7 +12,6 @@ import UIKit
 class SideBarList: UIButton {
     let topBorder = Divider().then { $0.setColor(UIColor.gray100!) }
     let bottomBorder = Divider().then { $0.setColor(UIColor.gray100!) }
-    
     let button = UIButton().then { $0.backgroundColor = UIColor.clear }
     let label = UILabel().then {
         $0.text = ""
@@ -20,19 +19,53 @@ class SideBarList: UIButton {
         $0.textColor = UIColor.textHigh
     }
     
-    weak var delegate: SideBarListButtonDelegate?
-    
     // Custom View 초기화
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViews()
+        
+        // layout
+        addView()
+        layoutConstraints()
+        
+        // button 동작
         setButton()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupViews()
+        
+        // layout
+        addView()
+        layoutConstraints()
+        
+        // button 동작
         setButton()
+    }
+    
+    func addView() {
+        addSubview(button)
+        button.addSubview(topBorder)
+        button.addSubview(label)
+        button.addSubview(bottomBorder)
+    }
+    
+    private func layoutConstraints() {
+        button.snp.makeConstraints { make in
+            make.height.equalTo(50)
+            make.width.equalToSuperview()
+        }
+        
+        topBorder.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.width.equalToSuperview()
+            make.top.equalTo(button.snp.top)
+        }
+        
+        label.snp.makeConstraints { make in
+            make.height.equalTo(24)
+            make.centerY.equalTo(button.snp.centerY)
+            make.leading.equalTo(button.snp.leading).offset(20)
+        }
     }
     
     // 버튼 동작
@@ -40,8 +73,9 @@ class SideBarList: UIButton {
         button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
     }
     
+    // 버튼이 탭되었을 때 어떤 버튼인지 전달
+    weak var delegate: SideBarListButtonDelegate?
     @objc func buttonTapped(_ sender: UIButton) {
-        // 버튼이 탭되었을 때 동작할 코드를 여기에 작성
         var title: SideBarMenu
         
         switch label.text {
@@ -53,43 +87,17 @@ class SideBarList: UIButton {
         delegate?.sideBarListButtonTapped(title: title)
     }
     
-    // 구성 요소들을 Custom View에 추가하고 레이아웃 설정
-    private func setupViews() {
-        addSubview(button)
-        button.snp.makeConstraints { make in
-            make.height.equalTo(50)
-            make.width.equalToSuperview()
-        }
-        
-        button.addSubview(topBorder)
-        topBorder.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.width.equalToSuperview()
-            make.top.equalTo(button.snp.top)
-        }
-        
-        button.addSubview(label)
-        label.snp.makeConstraints { make in
-            make.height.equalTo(24)
-            make.centerY.equalTo(button.snp.centerY)
-            make.leading.equalTo(button.snp.leading).offset(20)
-        }
+    // 버튼 타이틀 설정
+    func setTitle(_ title: String) {
+        label.text = title
     }
     
-    private func bottomDividerConstraints() {
-        button.addSubview(bottomBorder)
+    // 버튼 하단 border 설정
+    func setBottomBorder() {
         bottomBorder.snp.makeConstraints { make in
             make.height.equalTo(1)
             make.width.equalToSuperview()
             make.bottom.equalTo(button.snp.bottom)
         }
-    }
-    
-    func setTitle(_ title: String) {
-        label.text = title
-    }
-    
-    func setBottomBorder() {
-        bottomDividerConstraints()
     }
 }

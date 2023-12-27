@@ -118,6 +118,15 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
         bottomButtonsAddView()
     }
     
+    // 모든 layout Constraints
+    private func layoutConstraints() {
+        backgroundConstraints()
+        meetingInfoConstraints()
+        inviteCodeConstraints()
+        planConstraints()
+        bottomButtonsConstraints()
+    }
+    
     func buttonActions() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopUp))
         background.addGestureRecognizer(tapGesture)
@@ -223,15 +232,6 @@ extension SideBarViewController {
 
 // layout Constraints
 extension SideBarViewController {
-    // 모든 layout Constraints
-    private func layoutConstraints() {
-        backgroundConstraints()
-        meetingInfoConstraints()
-        inviteCodeConstraints()
-        planConstraints()
-        bottomButtonsConstraints()
-    }
-    
     // 배경 Constraints
     private func backgroundConstraints() {
         background.snp.makeConstraints { make in
@@ -246,8 +246,7 @@ extension SideBarViewController {
         }
         
         closeButton.snp.makeConstraints { make in
-            make.width.equalTo(24)
-            make.height.equalTo(24)
+            make.width.height.equalTo(24)
             make.top.equalTo(sideBarBackground.snp.top).offset(50)
             make.trailing.equalTo(sideBarBackground.snp.trailing).offset(-20)
         }
