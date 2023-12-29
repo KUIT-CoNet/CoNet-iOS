@@ -24,11 +24,6 @@ class HomeViewController: UIViewController {
     // 컴포넌트들이 들어갈 뷰
     let contentView = UIView()
     
-    let calendarView = CalendarView().then {
-        $0.layer.borderWidth = 0.2
-        $0.layer.borderColor = UIColor.gray300?.cgColor
-    }
-    
     let calendarVC = CalendarViewController()
     
     // label: 오늘의 약속
