@@ -9,10 +9,6 @@ import SnapKit
 import Then
 import UIKit
 
-protocol SideBarListButtonDelegate: AnyObject {
-    func sideBarListButtonTapped(title: SideBarMenu)
-}
-
 class SideBarViewController: UIViewController, SideBarListButtonDelegate {
     var meetingId: Int = 0
     
@@ -33,7 +29,8 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
         $0.textColor = UIColor.textHigh
         $0.preferredMaxLayoutWidth = 196
     }
-    let editMeetingInfoButton = UIButton().then { $0.setImage(UIImage(named: "editMeetingInfo"), for: .normal)}
+
+    let editMeetingInfoButton = UIButton().then { $0.setImage(UIImage(named: "editMeetingInfo"), for: .normal) }
     let memberCountImage = UIImageView().then { $0.image = UIImage(named: "meetingMember") }
     var memberCountLabel = UILabel().then {
         $0.text = ""
@@ -56,6 +53,7 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
         $0.font = UIFont.body2Medium
         $0.textColor = UIColor.purpleMain
     }
+
     let waitingPlanButton = SideBarList().then { $0.setTitle("대기중인 약속") }
     let decidedPlanButton = SideBarList().then {
         $0.setTitle("확정된 약속")
@@ -92,20 +90,43 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
         }
     }
     
-    // MARK: viewDidLoad()
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // background color를 clear로 설정 (default: black)
         view.backgroundColor = .clear
         
+        // layout
+        addView()
         layoutConstraints()
+        
+        // button 동작
         buttonActions()
     }
     
+    // 모든 addView
+    private func addView() {
+        backgroundAddView()
+        meetingInfoAddView()
+        inviteCodeAddView()
+        planAddView()
+        bottomButtonsAddView()
+    }
+    
+    // 모든 layout Constraints
+    private func layoutConstraints() {
+        backgroundConstraints()
+        meetingInfoConstraints()
+        inviteCodeConstraints()
+        planConstraints()
+        bottomButtonsConstraints()
+    }
+    
+    // 이전 ViewController로 데이터를 전달하는 delegate
+    weak var delegate: MeetingMainViewControllerDelegate?
+    // button 동작
     func buttonActions() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopUp))
-        background.addGestureRecognizer(tapGesture)
+        tapBackground()
         
         closeButton.addTarget(self, action: #selector(dismissPopUp), for: .touchUpInside)
         editMeetingInfoButton.addTarget(self, action: #selector(showEditMeetingInfo), for: .touchUpInside)
@@ -117,66 +138,64 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
         // custom UIView 사용에 따른 delegate 지정
         buttonsDelegate()
     }
-    
-    func buttonsDelegate() {
-        waitingPlanButton.delegate = self
-        decidedPlanButton.delegate = self
+}
+
+// addView
+extension SideBarViewController {
+    // 배경 addView
+    private func backgroundAddView() {
+        view.addSubview(background)
+        view.addSubview(sideBarBackground)
+        sideBarBackground.addSubview(closeButton)
     }
     
-    // 사이드바 팝업 닫기
-    @objc func dismissPopUp() {
-        dismiss(animated: true)
+    // 모임 정보 add view
+    private func meetingInfoAddView() {
+        sideBarBackground.addSubview(meetingNameLabel)
+        sideBarBackground.addSubview(editMeetingInfoButton)
+        sideBarBackground.addSubview(memberCountImage)
+        sideBarBackground.addSubview(memberCountLabel)
     }
     
-    // 모임 정보 수정 버튼 동작
-    @objc func showEditMeetingInfo() {
-        self.sideBarListButtonTapped(title: .editInfo)
+    // 초대 코드 발급 add view
+    private func inviteCodeAddView() {
+        sideBarBackground.addSubview(inviteCodeButton)
+        inviteCodeButton.addSubview(inviteCodeImage)
+        inviteCodeButton.addSubview(inviteCodeLabel)
     }
     
-    // 초대코드 버튼 동작
-    @objc func showInviteCodePopUp() {
-        self.sideBarListButtonTapped(title: .inviteCode)
+    // 약속 add view
+    private func planAddView() {
+        sideBarBackground.addSubview(planLabel)
+        sideBarBackground.addSubview(waitingPlanButton)
+        sideBarBackground.addSubview(decidedPlanButton)
     }
     
-    @objc func showDeleteMeeting() {
-        self.sideBarListButtonTapped(title: .delete)
-    }
-    
-    @objc func showLeaveMeeting() {
-        self.sideBarListButtonTapped(title: .out)
-    }
-    
-    // 이전 ViewController로 데이터를 전달하는 delegate
-    weak var delegate: MeetingMainViewControllerDelegate?
-    
-    // 사이드바의 리스트를 tap 하면
-    // 이전 ViewController로 어떤 버튼이 tap 되었는지 전달하는 함수
-    func sideBarListButtonTapped(title: SideBarMenu) {
-        dismiss(animated: true) {
-            self.delegate?.sendDataBack(data: title)
-        }
+    // 모임 나가기, 탈퇴 add view
+    private func bottomButtonsAddView() {
+        sideBarBackground.addSubview(bottomButtonDivider)
+        
+        // 모임 삭제
+        sideBarBackground.addSubview(deleteMeetingButton)
+        deleteMeetingButton.addSubview(deleteMeetingButtonTitle)
+        deleteMeetingButton.addSubview(deleteMeetingImage)
+        // 모임 나가기
+        sideBarBackground.addSubview(leaveMeetingButton)
+        leaveMeetingButton.addSubview(leaveMeetingImage)
+        leaveMeetingButton.addSubview(leaveMeetingButtonTitle)
+        
+        sideBarBackground.addSubview(bottomVerticalDivider)
     }
 }
 
 // layout Constraints
 extension SideBarViewController {
-    // 모든 layout Constraints
-    private func layoutConstraints() {
-        backgroundConstraints()
-        meetingInfoConstraints()
-        inviteCodeConstraints()
-        planConstraints()
-        bottomButtonsConstraints()
-    }
-    
     // 배경 Constraints
     private func backgroundConstraints() {
-        view.addSubview(background)
         background.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(0)
         }
         
-        view.addSubview(sideBarBackground)
         sideBarBackground.snp.makeConstraints { make in
             make.top.equalTo(view.snp.top)
             make.bottom.equalTo(view.snp.bottom)
@@ -184,10 +203,8 @@ extension SideBarViewController {
             make.trailing.equalTo(view.snp.trailing)
         }
         
-        sideBarBackground.addSubview(closeButton)
         closeButton.snp.makeConstraints { make in
-            make.width.equalTo(24)
-            make.height.equalTo(24)
+            make.width.height.equalTo(24)
             make.top.equalTo(sideBarBackground.snp.top).offset(50)
             make.trailing.equalTo(sideBarBackground.snp.trailing).offset(-20)
         }
@@ -195,27 +212,23 @@ extension SideBarViewController {
     
     // 모임 정보 Constraints
     private func meetingInfoConstraints() {
-        sideBarBackground.addSubview(meetingNameLabel)
         meetingNameLabel.snp.makeConstraints { make in
             make.top.equalTo(closeButton.snp.bottom).offset(36)
             make.leading.equalTo(sideBarBackground.snp.leading).offset(18)
         }
         
-        sideBarBackground.addSubview(editMeetingInfoButton)
         editMeetingInfoButton.snp.makeConstraints { make in
             make.width.height.equalTo(16)
             make.centerY.equalTo(meetingNameLabel.snp.centerY)
             make.leading.equalTo(meetingNameLabel.snp.trailing).offset(8)
         }
         
-        sideBarBackground.addSubview(memberCountImage)
         memberCountImage.snp.makeConstraints { make in
             make.width.height.equalTo(12)
             make.top.equalTo(meetingNameLabel.snp.bottom).offset(8)
             make.leading.equalTo(sideBarBackground.snp.leading).offset(18)
         }
         
-        sideBarBackground.addSubview(memberCountLabel)
         memberCountLabel.snp.makeConstraints { make in
             make.height.equalTo(16)
             make.centerY.equalTo(memberCountImage.snp.centerY)
@@ -225,21 +238,18 @@ extension SideBarViewController {
     
     // 초대 코드 발급 Constrints
     private func inviteCodeConstraints() {
-        sideBarBackground.addSubview(inviteCodeButton)
         inviteCodeButton.snp.makeConstraints { make in
             make.width.equalTo(sideBarBackground.snp.width)
             make.height.equalTo(50)
             make.top.equalTo(memberCountLabel.snp.bottom).offset(20)
         }
         
-        inviteCodeButton.addSubview(inviteCodeImage)
         inviteCodeImage.snp.makeConstraints { make in
             make.width.height.equalTo(24)
             make.centerY.equalTo(inviteCodeButton.snp.centerY)
             make.leading.equalTo(inviteCodeButton.snp.leading).offset(18)
         }
         
-        inviteCodeButton.addSubview(inviteCodeLabel)
         inviteCodeLabel.snp.makeConstraints { make in
             make.height.equalTo(24)
             make.centerY.equalTo(inviteCodeButton.snp.centerY)
@@ -249,7 +259,6 @@ extension SideBarViewController {
     
     // 약속 Constraints
     private func planConstraints() {
-        sideBarBackground.addSubview(planLabel)
         planLabel.snp.makeConstraints { make in
             make.height.equalTo(18)
             make.top.equalTo(inviteCodeButton.snp.bottom).offset(30)
@@ -257,13 +266,11 @@ extension SideBarViewController {
         }
         
         // 대기중인 약속
-        sideBarBackground.addSubview(waitingPlanButton)
         waitingPlanButton.snp.makeConstraints { make in
             listConstraints(make: make, previousView: planLabel, isFirstList: true)
         }
         
         // 확정된 약속
-        sideBarBackground.addSubview(decidedPlanButton)
         decidedPlanButton.snp.makeConstraints { make in
             listConstraints(make: make, previousView: waitingPlanButton, isFirstList: false)
         }
@@ -271,7 +278,6 @@ extension SideBarViewController {
     
     // 모임 나가기, 탈퇴 Constraints
     private func bottomButtonsConstraints() {
-        sideBarBackground.addSubview(bottomButtonDivider)
         bottomButtonDivider.snp.makeConstraints { make in
             make.width.equalTo(sideBarBackground.snp.width)
             make.height.equalTo(1)
@@ -279,7 +285,6 @@ extension SideBarViewController {
         }
         
         // 모임 삭제
-        sideBarBackground.addSubview(deleteMeetingButton)
         deleteMeetingButton.snp.makeConstraints { make in
             make.width.equalTo(sideBarBackground.snp.width).dividedBy(2)
             make.height.equalTo(60)
@@ -287,14 +292,12 @@ extension SideBarViewController {
             make.bottom.equalTo(sideBarBackground.snp.bottom).offset(-36)
         }
         
-        deleteMeetingButton.addSubview(deleteMeetingButtonTitle)
         deleteMeetingButtonTitle.snp.makeConstraints { make in
             make.height.equalTo(18)
             make.centerY.equalTo(deleteMeetingButton.snp.centerY)
             make.trailing.equalTo(deleteMeetingButton.snp.trailing).offset(-30)
         }
         
-        deleteMeetingButton.addSubview(deleteMeetingImage)
         deleteMeetingImage.snp.makeConstraints { make in
             make.width.height.equalTo(16)
             make.centerY.equalTo(deleteMeetingButtonTitle.snp.centerY)
@@ -302,7 +305,6 @@ extension SideBarViewController {
         }
         
         // 모임 나가기
-        sideBarBackground.addSubview(leaveMeetingButton)
         leaveMeetingButton.snp.makeConstraints { make in
             make.width.equalTo(sideBarBackground.snp.width).dividedBy(2)
             make.height.equalTo(60)
@@ -310,21 +312,18 @@ extension SideBarViewController {
             make.bottom.equalTo(sideBarBackground.snp.bottom).offset(-36)
         }
         
-        leaveMeetingButton.addSubview(leaveMeetingImage)
         leaveMeetingImage.snp.makeConstraints { make in
             make.width.height.equalTo(16)
             make.centerY.equalTo(leaveMeetingButton.snp.centerY)
             make.leading.equalTo(leaveMeetingButton.snp.leading).offset(30)
         }
         
-        leaveMeetingButton.addSubview(leaveMeetingButtonTitle)
         leaveMeetingButtonTitle.snp.makeConstraints { make in
             make.height.equalTo(18)
             make.centerY.equalTo(leaveMeetingButton)
             make.leading.equalTo(leaveMeetingImage.snp.trailing).offset(2)
         }
         
-        sideBarBackground.addSubview(bottomVerticalDivider)
         bottomVerticalDivider.snp.makeConstraints { make in
             make.width.equalTo(1)
             make.height.equalTo(30)
@@ -338,5 +337,50 @@ extension SideBarViewController {
         make.height.equalTo(50)
         make.width.equalTo(sideBarBackground.snp.width)
         make.top.equalTo(previousView.snp.bottom).offset(isFirstList ? 16 : 0)
+    }
+}
+
+// button actions
+extension SideBarViewController {
+    // 검은 배경 탭 -> 사이드바 닫기
+    private func tapBackground() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopUp))
+        background.addGestureRecognizer(tapGesture)
+    }
+    
+    // 사이드바 팝업 닫기
+    @objc func dismissPopUp() {
+        dismiss(animated: true)
+    }
+    
+    // 모임 정보 수정 버튼 동작
+    @objc func showEditMeetingInfo() {
+        sideBarListButtonTapped(title: .editInfo)
+    }
+    
+    // 초대코드 버튼 동작
+    @objc func showInviteCodePopUp() {
+        sideBarListButtonTapped(title: .inviteCode)
+    }
+    
+    @objc func showDeleteMeeting() {
+        sideBarListButtonTapped(title: .delete)
+    }
+    
+    @objc func showLeaveMeeting() {
+        sideBarListButtonTapped(title: .out)
+    }
+    
+    // 사이드바의 리스트를 tap 하면
+    // 이전 ViewController로 어떤 버튼이 tap 되었는지 전달하는 함수
+    func sideBarListButtonTapped(title: SideBarMenu) {
+        dismiss(animated: true) {
+            self.delegate?.sendDataBack(data: title)
+        }
+    }
+    
+    func buttonsDelegate() {
+        waitingPlanButton.delegate = self
+        decidedPlanButton.delegate = self
     }
 }

@@ -318,24 +318,19 @@ extension MeetingMainViewController: MeetingMainViewControllerDelegate {
         var nextVC: UIViewController
         
         switch data {
-        case .editInfo:
-            showMeetingInfoEditVC()
-        case .inviteCode:
-            showInvitationCodeVC()
-        case .wait:
-            showWaitingPlansVC()
-        case .decided:
-            showDecidedPlansVC()
-        case .delete:
-            showdeleteMeetingVC()
-        case .out:
-            showMeetingOutVC()
+        case .editInfo: showMeetingInfoEditVC() // 모임 정보 수정 페이지
+        case .inviteCode: showInvitationCodeVC() // 초대 코드 발급 팝업
+        case .wait: showWaitingPlansVC() // 대기중 약속 페이지
+        case .decided: showDecidedPlansVC() // 지난 약속 페이지
+        case .delete: showdeleteMeetingVC() // 모임 삭제 팝업
+        case .out: showMeetingOutVC() // 모임 나가기 팝업
         default:
             nextVC = WaitingPlanListViewController()
             pushViewController(nextVC)
         }
     }
     
+    // 모임 정보 수정 페이지
     func showMeetingInfoEditVC() {
         let nextVC = MeetingInfoEditViewController()
         nextVC.meetingId = meetingId
@@ -343,14 +338,14 @@ extension MeetingMainViewController: MeetingMainViewControllerDelegate {
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
+    // 초대 코드 발급 팝업
     func showInvitationCodeVC() {
         let nextVC = InvitationCodeViewController()
         nextVC.meetingId = meetingId
-        nextVC.modalPresentationStyle = .overCurrentContext
-        nextVC.modalTransitionStyle = .crossDissolve
-        present(nextVC, animated: true, completion: nil)
+        presentViewControllerModaly(nextVC)
     }
     
+    // 대기중 약속 페이지
     func showWaitingPlansVC() {
         let nextVC = WaitingPlanListViewController()
         nextVC.meetingId = meetingId
@@ -358,6 +353,7 @@ extension MeetingMainViewController: MeetingMainViewControllerDelegate {
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
+    // 지난 약속 페이지
     func showDecidedPlansVC() {
         let nextVC = DecidedPlanListViewController()
         nextVC.meetingId = meetingId
@@ -365,17 +361,22 @@ extension MeetingMainViewController: MeetingMainViewControllerDelegate {
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
+    // 모임 삭제 팝업
     func showdeleteMeetingVC() {
         let nextVC = MeetingDelPopUpViewController()
         nextVC.meetingId = meetingId
-        nextVC.modalPresentationStyle = .overCurrentContext
-        nextVC.modalTransitionStyle = .crossDissolve
-        present(nextVC, animated: true, completion: nil)
+        presentViewControllerModaly(nextVC)
     }
     
+    // 모임 나가기 팝업
     func showMeetingOutVC() {
         let nextVC = MeetingOutPopUpViewController()
         nextVC.meetingId = meetingId
+        presentViewControllerModaly(nextVC)
+    }
+    
+    // 팝업 띄우기 공통 Action
+    func presentViewControllerModaly(_ nextVC: UIViewController) {
         nextVC.modalPresentationStyle = .overCurrentContext
         nextVC.modalTransitionStyle = .crossDissolve
         present(nextVC, animated: true, completion: nil)
@@ -388,12 +389,6 @@ extension MeetingMainViewController: MeetingMainViewControllerDelegate {
     func pushViewController(_ nextVC: UIViewController) {
         nextVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(nextVC, animated: true)
-    }
-    
-    func presentViewControllerModaly(_ nextVC: UIViewController) {
-        nextVC.modalPresentationStyle = .overCurrentContext
-        nextVC.modalTransitionStyle = .crossDissolve
-        present(nextVC, animated: true, completion: nil)
     }
 }
 
