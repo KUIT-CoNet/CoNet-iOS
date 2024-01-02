@@ -8,7 +8,7 @@
 import Foundation
 
 class CalendarDateFormatter {
-    private let calendar = Calendar.current // Calendar 구조체를 현재 달력으로 초기화
+    private var calendar = Calendar.current // Calendar 구조체를 현재 달력으로 초기화
     private let dateFormatter = DateFormatter() // 원하는 String 타입으로 변화시켜줄 formatter
     private var nowCalendarDate = Date() // 현재 시간
     private(set) var days = [String]() // 달력에 표시할 날짜를 담을 배열
@@ -16,13 +16,22 @@ class CalendarDateFormatter {
     init() {
         dateFormatter.locale = Locale(identifier: "ko_KR")
         dateFormatter.timeZone = TimeZone(abbreviation: "KST")
+        calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         
         configureCalendar()
     }
     
+    func getDate() -> [Int] {
+        let calendarInfo = calendar.dateComponents([.year, .month, .day], from: nowCalendarDate)
+        
+        return [calendarInfo.year!, calendarInfo.month!, calendarInfo.day!]
+    }
+    
     // year, month text
     func getYearMonthText() -> String {
-        let yearMonthText = dateFormatter.string(from: nowCalendarDate)
+        let date = getDate()
+        let yearMonthText = String(date[0])+"년 "+String(date[1])+"월"
         
         return yearMonthText
     }

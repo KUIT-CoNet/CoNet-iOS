@@ -67,7 +67,7 @@ class CalendarViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByMeetingMain(notification:)), name: NSNotification.Name("ToCalendarVC"), object: nil)
         
-        // 년월 설정
+        // 년월 헤더 설정
         yearMonth.setTitle(calendarDateFormatter.getYearMonthText(), for: .normal)
         yearMonth.addTarget(self, action: #selector(didClickYearBtn), for: .touchUpInside)
     }
