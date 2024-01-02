@@ -22,10 +22,38 @@ class CalendarDateFormatter {
         configureCalendar()
     }
     
+    // 오늘 날짜 Int 배열 
+    func getToday() -> DateComponents {
+        let calendarInfo = calendar.dateComponents([.year, .month, .day], from: Date())
+        
+        return calendarInfo
+    }
+    
+    // 캘린더 날짜 Int 배열
     func getDate() -> [Int] {
         let calendarInfo = calendar.dateComponents([.year, .month, .day], from: nowCalendarDate)
         
         return [calendarInfo.year!, calendarInfo.month!, calendarInfo.day!]
+    }
+    
+    // [Int] -> yyyy-mm-dd
+    func changeDateType(date: [Int]) -> String {
+        // year
+        var returnDate = String(date[0])+"-"
+        
+        // month
+        if date[1] < 10 {
+            returnDate += "0"
+        }
+        returnDate += String(date[1])+"-"
+        
+        // day
+        if date[2] < 10 {
+            returnDate += "0"
+        }
+        returnDate += String(date[2])+"-"
+        
+        return returnDate
     }
     
     // year, month text

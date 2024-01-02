@@ -255,28 +255,16 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("Selected cell at indexPath: \(indexPath)")
         
+        // 오늘 날짜
+        let today = calendarDateFormatter.getToday()
+        
         // 캘린더 날짜
-        let yeMo = calendarDateFormatter.getYearMonthText()
+        let calendarDate = calendarDateFormatter.getDate()
         let calendarDay = calendarDateFormatter.days[indexPath.item]
-
-        var day = calendarDay
-        if calendarDay.count == 1 {
-            day = "0" + calendarDay
-        }
-
-        // 날짜 포멧 바꾸기
-        var calendarDate = yeMo + " " + day + "일"
-
-        let format = DateFormatter()
-        format.dateFormat = "yyyy년 MM월 dd일"
-        format.locale = Locale(identifier: "ko_KR")
-        format.timeZone = TimeZone(abbreviation: "KST")
-
-        let today = format.string(from: Date())
         
         // 선택한 날짜가 오늘일 때
         // 날짜 label 변경
-        if today == calendarDate {
+        if today.year == calendarDate[0] && today.month == calendarDate[1] && today.day == Int(calendarDay) {
             homeVC?.changeDate(month: "", day: "")
             NotificationCenter.default.post(name: NSNotification.Name("ToMeetingMain"), object: nil, userInfo: ["dayPlanlabel": "오늘의 약속"])
         } else {
@@ -284,20 +272,18 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
             NotificationCenter.default.post(name: NSNotification.Name("ToMeetingMain"), object: nil, userInfo: ["dayPlanlabel": calendarDateFormatter.getMonthText() + "월 " + calendarDay + "일의 약속"])
         }
         
-        // 선택 날짜 포맷 변경
-        calendarDate = calendarDate.replacingOccurrences(of: "년 ", with: "-")
-        calendarDate = calendarDate.replacingOccurrences(of: "월 ", with: "-")
-        calendarDate = calendarDate.replacingOccurrences(of: "일", with: "")
-
+        // yyyy-mm-dd 형식
+        let clickDate = calendarDateFormatter.changeDateType(date: calendarDate)
+        
         if let parentVC = parent {
             if parentVC is HomeViewController {
                 // 부모 뷰컨트롤러가 HomeViewController
                 // api: 특정 날짜 약속
-                homeVC?.dayPlanAPI(date: calendarDate)
+                homeVC?.dayPlanAPI(date: clickDate)
             } else if parentVC is MeetingMainViewController {
                 // 부모 뷰컨트롤러가 MeetingMainViewController
-                meetingMainVC?.dayPlanAPI(date: calendarDate)
-                NotificationCenter.default.post(name: NSNotification.Name("ToMeetingMain"), object: nil, userInfo: ["clickDate": calendarDate])
+                meetingMainVC?.dayPlanAPI(date: clickDate)
+                NotificationCenter.default.post(name: NSNotification.Name("ToMeetingMain"), object: nil, userInfo: ["clickDate": clickDate])
             }
         }
     }
@@ -331,14 +317,13 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
         // 날짜 설정
         cell.configureday(text: cellDay)
         
-        var calendar = Calendar.current
-        let today = calendar.dateComponents([.year, .month, .day], from: Date())
+        let today = calendarDateFormatter.getToday()
         
-        // 달력 month
+        // 달력 날짜
         let calendarDate = calendarDateFormatter.getDate()
         
-        if Int(cellDay) == today.day! && calendarDate[1] == today.month! && calendarDate[0] == today.year! {
-            // day, month 모두 같을 경우
+        if Int(cellDay) == today.day && calendarDate[1] == today.month && calendarDate[0] == today.year {
+            // day, month, year 모두 같을 경우
             // 오늘 날짜 보라색으로 설정
             cell.setTodayColor()
         } else if indexPath.item % 7 == 0 {
