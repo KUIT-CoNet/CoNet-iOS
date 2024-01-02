@@ -38,12 +38,9 @@ class CalendarDateFormatter {
     
     // month text
     func getMonthText() -> String {
-        let format = DateFormatter()
-        format.dateFormat = "M"
-        format.locale = Locale(identifier: "ko_KR")
-        format.timeZone = TimeZone(abbreviation: "KST")
+        let date = getDate()
         
-        return format.string(from: nowCalendarDate)
+        return String(date[1])
     }
     
     // 이번 달 날짜로 update

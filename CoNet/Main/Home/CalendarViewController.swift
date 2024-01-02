@@ -331,20 +331,13 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
         // 날짜 설정
         cell.configureday(text: cellDay)
         
-        let format = DateFormatter()
-        format.dateFormat = "d"
-        
-        // 오늘 날짜 계산
-        let today = format.string(from: Date())
-        
-        format.dateFormat = "MM"
-        // 오늘 날짜 month 계산
-        let todayMonth = format.string(from: Date())
+        var calendar = Calendar.current
+        let today = calendar.dateComponents([.year, .month, .day], from: Date())
         
         // 달력 month
-        let calendarMonth = calendarDateFormatter.currentMonth()
+        let calendarDate = calendarDateFormatter.getDate()
         
-        if cellDay == today && todayMonth == calendarMonth {
+        if Int(cellDay) == today.day! && calendarDate[1] == today.month! && calendarDate[0] == today.year! {
             // day, month 모두 같을 경우
             // 오늘 날짜 보라색으로 설정
             cell.setTodayColor()
