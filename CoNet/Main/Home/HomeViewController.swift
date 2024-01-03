@@ -78,6 +78,17 @@ class HomeViewController: UIViewController {
     // 대기 중 약속 데이터
     private var waitingPlanData: [WaitingPlan] = []
     
+    let calendarDateFormatter = CalendarDateFormatter()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        dayPlanAPI(date: calendarDateFormatter.changeDateType(date: calendarDateFormatter.getCalendarDateIntArray()))
+        waitingPlanAPI()
+        
+        updateContentSize()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -89,32 +100,10 @@ class HomeViewController: UIViewController {
         // layout
         addView()
         layoutConstraints()
+        setupCollectionView()
         
         // HomeViewController의 인스턴스를 CalendarViewController의 프로퍼티에 할당
         calendarVC.homeVC = self
-        
-        setupCollectionView()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        let format = DateFormatter()
-        format.dateFormat = "yyyy-MM-dd"
-        format.locale = Locale(identifier: "ko_KR")
-        format.timeZone = TimeZone(abbreviation: "KST")
-        
-        dayPlanAPI(date: format.string(from: Date()))
-        
-        // api: 대기 중인 약속
-        HomeAPI().getWaitingPlan { count, plans in
-            self.waitingPlanNum.text = String(count)
-            self.waitingPlanData = plans
-            self.waitingPlanCollectionView.reloadData()
-            self.layoutConstraints()
-        }
-        
-        updateContentSize()
     }
     
     override func viewDidLayoutSubviews() {
@@ -130,6 +119,16 @@ class HomeViewController: UIViewController {
             self.planNum.text = String(count)
             self.dayPlanData = plans
             self.dayPlanCollectionView.reloadData()
+            self.layoutConstraints()
+        }
+    }
+    
+    func waitingPlanAPI() {
+        // api: 대기 중인 약속
+        HomeAPI().getWaitingPlan { count, plans in
+            self.waitingPlanNum.text = String(count)
+            self.waitingPlanData = plans
+            self.waitingPlanCollectionView.reloadData()
             self.layoutConstraints()
         }
     }
