@@ -13,13 +13,14 @@ class WaitingPlanListViewController: UIViewController {
     var meetingId: Int = 0
     
     private lazy var mainView = PlanListCollectionView.init(frame: self.view.frame)
-
-//    static func instance() -> ViewController {
-//        return ViewController.init(nibName: nil, bundle: nil)
-//    }
-    
     private var plansCount: Int = 0
     private var waitingPlanData: [WaitingPlanInfo] = []
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = false
+        getWatingPlans() // 대기 중 약속 데이터 가져오기
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +28,6 @@ class WaitingPlanListViewController: UIViewController {
         navigationItem.title = "대기중인 약속"
         
         view = mainView
-        
         view.backgroundColor = UIColor.gray50
         setupCollectionView()
     }
@@ -37,21 +37,20 @@ class WaitingPlanListViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.isHidden = false
-        
+    // CollectionView 설정
+    private func setupCollectionView() {
+        mainView.collectionView.delegate = self
+        mainView.collectionView.dataSource = self
+        mainView.collectionView.register(WaitingPlanCell.self, forCellWithReuseIdentifier: WaitingPlanCell.registerId)
+    }
+    
+    // 대기 중 약속 데이터 가져오기
+    private func getWatingPlans() {
         PlanAPI().getWaitingPlansAtMeeting(meetingId: meetingId) { count, plans in
             self.plansCount = count
             self.waitingPlanData = plans
             self.mainView.reload()
         }
-    }
-    
-    private func setupCollectionView() {
-        mainView.collectionView.delegate = self
-        mainView.collectionView.dataSource = self
-        mainView.collectionView.register(WaitingPlanCell.self, forCellWithReuseIdentifier: WaitingPlanCell.registerId)
     }
 }
 
@@ -93,11 +92,13 @@ extension WaitingPlanListViewController: UICollectionViewDelegate, UICollectionV
         return 10
     }
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-//        // 여기서 좌우 여백 값을 조절합니다.
-//        let leftRightInset: CGFloat = 16.0
-//        return UIEdgeInsets(top: 0, left: leftRightInset, bottom: 0, right: leftRightInset)
-//    }
+    /*
+    // 셀 좌우 여백 값 조절
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let leftRightInset: CGFloat = 16.0
+        return UIEdgeInsets(top: 0, left: leftRightInset, bottom: 0, right: leftRightInset)
+    }
+     */
 }
 
 protocol MeetingMainViewControllerDelegate: AnyObject {

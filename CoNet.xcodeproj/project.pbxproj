@@ -95,7 +95,6 @@
 		51A3DA132A72BF4D00CAEE2A /* ArrowList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A3DA122A72BF4D00CAEE2A /* ArrowList.swift */; };
 		51B526C42A6C2F76009DBFB4 /* SideBarList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B526C32A6C2F76009DBFB4 /* SideBarList.swift */; };
 		51B526C62A6C324D009DBFB4 /* SideBarMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B526C52A6C324D009DBFB4 /* SideBarMenu.swift */; };
-		51B526C82A6C3893009DBFB4 /* PlanDummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B526C72A6C3893009DBFB4 /* PlanDummyData.swift */; };
 		51B526CA2A6C3901009DBFB4 /* DecidedPlanListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B526C92A6C3901009DBFB4 /* DecidedPlanListViewController.swift */; };
 		51B526CC2A6C3988009DBFB4 /* DecidedPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B526CB2A6C3988009DBFB4 /* DecidedPlanCell.swift */; };
 		51DA64962A532CB300BBA4C0 /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 51DA64952A532CB300BBA4C0 /* KakaoSDK */; };
@@ -198,7 +197,6 @@
 		51A3DA122A72BF4D00CAEE2A /* ArrowList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowList.swift; sourceTree = "<group>"; };
 		51B526C32A6C2F76009DBFB4 /* SideBarList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideBarList.swift; sourceTree = "<group>"; };
 		51B526C52A6C324D009DBFB4 /* SideBarMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideBarMenu.swift; sourceTree = "<group>"; };
-		51B526C72A6C3893009DBFB4 /* PlanDummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanDummyData.swift; sourceTree = "<group>"; };
 		51B526C92A6C3901009DBFB4 /* DecidedPlanListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecidedPlanListViewController.swift; sourceTree = "<group>"; };
 		51B526CB2A6C3988009DBFB4 /* DecidedPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecidedPlanCell.swift; sourceTree = "<group>"; };
 		51C29AF22B31DD7600B1A1BA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -501,7 +499,6 @@
 		5199BCDB2A72435800CE585C /* PlanList */ = {
 			isa = PBXGroup;
 			children = (
-				51B526C72A6C3893009DBFB4 /* PlanDummyData.swift */,
 				518F55EF2A6BC102002D8F0F /* PlanListCollectionView.swift */,
 			);
 			path = PlanList;
@@ -730,7 +727,6 @@
 				51B526C62A6C324D009DBFB4 /* SideBarMenu.swift in Sources */,
 				23DA182A2A694551004EC6A6 /* CalendarView.swift in Sources */,
 				235F5B732A69893F00ADC0D6 /* CalendarDateFormatter.swift in Sources */,
-				51B526C82A6C3893009DBFB4 /* PlanDummyData.swift in Sources */,
 				512856392A81678200C1FBA7 /* FixPlanPopUpView.swift in Sources */,
 				51046AAB2A62F60200AD543D /* PreviewExtension.swift in Sources */,
 				23DE37C12A7287BD00F1DFE0 /* TimeShareViewController.swift in Sources */,

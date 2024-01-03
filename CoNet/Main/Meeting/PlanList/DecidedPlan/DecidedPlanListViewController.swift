@@ -11,28 +11,14 @@ class DecidedPlanListViewController: UIViewController {
     var meetingId: Int = 0
     
     private lazy var mainView = PlanListCollectionView.init(frame: self.view.frame)
-
-//    static func instance() -> ViewController {
-//        return ViewController.init(nibName: nil, bundle: nil)
-//    }
-    
     var plansCount: Int = 0
     private var decidedPlanData: [DecidedPlanInfo] = []
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.navigationController?.navigationBar.isHidden = true
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = false
         
-        PlanAPI().getDecidedPlansAtMeeting(meetingId: meetingId) { count, plans in
-            self.plansCount = count
-            self.decidedPlanData = plans
-            self.mainView.reload()
-        }
+        getDecidedPlan() // 확정된 약속 데이터 가져오기
     }
     
     override func viewDidLoad() {
@@ -41,15 +27,30 @@ class DecidedPlanListViewController: UIViewController {
         navigationItem.title = "확정된 약속"
         
         view = mainView
-        
         view.backgroundColor = UIColor.gray50
+        
         setupCollectionView()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.navigationBar.isHidden = true
+    }
+    
+    // CollectionView 설정
     private func setupCollectionView() {
         mainView.collectionView.delegate = self
         mainView.collectionView.dataSource = self
         mainView.collectionView.register(DecidedPlanCell.self, forCellWithReuseIdentifier: DecidedPlanCell.registerId)
+    }
+    
+    // 확정된 약속 데이터 가져오기
+    private func getDecidedPlan() {
+        PlanAPI().getDecidedPlansAtMeeting(meetingId: meetingId) { count, plans in
+            self.plansCount = count
+            self.decidedPlanData = plans
+            self.mainView.reload()
+        }
     }
 }
 

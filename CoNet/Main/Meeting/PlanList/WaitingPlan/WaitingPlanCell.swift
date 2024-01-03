@@ -20,15 +20,6 @@ class WaitingPlanCell: UICollectionViewCell {
         
         $0.layer.borderColor = UIColor.black.withAlphaComponent(0.1).cgColor
         $0.layer.borderWidth = 1
-        
-//        $0.layer.borderColor = UIColor.clear.cgColor
-//        $0.layer.borderWidth = 1
-//
-//        $0.layer.masksToBounds = false
-//        $0.layer.shadowOffset = CGSize(width: 0, height: 2)
-//        $0.layer.shadowColor = UIColor.black.cgColor
-//        $0.layer.shadowOpacity = 0.1
-//        $0.layer.shadowRadius = 8 / UIScreen.main.scale
     }
     
     // 날짜View - 시작 날짜, 구분선, 끝 날짜
@@ -55,7 +46,7 @@ class WaitingPlanCell: UICollectionViewCell {
     // 약속 이름
     let planTitleLabel = UILabel().then {
         $0.numberOfLines = 2
-        $0.text = "제목은 최대 두 줄, 더 늘어나면 말줄임표로"
+        $0.text = "대기 중인 약속을 불러오고 있어요"
         $0.font = UIFont.body1Medium
         $0.textColor = UIColor.textHigh
         $0.lineBreakMode = .byWordWrapping
@@ -63,15 +54,36 @@ class WaitingPlanCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        addView()
         layoutContraints()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        
+        addView()
         layoutContraints()
     }
     
-    // 전체 constraints
+    // 전체 addView
+    private func addView() {
+        // background
+        addSubview(background)
+        
+        // 날짜
+        dateView.addSubview(startDateLabel)
+        dateView.addSubview(finishDateLabel)
+        dateView.addSubview(divider)
+        background.addSubview(dateView)
+        
+        // 세로 구분선
+        background.addSubview(verticalDivider)
+        // 약속 이름
+        background.addSubview(planTitleLabel)
+    }
+    
+    // 전체 layoutConstraints
     private func layoutContraints() {
         backgroundConstraints()
         dateViewConstraints()
@@ -80,33 +92,28 @@ class WaitingPlanCell: UICollectionViewCell {
     }
     
     private func backgroundConstraints() {
-        addSubview(background)
         background.snp.makeConstraints { make in
             make.edges.equalTo(0)
         }
     }
     
     private func dateViewConstraints() {
-        dateView.addSubview(startDateLabel)
         startDateLabel.snp.makeConstraints { make in
             make.height.equalTo(16)
             make.top.equalTo(dateView.snp.top)
             make.centerX.equalToSuperview()
         }
         
-        dateView.addSubview(finishDateLabel)
         finishDateLabel.snp.makeConstraints { make in
             make.height.equalTo(16)
             make.bottom.equalTo(dateView.snp.bottom)
             make.centerX.equalToSuperview()
         }
         
-        dateView.addSubview(divider)
         divider.snp.makeConstraints { make in
             make.center.equalTo(dateView.snp.center)
         }
         
-        background.addSubview(dateView)
         dateView.snp.makeConstraints { make in
             make.width.equalTo(88)
             make.height.equalTo(background).offset(-40)
@@ -116,7 +123,6 @@ class WaitingPlanCell: UICollectionViewCell {
     }
     
     private func verticalDividerConstraints() {
-        background.addSubview(verticalDivider)
         verticalDivider.snp.makeConstraints { make in
             make.height.equalTo(26)
             make.width.equalTo(1)
@@ -126,7 +132,6 @@ class WaitingPlanCell: UICollectionViewCell {
     }
     
     private func planTitleConstraints() {
-        background.addSubview(planTitleLabel)
         planTitleLabel.snp.makeConstraints { make in
             make.height.equalTo(52)
             make.centerY.equalTo(background.snp.centerY)
