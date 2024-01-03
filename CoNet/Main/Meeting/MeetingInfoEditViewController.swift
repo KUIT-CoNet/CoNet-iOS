@@ -9,7 +9,7 @@ import SnapKit
 import Then
 import UIKit
 
-class MeetingInfoEditViewController: UIViewController {
+class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
     var meetingId: Int = 0
     
     let xButton = UIButton().then {
@@ -46,7 +46,6 @@ class MeetingInfoEditViewController: UIViewController {
         $0.placeholder = "모임 이름 입력"
         $0.font = UIFont.headline3Regular
         $0.tintColor = UIColor.textDisabled
-        $0.becomeFirstResponder()
     }
     
     let grayLine = UIView().then {
@@ -102,6 +101,7 @@ class MeetingInfoEditViewController: UIViewController {
         addView()
         layoutConstriants()
         buttonClicks()
+        meetingnameTextField.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -234,6 +234,14 @@ class MeetingInfoEditViewController: UIViewController {
         textCountLabel.text = "\(nameCount)/30"
     }
     
+    // 텍스트필트 클릭 시
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == meetingnameTextField {
+            grayLine.backgroundColor = UIColor.purpleMain
+            textCountLabel.textColor = UIColor.black
+        }
+    }
+    
     @objc private func updateMeeting() {
         guard let name = meetingnameTextField.text else { return }
         guard let image = photoImageView.image else { return }
@@ -263,6 +271,7 @@ class MeetingInfoEditViewController: UIViewController {
         }
         completionButton.setTitleColor(completionButton.isEnabled ? .purpleMain : .textDisabled, for: .normal)
         updateTextCountLabel()
+        textFieldDidBeginEditing(meetingnameTextField)
     }
     
     // 텍스트필트 x버튼 클릭시
