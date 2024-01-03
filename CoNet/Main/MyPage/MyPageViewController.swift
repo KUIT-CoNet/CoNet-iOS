@@ -41,7 +41,7 @@ class MyPageViewController: UIViewController {
     lazy var userInfoView = myPageList.arrowView(title: "회원정보", labelFont: UIFont.body1Regular!)
     lazy var noticeView = myPageList.arrowView(title: "공지사항", labelFont: UIFont.body1Regular!)
     lazy var inquireView = myPageList.arrowView(title: "문의하기", labelFont: UIFont.body1Regular!)
-    lazy var termView = myPageList.noArrowView(title: "이용약관")
+    lazy var termView = myPageList.arrowView(title: "이용약관", labelFont: UIFont.body1Regular!)
     lazy var logoutView = myPageList.noArrowView(title: "로그아웃")
     
     override func viewWillAppear(_ animated: Bool) {
