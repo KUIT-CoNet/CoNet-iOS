@@ -39,7 +39,6 @@ class MyPageViewController: UIViewController {
     // 마이페이지 리스트
     let myPageList = MyPageList()
     lazy var userInfoView = myPageList.arrowView(title: "회원정보", labelFont: UIFont.body1Regular!)
-    lazy var notificationView = myPageList.toggleView(title: "알림 설정")
     lazy var noticeView = myPageList.arrowView(title: "공지사항", labelFont: UIFont.body1Regular!)
     lazy var inquireView = myPageList.arrowView(title: "문의하기", labelFont: UIFont.body1Regular!)
     lazy var termView = myPageList.noArrowView(title: "이용약관")
@@ -156,12 +155,10 @@ class MyPageViewController: UIViewController {
             verticalPadding(make: make)
         }
         
-        myPageListLayoutConstraints(notificationView, previousView: userInfoView)
-        
         view.addSubview(shortDivider)
         shortDivider.snp.makeConstraints { make in
             dividerConstraints(make: make)
-            make.top.equalTo(notificationView.snp.bottom).offset(24)
+            make.top.equalTo(userInfoView.snp.bottom).offset(24)
         }
         
         myPageListLayoutConstraints(noticeView, previousView: shortDivider)
