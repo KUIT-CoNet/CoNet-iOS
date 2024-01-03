@@ -44,6 +44,11 @@ class MyPageViewController: UIViewController {
     lazy var termView = myPageList.noArrowView(title: "이용약관")
     lazy var logoutView = myPageList.noArrowView(title: "로그아웃")
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getUser()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = true
@@ -51,21 +56,19 @@ class MyPageViewController: UIViewController {
         // background color를 white로 설정 (default: black)
         view.backgroundColor = .white
         
-        // 전체 layout constraints
+        addView()
         layoutConstraints()
-        
+        buttonActions() // button 동작
+    }
+    
+    private func buttonActions() {
         userInfoView.addTarget(self, action: #selector(showUserInfoViewController), for: .touchUpInside)
         noticeView.addTarget(self, action: #selector(showNoticeViewController), for: .touchUpInside)
         inquireView.addTarget(self, action: #selector(showInquireViewController), for: .touchUpInside)
         logoutView.addTarget(self, action: #selector(showLogoutPopup), for: .touchUpInside)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        fetchUser()
-    }
-    
-    private func fetchUser() {
+    private func getUser() {
         MyPageAPI().getUser { name, imageUrl, _, _ in
             self.nameLabel.text = name
             
@@ -83,7 +86,6 @@ class MyPageViewController: UIViewController {
     @objc private func showNoticeViewController(_ sender: UIView) {
         let nextVC = NoticeViewController()
         navigationController?.pushViewController(nextVC, animated: true)
-        
     }
     
     @objc private func showInquireViewController(_ sender: UIView) {
@@ -96,6 +98,10 @@ class MyPageViewController: UIViewController {
         popupVC.modalPresentationStyle = .overCurrentContext
         popupVC.modalTransitionStyle = .crossDissolve
         present(popupVC, animated: true, completion: nil)
+    }
+    
+    private func addView() {
+        
     }
     
     // 전체 layout constraints
