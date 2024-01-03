@@ -176,7 +176,7 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
         meetingnameTextField.snp.makeConstraints { make in
             make.top.equalTo(meetingnameLabel.snp.bottom).offset(10)
             make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
+            make.trailing.equalTo(safeArea.snp.trailing).offset(-40)
         }
         xnameButton.snp.makeConstraints { make in
             make.width.height.equalTo(16)
@@ -231,7 +231,7 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
     
     func updateTextCountLabel() {
         let nameCount = meetingnameTextField.text?.count ?? 0
-        textCountLabel.text = "\(nameCount)/30"
+        textCountLabel.text = "\(nameCount)/20"
     }
     
     // 텍스트필트 클릭 시
@@ -264,7 +264,7 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
         guard let text = meetingnameTextField.text else { return }
         completionButton.isEnabled = !text.isEmpty && photoImageView.image != nil
         
-        if text.count > 30 {
+        if text.count > 20 {
             xnameButton.setImage(UIImage(named: "emarkRedEmpty"), for: .normal)
         } else {
             xnameButton.setImage(UIImage(named: "clearBtn"), for: .normal)
