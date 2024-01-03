@@ -8,7 +8,7 @@
 import Foundation
 
 class CalendarDateFormatter {
-    private let calendar = Calendar.current // Calendar 구조체를 현재 달력으로 초기화
+    private var calendar = Calendar.current // Calendar 구조체를 현재 달력으로 초기화
     private let dateFormatter = DateFormatter() // 원하는 String 타입으로 변화시켜줄 formatter
     private var nowCalendarDate = Date() // 현재 시간
     private(set) var days = [String]() // 달력에 표시할 날짜를 담을 배열
@@ -16,25 +16,59 @@ class CalendarDateFormatter {
     init() {
         dateFormatter.locale = Locale(identifier: "ko_KR")
         dateFormatter.timeZone = TimeZone(abbreviation: "KST")
+        calendar.locale = Locale(identifier: "ko_KR")
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         
         configureCalendar()
     }
     
+    // 오늘 날짜 Int 배열 
+    func getToday() -> DateComponents {
+        let calendarInfo = calendar.dateComponents([.year, .month, .day], from: Date())
+        
+        return calendarInfo
+    }
+    
+    // 캘린더 날짜 Int 배열
+    func getCalendarDateIntArray() -> [Int] {
+        let calendarInfo = calendar.dateComponents([.year, .month, .day], from: nowCalendarDate)
+        
+        return [calendarInfo.year!, calendarInfo.month!, calendarInfo.day!]
+    }
+    
+    // [Int] -> yyyy-mm-dd
+    func changeDateType(date: [Int]) -> String {
+        // year
+        var returnDate = String(date[0])+"-"
+        
+        // month
+        if date[1] < 10 {
+            returnDate += "0"
+        }
+        returnDate += String(date[1])+"-"
+        
+        // day
+        if date[2] < 10 {
+            returnDate += "0"
+        }
+        returnDate += String(date[2])+"-"
+        
+        return returnDate
+    }
+    
     // year, month text
     func getYearMonthText() -> String {
-        let yearMonthText = dateFormatter.string(from: nowCalendarDate)
+        let date = getCalendarDateIntArray()
+        let yearMonthText = String(date[0])+"년 "+String(date[1])+"월"
         
         return yearMonthText
     }
     
     // month text
     func getMonthText() -> String {
-        let format = DateFormatter()
-        format.dateFormat = "M"
-        format.locale = Locale(identifier: "ko_KR")
-        format.timeZone = TimeZone(abbreviation: "KST")
+        let date = getCalendarDateIntArray()
         
-        return format.string(from: nowCalendarDate)
+        return String(date[1])
     }
     
     // 이번 달 날짜로 update
