@@ -9,10 +9,6 @@ import SnapKit
 import Then
 import UIKit
 
-class NextViewController {
-    var next = ""
-}
-
 class MyPageViewController: UIViewController {
     // "MY" 타이틀
     let titleLabel = UILabel().then {
