@@ -159,8 +159,7 @@ class CalendarViewController: UIViewController {
     func headerConstraints() {
         // 이전 달로 이동 버튼
         prevBtn.snp.makeConstraints { make in
-            make.width.equalTo(24)
-            make.height.equalTo(24)
+            make.width.height.equalTo(24)
             make.leading.equalTo(view.snp.leading).offset(44)
             make.top.equalTo(view.snp.top).offset(36)
         }
@@ -174,8 +173,7 @@ class CalendarViewController: UIViewController {
         
         // 다음 달로 이동 버튼
         nextBtn.snp.makeConstraints { make in
-            make.width.equalTo(24)
-            make.height.equalTo(24)
+            make.width.height.equalTo(24)
             make.trailing.equalTo(view.snp.trailing).offset(-44)
             make.top.equalTo(view.snp.top).offset(36)
         }
