@@ -119,20 +119,18 @@ class MyPageViewController: UIViewController {
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(36)
             make.top.equalTo(safeArea.snp.top).offset(40)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
+            make.leading.equalTo(view.snp.leading).offset(24)
         }
     }
     
     // 프로필 이미지, 이름 constraints
     private func userConstraints() {
-        let safeArea = view.safeAreaLayoutGuide
-        
         view.addSubview(profileImage)
         profileImage.snp.makeConstraints { make in
             make.width.equalTo(60)
             make.height.equalTo(60)
             make.top.equalTo(titleLabel.snp.bottom).offset(32)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
+            make.leading.equalTo(view.snp.leading).offset(24)
         }
         
         view.addSubview(nameLabel)
@@ -145,18 +143,16 @@ class MyPageViewController: UIViewController {
         view.addSubview(divider)
         divider.snp.makeConstraints { make in
             make.height.equalTo(18)
-            make.width.equalTo(safeArea.snp.width)
+            make.width.equalTo(view.snp.width)
             make.top.equalTo(profileImage.snp.bottom).offset(22)
         }
     }
     
     // 마이페이지 리스트 contents constraints
     private func contentsConstraints() {
-        let safeArea = view.safeAreaLayoutGuide
-        
         view.addSubview(userInfoView)
         userInfoView.snp.makeConstraints { make in
-            make.width.equalTo(safeArea.snp.width).offset(-48)
+            make.width.equalTo(view.snp.width).offset(-48)
             make.top.equalTo(divider.snp.bottom).offset(32)
             verticalPadding(make: make)
         }
@@ -182,11 +178,9 @@ class MyPageViewController: UIViewController {
     
     // 리스트의 공통된 constraints
     private func myPageListLayoutConstraints(_ listView: UIView, previousView: UIView) {
-        let safeArea = view.safeAreaLayoutGuide
-        
         view.addSubview(listView)
         listView.snp.makeConstraints { make in
-            make.width.equalTo(safeArea.snp.width).offset(-48)
+            make.width.equalTo(view.snp.width).offset(-48)
             make.top.equalTo(previousView.snp.bottom).offset(24)
             verticalPadding(make: make)
         }
@@ -194,18 +188,14 @@ class MyPageViewController: UIViewController {
     
     // 얇은 구분선 constraints
     private func dividerConstraints(make: ConstraintMaker) {
-        let safeArea = view.safeAreaLayoutGuide
-        
         make.height.equalTo(1)
-        make.width.equalTo(safeArea.snp.width).offset(-48)
+        make.width.equalTo(view.snp.width).offset(-48)
         verticalPadding(make: make)
     }
     
     // 왼쪽, 오른쪽 여백 24
     private func verticalPadding(make: ConstraintMaker) {
-        let safeArea = view.safeAreaLayoutGuide
-        
-        make.leading.equalTo(safeArea.snp.leading).offset(24)
-        make.trailing.equalTo(safeArea.snp.trailing).offset(24)
+        make.leading.equalTo(view.snp.leading).offset(24)
+        make.trailing.equalTo(view.snp.trailing).offset(24)
     }
 }
