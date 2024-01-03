@@ -257,7 +257,7 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
         let today = calendarDateFormatter.getToday()
         
         // 캘린더 날짜
-        let calendarDate = calendarDateFormatter.getDate()
+        let calendarDate = calendarDateFormatter.getCalendarDateIntArray()
         let calendarDay = calendarDateFormatter.days[indexPath.item]
         
         // 선택한 날짜가 오늘일 때
@@ -318,7 +318,7 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
         let today = calendarDateFormatter.getToday()
         
         // 달력 날짜
-        let calendarDate = calendarDateFormatter.getDate()
+        let calendarDate = calendarDateFormatter.getCalendarDateIntArray()
         
         if Int(cellDay) == today.day && calendarDate[1] == today.month && calendarDate[0] == today.year {
             // day, month, year 모두 같을 경우

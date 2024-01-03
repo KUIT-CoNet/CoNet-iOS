@@ -30,7 +30,7 @@ class CalendarDateFormatter {
     }
     
     // 캘린더 날짜 Int 배열
-    func getDate() -> [Int] {
+    func getCalendarDateIntArray() -> [Int] {
         let calendarInfo = calendar.dateComponents([.year, .month, .day], from: nowCalendarDate)
         
         return [calendarInfo.year!, calendarInfo.month!, calendarInfo.day!]
@@ -58,7 +58,7 @@ class CalendarDateFormatter {
     
     // year, month text
     func getYearMonthText() -> String {
-        let date = getDate()
+        let date = getCalendarDateIntArray()
         let yearMonthText = String(date[0])+"년 "+String(date[1])+"월"
         
         return yearMonthText
@@ -66,7 +66,7 @@ class CalendarDateFormatter {
     
     // month text
     func getMonthText() -> String {
-        let date = getDate()
+        let date = getCalendarDateIntArray()
         
         return String(date[1])
     }
