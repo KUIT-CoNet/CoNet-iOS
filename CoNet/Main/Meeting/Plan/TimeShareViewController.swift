@@ -324,12 +324,12 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         nextVC.planNameTextField.text = planTitle.text
         nextVC.planStartDateField.text = sendDate[0].replacingOccurrences(of: "-", with: ". ")
         nextVC.calendarButton.isEnabled = false
-        nextVC.planStartDateUnderLabel.text = "약속 기간은 수정할 수 없습니다."
-        nextVC.planStartDateUnderLabel.textColor = UIColor.textDisabled
-        nextVC.planStartDateUnderLabel.snp.makeConstraints { make in
+        nextVC.cautionLabel.text = "약속 기간은 수정할 수 없습니다."
+        nextVC.cautionLabel.textColor = UIColor.textDisabled
+        nextVC.cautionLabel.snp.makeConstraints { make in
             make.leading.equalTo(nextVC.view.safeAreaLayoutGuide.snp.leading).offset(24)
         }
-        nextVC.planStartDateUnderImage.isHidden = true
+        nextVC.cautionImage.isHidden = true
         nextVC.planStartDateField.isUserInteractionEnabled = false
         nextVC.makeButton.setTitle("수정", for: .normal)
         nextVC.planId = planId
