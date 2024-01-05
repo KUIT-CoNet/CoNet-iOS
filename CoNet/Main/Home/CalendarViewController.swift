@@ -63,7 +63,7 @@ class CalendarViewController: UIViewController {
         setupCollectionView()
         
         // 버튼 클릭 이벤트
-        btnEvents()
+        buttonActions()
         
         NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByMeetingMain(notification:)), name: NSNotification.Name("ToCalendarVC"), object: nil)
         
@@ -79,6 +79,16 @@ class CalendarViewController: UIViewController {
         
         // api 호출
         getMonthPlanAPI(date: format.string(from: Date()))
+    }
+    
+    private func setupCollectionView() {
+        calendarCollectionView.dataSource = self
+        calendarCollectionView.delegate = self
+    }
+    
+    func buttonActions() {
+        prevBtn.addTarget(self, action: #selector(didClickPrevBtn), for: .touchUpInside)
+        nextBtn.addTarget(self, action: #selector(didClickNextBtn), for: .touchUpInside)
     }
     
     // API: 특정 달 약속 조회
@@ -128,91 +138,6 @@ class CalendarViewController: UIViewController {
     // 현재 달로 update
     func updateCalendarData() {
         calendarDateFormatter.updateCurrentMonthDays()
-    }
-    
-    func btnEvents() {
-        prevBtn.addTarget(self, action: #selector(didClickPrevBtn), for: .touchUpInside)
-        nextBtn.addTarget(self, action: #selector(didClickNextBtn), for: .touchUpInside)
-    }
-    
-    private func setupCollectionView() {
-        calendarCollectionView.dataSource = self
-        calendarCollectionView.delegate = self
-    }
-    
-    func addView() {
-        view.addSubview(prevBtn)
-        view.addSubview(yearMonth)
-        view.addSubview(nextBtn)
-        view.addSubview(weekStackView)
-        view.addSubview(calendarCollectionView)
-    }
-    
-    // layout
-    func layoutConstraints() {
-        headerConstraints()
-        weekConstraints()
-        calendarConstraints()
-    }
-    
-    // 헤더 constraints
-    func headerConstraints() {
-        // 이전 달로 이동 버튼
-        prevBtn.snp.makeConstraints { make in
-            make.width.height.equalTo(24)
-            make.leading.equalTo(view.snp.leading).offset(44)
-            make.top.equalTo(view.snp.top).offset(36)
-        }
-        
-        // 날짜
-        yearMonth.snp.makeConstraints { make in
-            make.height.equalTo(26)
-            make.centerX.equalTo(view.snp.centerX)
-            make.top.equalTo(view.snp.top).offset(36)
-        }
-        
-        // 다음 달로 이동 버튼
-        nextBtn.snp.makeConstraints { make in
-            make.width.height.equalTo(24)
-            make.trailing.equalTo(view.snp.trailing).offset(-44)
-            make.top.equalTo(view.snp.top).offset(36)
-        }
-    }
-    
-    // 요일
-    func weekConstraints() {
-        weekStackView.snp.makeConstraints { make in
-            make.height.equalTo(48)
-            make.leading.trailing.equalTo(view).inset(28)
-            make.top.equalTo(yearMonth.snp.bottom).offset(21)
-        }
-        
-        // 요일 설정
-        let dayOfWeek = ["일", "월", "화", "수", "목", "금", "토"]
-        
-        dayOfWeek.forEach {
-            let label = UILabel()
-            label.text = $0
-            label.font = UIFont.body2Medium
-            label.textAlignment = .center
-            self.weekStackView.addArrangedSubview(label)
-            
-            // 일요일: red, 나머지: black
-            if $0 == "일" {
-                label.textColor = UIColor.error
-            } else {
-                label.textColor = .black
-            }
-        }
-    }
-    
-    // 날짜
-    func calendarConstraints() {
-        calendarCollectionView.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(view).inset(28)
-            make.top.equalTo(weekStackView.snp.bottom).offset(0)
-            make.bottom.equalTo(view.snp.bottom).offset(-19)
-        }
     }
     
     // 이전 달로 이동 버튼
@@ -342,5 +267,83 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
         }
         
         return cell
+    }
+}
+
+extension CalendarViewController {
+    
+    func addView() {
+        view.addSubview(prevBtn)
+        view.addSubview(yearMonth)
+        view.addSubview(nextBtn)
+        view.addSubview(weekStackView)
+        view.addSubview(calendarCollectionView)
+    }
+    
+    // layout
+    func layoutConstraints() {
+        headerConstraints()
+        weekConstraints()
+        calendarConstraints()
+    }
+    
+    // 헤더 constraints
+    func headerConstraints() {
+        // 이전 달로 이동 버튼
+        prevBtn.snp.makeConstraints { make in
+            make.width.height.equalTo(24)
+            make.leading.equalTo(view.snp.leading).offset(44)
+            make.top.equalTo(view.snp.top).offset(36)
+        }
+        
+        // 날짜
+        yearMonth.snp.makeConstraints { make in
+            make.height.equalTo(26)
+            make.centerX.equalTo(view.snp.centerX)
+            make.top.equalTo(view.snp.top).offset(36)
+        }
+        
+        // 다음 달로 이동 버튼
+        nextBtn.snp.makeConstraints { make in
+            make.width.height.equalTo(24)
+            make.trailing.equalTo(view.snp.trailing).offset(-44)
+            make.top.equalTo(view.snp.top).offset(36)
+        }
+    }
+    
+    // 요일
+    func weekConstraints() {
+        weekStackView.snp.makeConstraints { make in
+            make.height.equalTo(48)
+            make.leading.trailing.equalTo(view).inset(28)
+            make.top.equalTo(yearMonth.snp.bottom).offset(21)
+        }
+        
+        // 요일 설정
+        let dayOfWeek = ["일", "월", "화", "수", "목", "금", "토"]
+        
+        dayOfWeek.forEach {
+            let label = UILabel()
+            label.text = $0
+            label.font = UIFont.body2Medium
+            label.textAlignment = .center
+            self.weekStackView.addArrangedSubview(label)
+            
+            // 일요일: red, 나머지: black
+            if $0 == "일" {
+                label.textColor = UIColor.error
+            } else {
+                label.textColor = .black
+            }
+        }
+    }
+    
+    // 날짜
+    func calendarConstraints() {
+        calendarCollectionView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view).inset(28)
+            make.top.equalTo(weekStackView.snp.bottom).offset(0)
+            make.bottom.equalTo(view.snp.bottom).offset(-19)
+        }
     }
 }
