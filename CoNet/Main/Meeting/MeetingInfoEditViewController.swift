@@ -213,20 +213,20 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
         photoImageView.snp.makeConstraints { make in
             make.width.height.equalTo(345)
             make.top.equalTo(meetingphotoLabel.snp.bottom).offset(8)
-            make.centerX.equalTo(safeArea)
+            make.centerX.equalTo(safeArea.snp.centerX)
         }
         photoUploadImage.snp.makeConstraints { make in
             make.width.height.equalTo(32)
             make.top.equalTo(meetingphotoLabel.snp.bottom).offset(122)
-            make.centerX.equalTo(safeArea)
+            make.centerX.equalTo(safeArea.snp.centerX)
         }
         photoUploadLabel.snp.makeConstraints { make in
             make.top.equalTo(photoUploadImage.snp.bottom).offset(6)
-            make.centerX.equalTo(safeArea)
+            make.centerX.equalTo(safeArea.snp.centerX)
         }
         photoEditButton.snp.makeConstraints { make in
             make.top.equalTo(photoUploadLabel.snp.bottom).offset(20)
-            make.centerX.equalTo(safeArea)
+            make.centerX.equalTo(safeArea.snp.centerX)
         }
     }
     
