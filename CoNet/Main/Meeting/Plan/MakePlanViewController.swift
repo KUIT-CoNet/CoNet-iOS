@@ -101,9 +101,11 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         
         addView()
         layoutConstraints()
-        buttonClicks()
+        buttonActions()
         updateMakeButtonState()
         
+        planNameTextField.delegate = self
+        planStartDateField.delegate = self
         // 데이터 받기
         NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByBottomSheet(notification:)), name: NSNotification.Name("SendDateToMakePlanVC"), object: nil)
     }
@@ -135,13 +137,10 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(makeButton)
     }
     
-    func buttonClicks() {
+    func buttonActions() {
         xnameButton.addTarget(self, action: #selector(xnameButtonTapped), for: .touchUpInside)
         calendarButton.addTarget(self, action: #selector(calendarButtonTapped), for: .touchUpInside)
         makeButton.addTarget(self, action: #selector(makeButtonTapped), for: .touchUpInside)
-        
-        planNameTextField.delegate = self
-        planStartDateField.delegate = self
         planNameTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
         planStartDateField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
         backButton.addTarget(self, action: #selector(didClickBackButton), for: .touchUpInside)
@@ -234,7 +233,7 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    // 키보드 숨김
+    // 텍스트필드 외의 화면 클릭시 키보드 숨김
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
@@ -296,10 +295,10 @@ extension MakePlanViewController {
             make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
         }
         grayLine1.snp.makeConstraints { make in
+            make.width.equalTo(345)
             make.height.equalTo(1)
             make.top.equalTo(planNameLabel.snp.bottom).offset(40)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
+            make.centerX.equalTo(safeArea.snp.centerX)
         }
         textCountLabel.snp.makeConstraints { make in
             make.height.equalTo(16)
@@ -324,10 +323,10 @@ extension MakePlanViewController {
             make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
         }
         grayLine2.snp.makeConstraints { make in
+            make.width.equalTo(345)
             make.height.equalTo(1)
             make.top.equalTo(planStartDateLabel.snp.bottom).offset(40)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
+            make.centerX.equalTo(safeArea.snp.centerX)
         }
         cautionImage.snp.makeConstraints { make in
             make.width.height.equalTo(12)
@@ -346,8 +345,7 @@ extension MakePlanViewController {
         makeButton.snp.makeConstraints { make in
             make.width.equalTo(345)
             make.height.equalTo(52)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
+            make.centerX.equalTo(safeArea.snp.centerX)
             make.bottom.equalTo(safeArea.snp.bottom).offset(-12)
         }
     }
