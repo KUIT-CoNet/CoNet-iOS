@@ -46,6 +46,7 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
         $0.placeholder = "모임 이름 입력"
         $0.font = UIFont.headline3Regular
         $0.tintColor = UIColor.textDisabled
+        $0.becomeFirstResponder()
     }
     
     let grayLine = UIView().then {
@@ -106,6 +107,7 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.meetingnameTextField.becomeFirstResponder()
         MeetingAPI().getMeetingDetailInfo(teamId: meetingId) { meeting in
             self.meetingnameTextField.text = meeting.name
             guard let url = URL(string: meeting.imgUrl) else { return }
@@ -113,6 +115,10 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
             self.photoImageView.alpha = 0.8
             self.updateTextCountLabel()
         }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     func addView() {
@@ -133,8 +139,8 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
     
     func layoutConstriants() {
         applyConstraintsToTopSection()
-        applyConstraintsToGathername()
-        applyConstraintsToGatherphoto()
+        applyConstraintsToMeetingname()
+        applyConstraintsToMeetingphoto()
     }
     
     // 버튼 addTarget
@@ -165,7 +171,7 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func applyConstraintsToGathername() {
+    func applyConstraintsToMeetingname() {
         let safeArea = view.safeAreaLayoutGuide
         
         meetingnameLabel.snp.makeConstraints { make in
@@ -196,36 +202,31 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func applyConstraintsToGatherphoto() {
+    func applyConstraintsToMeetingphoto() {
         let safeArea = view.safeAreaLayoutGuide
         
         meetingphotoLabel.snp.makeConstraints { make in
             make.height.equalTo(14)
             make.top.equalTo(grayLine.snp.bottom).offset(32)
             make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
         }
         photoImageView.snp.makeConstraints { make in
             make.width.height.equalTo(345)
             make.top.equalTo(meetingphotoLabel.snp.bottom).offset(8)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
+            make.centerX.equalTo(safeArea)
         }
         photoUploadImage.snp.makeConstraints { make in
             make.width.height.equalTo(32)
             make.top.equalTo(meetingphotoLabel.snp.bottom).offset(122)
-            make.leading.equalTo(safeArea.snp.leading).offset(181)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-180)
+            make.centerX.equalTo(safeArea)
         }
         photoUploadLabel.snp.makeConstraints { make in
             make.top.equalTo(photoUploadImage.snp.bottom).offset(6)
-            make.leading.equalTo(photoImageView.snp.leading).offset(95)
-            make.trailing.equalTo(photoImageView.snp.trailing).offset(95)
+            make.centerX.equalTo(safeArea)
         }
         photoEditButton.snp.makeConstraints { make in
             make.top.equalTo(photoUploadLabel.snp.bottom).offset(20)
-            make.leading.equalTo(photoImageView.snp.leading).offset(147)
-            make.trailing.equalTo(photoImageView.snp.trailing).offset(-147)
+            make.centerX.equalTo(safeArea)
         }
     }
     
@@ -234,7 +235,7 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
         textCountLabel.text = "\(nameCount)/20"
     }
     
-    // 텍스트필트 클릭 시
+    // 텍스트필드 클릭 시
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == meetingnameTextField {
             grayLine.backgroundColor = UIColor.purpleMain
@@ -259,7 +260,7 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
         navigationController?.popViewController(animated: true)
     }
     
-    // 텍스트 필드 내용 변경 시
+    // 텍스트필드 내용 변경 시
     @objc private func textFieldEditingChanged() {
         guard let text = meetingnameTextField.text else { return }
         completionButton.isEnabled = !text.isEmpty && photoImageView.image != nil
@@ -274,13 +275,13 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
         textFieldDidBeginEditing(meetingnameTextField)
     }
     
-    // 텍스트필트 x버튼 클릭시
+    // 텍스트필드 x버튼 클릭시
     @objc private func xnameButtonTapped() {
         meetingnameTextField.text = ""
         textFieldEditingChanged()
     }
     
-    // 사진 업로드 버튼 클릭시
+    // 사진 업로드버튼 클릭시
     @objc private func editButtonTapped() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
