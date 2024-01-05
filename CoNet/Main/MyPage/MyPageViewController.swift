@@ -155,7 +155,7 @@ class MyPageViewController: UIViewController {
         userInfoView.snp.makeConstraints { make in
             make.width.equalTo(view.snp.width).offset(-48)
             make.top.equalTo(divider.snp.bottom).offset(32)
-            verticalPadding(make: make)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
         }
         
         shortDivider.snp.makeConstraints { make in
@@ -181,7 +181,7 @@ class MyPageViewController: UIViewController {
         listView.snp.makeConstraints { make in
             make.width.equalTo(view.snp.width).offset(-48)
             make.top.equalTo(previousView.snp.bottom).offset(24)
-            verticalPadding(make: make)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
         }
     }
     
@@ -189,12 +189,6 @@ class MyPageViewController: UIViewController {
     private func dividerConstraints(make: ConstraintMaker) {
         make.height.equalTo(1)
         make.width.equalTo(view.snp.width).offset(-48)
-        verticalPadding(make: make)
-    }
-    
-    // 왼쪽, 오른쪽 여백 24
-    private func verticalPadding(make: ConstraintMaker) {
-        make.leading.equalTo(view.snp.leading).offset(24)
-        make.trailing.equalTo(view.snp.trailing).offset(24)
+        make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
     }
 }
