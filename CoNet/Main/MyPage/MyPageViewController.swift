@@ -101,7 +101,15 @@ class MyPageViewController: UIViewController {
     }
     
     private func addView() {
+        view.addSubview(titleLabel)
         
+        view.addSubview(profileImage)
+        view.addSubview(nameLabel)
+        view.addSubview(divider)
+        
+        view.addSubview(userInfoView)
+        view.addSubview(shortDivider)
+        view.addSubview(secondShortDivider)
     }
     
     // 전체 layout constraints
@@ -114,8 +122,6 @@ class MyPageViewController: UIViewController {
     // "MY" 타이틀 constraints
     private func titleConstraints() {
         let safeArea = view.safeAreaLayoutGuide
-        
-        view.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(36)
             make.top.equalTo(safeArea.snp.top).offset(40)
@@ -125,22 +131,18 @@ class MyPageViewController: UIViewController {
     
     // 프로필 이미지, 이름 constraints
     private func userConstraints() {
-        view.addSubview(profileImage)
         profileImage.snp.makeConstraints { make in
-            make.width.equalTo(60)
-            make.height.equalTo(60)
+            make.width.height.equalTo(60)
             make.top.equalTo(titleLabel.snp.bottom).offset(32)
             make.leading.equalTo(view.snp.leading).offset(24)
         }
         
-        view.addSubview(nameLabel)
         nameLabel.snp.makeConstraints { make in
             make.height.equalTo(26)
             make.centerY.equalTo(profileImage)
             make.leading.equalTo(profileImage.snp.trailing).offset(20)
         }
         
-        view.addSubview(divider)
         divider.snp.makeConstraints { make in
             make.height.equalTo(18)
             make.width.equalTo(view.snp.width)
@@ -150,14 +152,12 @@ class MyPageViewController: UIViewController {
     
     // 마이페이지 리스트 contents constraints
     private func contentsConstraints() {
-        view.addSubview(userInfoView)
         userInfoView.snp.makeConstraints { make in
             make.width.equalTo(view.snp.width).offset(-48)
             make.top.equalTo(divider.snp.bottom).offset(32)
             verticalPadding(make: make)
         }
         
-        view.addSubview(shortDivider)
         shortDivider.snp.makeConstraints { make in
             dividerConstraints(make: make)
             make.top.equalTo(userInfoView.snp.bottom).offset(24)
@@ -167,7 +167,6 @@ class MyPageViewController: UIViewController {
         myPageListLayoutConstraints(inquireView, previousView: noticeView)
         myPageListLayoutConstraints(termView, previousView: inquireView)
         
-        view.addSubview(secondShortDivider)
         secondShortDivider.snp.makeConstraints { make in
             dividerConstraints(make: make)
             make.top.equalTo(termView.snp.bottom).offset(24)
@@ -176,9 +175,9 @@ class MyPageViewController: UIViewController {
         myPageListLayoutConstraints(logoutView, previousView: secondShortDivider)
     }
     
-    // 리스트의 공통된 constraints
+    // 마이 페이지 리스트의 공통된 constraints
     private func myPageListLayoutConstraints(_ listView: UIView, previousView: UIView) {
-        view.addSubview(listView)
+        view.addSubview(listView) // 공통 layout이라서 여기에 남겨둠
         listView.snp.makeConstraints { make in
             make.width.equalTo(view.snp.width).offset(-48)
             make.top.equalTo(previousView.snp.bottom).offset(24)
