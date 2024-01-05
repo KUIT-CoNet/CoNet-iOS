@@ -258,7 +258,10 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
         
         // 캘린더 날짜
         let calendarDate = calendarDateFormatter.getCalendarDateIntArray()
-        let calendarDay = calendarDateFormatter.days[indexPath.item]
+        var calendarDay = calendarDateFormatter.days[indexPath.item]
+        if calendarDay != "" {
+            calendarDay = calendarDateFormatter.formatNumberToTwoDigit(Int(calendarDay)!)
+        }
         
         // 선택한 날짜가 오늘일 때
         // 날짜 label 변경
@@ -270,8 +273,8 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
             NotificationCenter.default.post(name: NSNotification.Name("ToMeetingMain"), object: nil, userInfo: ["dayPlanlabel": calendarDateFormatter.getMonthText() + "월 " + calendarDay + "일의 약속"])
         }
         
-        // yyyy-mm-dd 형식
-        let clickDate = calendarDateFormatter.changeDateType(date: calendarDate)
+        // yyyy-MM-dd 형식
+        let clickDate = calendarDateFormatter.changeDateType(date: calendarDate) + calendarDay
         
         if let parentVC = parent {
             if parentVC is HomeViewController {
