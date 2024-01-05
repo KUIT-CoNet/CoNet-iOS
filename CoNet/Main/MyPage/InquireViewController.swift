@@ -19,7 +19,7 @@ class InquireViewController: UIViewController, MFMailComposeViewControllerDelega
     
     let descriptionLabel = UILabel().then {
         $0.numberOfLines = 0
-        $0.text = "이용 중 불편한 점이나 문의사항을 보내주세요.\n평일 (월-금) 10:00 - 17:00, 주말/공휴일 휴무\nconet.official23@gmail.com"
+        $0.text = "이용 중 불편한 점이나 문의사항을 보내주세요.\n평일 (월-금) 10:00 - 17:00, 주말/공휴일 휴무\nhelpconet@gmail.com"
         $0.font = UIFont.body2Medium
         $0.textColor = UIColor.textMedium
     }
@@ -85,7 +85,7 @@ class InquireViewController: UIViewController, MFMailComposeViewControllerDelega
     private func showMailApp() {
         let mailComposer = MFMailComposeViewController()
         mailComposer.mailComposeDelegate = self
-        mailComposer.setToRecipients(["conet.official23@gmail.com"])
+        mailComposer.setToRecipients(["helpconet@gmail.com"])
         mailComposer.setSubject("문의사항")
 //            mailComposer.setMessageBody("Message Body", isHTML: false)
         
