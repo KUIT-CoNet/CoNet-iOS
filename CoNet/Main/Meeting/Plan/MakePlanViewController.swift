@@ -120,30 +120,13 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         navigationController?.navigationBar.isHidden = true
     }
     
-    func addView() {
-        view.addSubview(backButton)
-        view.addSubview(titleLabel)
-        view.addSubview(planNameLabel)
-        view.addSubview(xnameButton)
-        view.addSubview(planNameTextField)
-        view.addSubview(textCountLabel)
-        view.addSubview(grayLine1)
-        view.addSubview(planStartDateLabel)
-        view.addSubview(planStartDateField)
-        view.addSubview(calendarButton)
-        view.addSubview(grayLine2)
-        view.addSubview(cautionImage)
-        view.addSubview(cautionLabel)
-        view.addSubview(makeButton)
-    }
-    
     func buttonActions() {
         xnameButton.addTarget(self, action: #selector(xnameButtonTapped), for: .touchUpInside)
         calendarButton.addTarget(self, action: #selector(calendarButtonTapped), for: .touchUpInside)
-        makeButton.addTarget(self, action: #selector(makeButtonTapped), for: .touchUpInside)
         planNameTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
         planStartDateField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
         backButton.addTarget(self, action: #selector(didClickBackButton), for: .touchUpInside)
+        makeButton.addTarget(self, action: #selector(makeButtonTapped), for: .touchUpInside)
     }
     
     // 뒤로가기 버튼 클릭
@@ -151,11 +134,15 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         navigationController?.popViewController(animated: true)
     }
     
+    // 날짜 데이터 받기
     @objc func dataReceivedByBottomSheet(notification: Notification) {
         if var data = notification.userInfo?["date"] as? String {
             date = data
             data = data.replacingOccurrences(of: "-", with: ".")
             planStartDateField.text = data
+            
+            // 날짜가 뷰에 반영되면 grayLine2 색상이 원래대로 변경됨
+            grayLine2.backgroundColor = UIColor.iconDisabled
         }
         updateMakeButtonState()
     }
@@ -178,12 +165,30 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         updateMakeButtonState()
     }
     
+    // 텍스트필드 관련 색상 설정(수정시)
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == planNameTextField {
+            grayLine1.backgroundColor = UIColor.purpleMain
+            xnameButton.isHidden = false
+        }
+    }
+    
+    // 텍스트필드 관련 색상 설정(수정 완료시)
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == planNameTextField {
+            grayLine1.backgroundColor = UIColor.iconDisabled
+            xnameButton.isHidden = true
+        }
+    }
+    
     @objc private func xnameButtonTapped() {
         planNameTextField.text = ""
         planNameTextField.sendActions(for: .editingChanged)
     }
     
     @objc private func calendarButtonTapped() {
+        // grayLine2 색상 purpleMain으로 변경됨
+        grayLine2.backgroundColor = UIColor.purpleMain
         let bottomSheetVC = PlanDateButtonSheetViewController()
         bottomSheetVC.modalPresentationStyle = .overCurrentContext
         bottomSheetVC.modalTransitionStyle = .crossDissolve
@@ -193,6 +198,7 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
     // 이전 ViewController로 데이터를 전달하는 delegate
     weak var delegate: MeetingMainViewControllerDelegate?
     
+    // 만들기 버튼 활성화
     private func updateMakeButtonState() {
         let isPlanNameFilled = !(planNameTextField.text?.isEmpty ?? true)
         let isPlanStartDateFilled = !(planStartDateField.text?.isEmpty ?? true)
@@ -239,29 +245,25 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
     }
 }
 
-// 텍스트, 데이트 필드 관련 색상 설정
+// addview, layout
 extension MakePlanViewController {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        if textField == planNameTextField {
-            grayLine1.backgroundColor = UIColor.purpleMain
-            xnameButton.isHidden = false
-        } else if textField == planStartDateField {
-            grayLine2.backgroundColor = UIColor.purpleMain
-            xnameButton.isHidden = true
-        }
+    func addView() {
+        view.addSubview(backButton)
+        view.addSubview(titleLabel)
+        view.addSubview(planNameLabel)
+        view.addSubview(xnameButton)
+        view.addSubview(planNameTextField)
+        view.addSubview(textCountLabel)
+        view.addSubview(grayLine1)
+        view.addSubview(planStartDateLabel)
+        view.addSubview(planStartDateField)
+        view.addSubview(calendarButton)
+        view.addSubview(grayLine2)
+        view.addSubview(cautionImage)
+        view.addSubview(cautionLabel)
+        view.addSubview(makeButton)
     }
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField == planNameTextField {
-            grayLine1.backgroundColor = UIColor.iconDisabled
-        } else if textField == planStartDateField {
-            grayLine2.backgroundColor = UIColor.iconDisabled
-        }
-        xnameButton.isHidden = true
-    }
-}
-
-// layout
-extension MakePlanViewController {
+    
     func layoutConstraints() {
         applyConstraintsToPlanName()
         applyConstraintsToPlanDate()
