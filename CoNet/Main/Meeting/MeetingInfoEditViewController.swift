@@ -121,6 +121,92 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
         self.view.endEditing(true)
     }
     
+    // 버튼 addTarget
+    func buttonClicks() {
+        completionButton.addTarget(self, action: #selector(updateMeeting), for: .touchUpInside)
+        xButton.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
+        photoEditButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
+        meetingnameTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
+        xnameButton.addTarget(self, action: #selector(xnameButtonTapped), for: .touchUpInside)
+    }
+    
+    func updateTextCountLabel() {
+        let nameCount = meetingnameTextField.text?.count ?? 0
+        textCountLabel.text = "\(nameCount)/20"
+    }
+    
+    // 텍스트필드 클릭 시
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == meetingnameTextField {
+            grayLine.backgroundColor = UIColor.purpleMain
+            textCountLabel.textColor = UIColor.black
+        }
+    }
+    
+    @objc private func updateMeeting() {
+        guard let name = meetingnameTextField.text else { return }
+        guard let image = photoImageView.image else { return }
+        
+        MeetingAPI().updateMeeting(id: meetingId, name: name, image: image) { isSuccess in
+            if isSuccess {
+                print("DEBUG (모임 수정 api): isSuccess true")
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+    }
+    
+    // x버튼 클릭시
+    @objc private func xButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    // 텍스트필드 내용 변경 시
+    @objc private func textFieldEditingChanged() {
+        guard let text = meetingnameTextField.text else { return }
+        completionButton.isEnabled = !text.isEmpty && photoImageView.image != nil
+        
+        if text.count > 20 {
+            xnameButton.setImage(UIImage(named: "emarkRedEmpty"), for: .normal)
+        } else {
+            xnameButton.setImage(UIImage(named: "clearBtn"), for: .normal)
+        }
+        completionButton.setTitleColor(completionButton.isEnabled ? .purpleMain : .textDisabled, for: .normal)
+        updateTextCountLabel()
+        textFieldDidBeginEditing(meetingnameTextField)
+    }
+    
+    // 텍스트필드 x버튼 클릭시
+    @objc private func xnameButtonTapped() {
+        meetingnameTextField.text = ""
+        textFieldEditingChanged()
+    }
+    
+    // 사진 업로드버튼 클릭시
+    @objc private func editButtonTapped() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        present(imagePicker, animated: true, completion: nil)
+    }
+}
+
+extension MeetingInfoEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        if let selectedImage = info[.originalImage] as? UIImage {
+            photoImageView.image = selectedImage
+            photoImageView.alpha = 0.8
+        }
+        picker.dismiss(animated: true, completion: nil)
+        textFieldEditingChanged()
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+}
+
+// addView, layout
+extension MeetingInfoEditViewController {
     func addView() {
         self.view.addSubview(xButton)
         self.view.addSubview(meetingInfoEditLabel)
@@ -141,15 +227,6 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
         applyConstraintsToTopSection()
         applyConstraintsToMeetingname()
         applyConstraintsToMeetingphoto()
-    }
-    
-    // 버튼 addTarget
-    func buttonClicks() {
-        completionButton.addTarget(self, action: #selector(updateMeeting), for: .touchUpInside)
-        xButton.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
-        photoEditButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
-        meetingnameTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
-        xnameButton.addTarget(self, action: #selector(xnameButtonTapped), for: .touchUpInside)
     }
     
     func applyConstraintsToTopSection() {
@@ -228,79 +305,5 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
             make.top.equalTo(photoUploadLabel.snp.bottom).offset(20)
             make.centerX.equalTo(safeArea.snp.centerX)
         }
-    }
-    
-    func updateTextCountLabel() {
-        let nameCount = meetingnameTextField.text?.count ?? 0
-        textCountLabel.text = "\(nameCount)/20"
-    }
-    
-    // 텍스트필드 클릭 시
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        if textField == meetingnameTextField {
-            grayLine.backgroundColor = UIColor.purpleMain
-            textCountLabel.textColor = UIColor.black
-        }
-    }
-    
-    @objc private func updateMeeting() {
-        guard let name = meetingnameTextField.text else { return }
-        guard let image = photoImageView.image else { return }
-        
-        MeetingAPI().updateMeeting(id: meetingId, name: name, image: image) { isSuccess in
-            if isSuccess {
-                print("DEBUG (모임 수정 api): isSuccess true")
-                self.navigationController?.popViewController(animated: true)
-            }
-        }
-    }
-    
-    // x버튼 클릭시
-    @objc private func xButtonTapped() {
-        navigationController?.popViewController(animated: true)
-    }
-    
-    // 텍스트필드 내용 변경 시
-    @objc private func textFieldEditingChanged() {
-        guard let text = meetingnameTextField.text else { return }
-        completionButton.isEnabled = !text.isEmpty && photoImageView.image != nil
-        
-        if text.count > 20 {
-            xnameButton.setImage(UIImage(named: "emarkRedEmpty"), for: .normal)
-        } else {
-            xnameButton.setImage(UIImage(named: "clearBtn"), for: .normal)
-        }
-        completionButton.setTitleColor(completionButton.isEnabled ? .purpleMain : .textDisabled, for: .normal)
-        updateTextCountLabel()
-        textFieldDidBeginEditing(meetingnameTextField)
-    }
-    
-    // 텍스트필드 x버튼 클릭시
-    @objc private func xnameButtonTapped() {
-        meetingnameTextField.text = ""
-        textFieldEditingChanged()
-    }
-    
-    // 사진 업로드버튼 클릭시
-    @objc private func editButtonTapped() {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary
-        present(imagePicker, animated: true, completion: nil)
-    }
-}
-
-extension MeetingInfoEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        if let selectedImage = info[.originalImage] as? UIImage {
-            photoImageView.image = selectedImage
-            photoImageView.alpha = 0.8
-        }
-        picker.dismiss(animated: true, completion: nil)
-        textFieldEditingChanged()
-    }
-
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
     }
 }
