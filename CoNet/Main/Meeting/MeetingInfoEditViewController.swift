@@ -78,7 +78,7 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
     let photoUploadImage = UIImageView().then {
         $0.image = UIImage(named: "imageplus")
         $0.tintColor = UIColor.iconDisabled
-    } 
+    }
     
     let photoUploadLabel = UILabel().then {
         $0.text = "업로드할 이미지를 첨부해주세요.\n1:1의 정방향 이미지를 추천합니다."
@@ -122,7 +122,7 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
     }
     
     // 버튼 addTarget
-    func buttonClicks() {
+    func buttonActions() {
         completionButton.addTarget(self, action: #selector(updateMeeting), for: .touchUpInside)
         xButton.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
         photoEditButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
@@ -140,18 +140,6 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
         if textField == meetingnameTextField {
             grayLine.backgroundColor = UIColor.purpleMain
             textCountLabel.textColor = UIColor.black
-        }
-    }
-    
-    @objc private func updateMeeting() {
-        guard let name = meetingnameTextField.text else { return }
-        guard let image = photoImageView.image else { return }
-        
-        MeetingAPI().updateMeeting(id: meetingId, name: name, image: image) { isSuccess in
-            if isSuccess {
-                print("DEBUG (모임 수정 api): isSuccess true")
-                self.navigationController?.popViewController(animated: true)
-            }
         }
     }
     
@@ -187,6 +175,18 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
         imagePicker.delegate = self
         imagePicker.sourceType = .photoLibrary
         present(imagePicker, animated: true, completion: nil)
+    }
+    
+    @objc private func updateMeeting() {
+        guard let name = meetingnameTextField.text else { return }
+        guard let image = photoImageView.image else { return }
+        
+        MeetingAPI().updateMeeting(id: meetingId, name: name, image: image) { isSuccess in
+            if isSuccess {
+                print("DEBUG (모임 수정 api): isSuccess true")
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
     }
 }
 
