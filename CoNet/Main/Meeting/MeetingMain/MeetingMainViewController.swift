@@ -230,9 +230,9 @@ class MeetingMainViewController: UIViewController {
         navigationItem.rightBarButtonItem = barButtonItem
         
         // 뒤로가기 버튼 추가
-//        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-//        let leftbarButtonItem = UIBarButtonItem(customView: backButton)
-//        navigationItem.leftBarButtonItem = leftbarButtonItem
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        let leftbarButtonItem = UIBarButtonItem(customView: backButton)
+        navigationItem.leftBarButtonItem = leftbarButtonItem
     }
     
     // 뒤로가기 버튼 동작
@@ -285,8 +285,7 @@ extension MeetingMainViewController: MeetingMainViewControllerDelegate {
     func sendIntDataBack(data: Int) {
         let nextVC = TimeShareViewController()
         nextVC.planId = data
-        nextVC.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(nextVC, animated: true)
+        pushViewController(nextVC)
     }
     
     func sendDataBack(data: SideBarMenu) {
@@ -309,8 +308,7 @@ extension MeetingMainViewController: MeetingMainViewControllerDelegate {
     func showMeetingInfoEditVC() {
         let nextVC = MeetingInfoEditViewController()
         nextVC.meetingId = meetingId
-        nextVC.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(nextVC, animated: true)
+        pushViewController(nextVC)
     }
     
     // 초대 코드 발급 팝업
@@ -324,16 +322,14 @@ extension MeetingMainViewController: MeetingMainViewControllerDelegate {
     func showWaitingPlansVC() {
         let nextVC = WaitingPlanListViewController()
         nextVC.meetingId = meetingId
-        nextVC.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(nextVC, animated: true)
+        pushViewController(nextVC)
     }
     
     // 지난 약속 페이지
     func showDecidedPlansVC() {
         let nextVC = DecidedPlanListViewController()
         nextVC.meetingId = meetingId
-        nextVC.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(nextVC, animated: true)
+        pushViewController(nextVC)
     }
     
     // 모임 삭제 팝업
