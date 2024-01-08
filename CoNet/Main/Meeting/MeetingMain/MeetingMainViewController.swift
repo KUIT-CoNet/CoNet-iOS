@@ -365,8 +365,7 @@ extension MeetingMainViewController: UICollectionViewDelegate, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let nextVC = DecidedPlanInfoViewController()
         nextVC.planId = dayPlanData[indexPath.item].planId
-        nextVC.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(nextVC, animated: true)
+        pushViewController(nextVC)
     }
     
     // 셀 개수
