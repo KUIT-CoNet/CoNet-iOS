@@ -112,6 +112,9 @@ class MeetingMainViewController: UIViewController {
         
         buttonActions()
         
+        // 모임 정보 조회 api 
+        getMeetingInfo()
+        
         // view height 동적 설정
         updateContentSize()
         
@@ -129,16 +132,6 @@ class MeetingMainViewController: UIViewController {
         format.timeZone = TimeZone(abbreviation: "KST")
         
         dayPlanAPI(date: format.string(from: Date()))
-        
-        MeetingAPI().getMeetingDetailInfo(teamId: meetingId) { meeting in
-            self.meetingName.text = meeting.name
-            self.memberNum.text = "\(meeting.memberCount)명"
-            
-            self.isBookmarked = meeting.bookmark
-            self.starButton.setImage(UIImage(named: meeting.bookmark ? "meetingStarOn" : "meetingStarOff"), for: .normal)
-            guard let url = URL(string: meeting.imgUrl) else { return }
-            self.meetingImage.kf.setImage(with: url, placeholder: UIImage(named: "uploadImage"))
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -161,6 +154,19 @@ class MeetingMainViewController: UIViewController {
     private func buttonActions() {
         addMeetingButton.addTarget(self, action: #selector(showMakePlanViewController), for: .touchUpInside)
         starButton.addTarget(self, action: #selector(starButtonTapped), for: .touchUpInside)
+    }
+    
+    // 모임 정보 조회 api
+    func getMeetingInfo() {
+        MeetingAPI().getMeetingDetailInfo(teamId: meetingId) { meeting in
+            self.meetingName.text = meeting.name
+            self.memberNum.text = "\(meeting.memberCount)명"
+            
+            self.isBookmarked = meeting.bookmark
+            self.starButton.setImage(UIImage(named: meeting.bookmark ? "meetingStarOn" : "meetingStarOff"), for: .normal)
+            guard let url = URL(string: meeting.imgUrl) else { return }
+            self.meetingImage.kf.setImage(with: url, placeholder: UIImage(named: "uploadImage"))
+        }
     }
     
     // 특정 날짜 약속 조회 api 함수
@@ -253,6 +259,7 @@ class MeetingMainViewController: UIViewController {
         }
     }
     
+    // 즐겨찾기 on
     private func bookmark() {
         MeetingAPI().postBookmark(teamId: meetingId) { isSuccess in
             if isSuccess {
@@ -262,6 +269,7 @@ class MeetingMainViewController: UIViewController {
         }
     }
     
+    // 즐겨찾기 off
     private func deleteBookmark() {
         MeetingAPI().postDeleteBookmark(teamId: meetingId) { isSuccess in
             if isSuccess {
