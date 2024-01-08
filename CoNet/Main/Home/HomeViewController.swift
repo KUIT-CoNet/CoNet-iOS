@@ -274,10 +274,7 @@ extension HomeViewController {
         
         // 스크롤뷰
         scrollView.snp.makeConstraints { make in
-            make.leading.equalTo(safeArea.snp.leading).offset(0)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(0)
-            make.top.equalTo(safeArea.snp.top).offset(0)
-            make.bottom.equalTo(safeArea.snp.bottom).offset(0)
+            make.edges.equalTo(safeArea.snp.edges)
         }
         
         // 컴포넌트들이 들어갈 뷰
@@ -299,8 +296,7 @@ extension HomeViewController {
         calendarVC.didMove(toParent: self)
         calendarVC.view.snp.makeConstraints { make in
             make.top.equalTo(logoImage.snp.bottom).offset(5)
-            make.leading.equalTo(contentView.snp.leading).offset(0)
-            make.trailing.equalTo(contentView.snp.trailing).offset(0)
+            make.horizontalEdges.equalToSuperview()
             make.height.equalTo(448)
         }
         
@@ -318,8 +314,7 @@ extension HomeViewController {
         
         // label: 약속 수
         planNum.snp.makeConstraints { make in
-            make.centerY.equalTo(planNumCircle.snp.centerY)
-            make.centerX.equalTo(planNumCircle.snp.centerX)
+            make.center.equalTo(planNumCircle.snp.center)
         }
         
         // collectionView: 오늘의 약속
@@ -344,8 +339,7 @@ extension HomeViewController {
         
         // label: 대기 중인 약속 수
         waitingPlanNum.snp.makeConstraints { make in
-            make.centerY.equalTo(planNumCircle2.snp.centerY)
-            make.centerX.equalTo(planNumCircle2.snp.centerX)
+            make.center.equalTo(planNumCircle2.snp.center)
         }
         
         // collectionView: 대기 중 약속
