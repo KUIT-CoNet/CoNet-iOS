@@ -68,29 +68,22 @@ class MyPageViewController: UIViewController {
         logoutView.addTarget(self, action: #selector(showLogoutPopup), for: .touchUpInside)
     }
     
-    private func getUser() {
-        MyPageAPI().getUser { name, imageUrl, _, _ in
-            self.nameLabel.text = name
-            
-            guard let url = URL(string: imageUrl) else { return }
-            self.profileImage.kf.setImage(with: url)
-        }
-    }
-    
     @objc private func showUserInfoViewController(_ sender: UIView) {
-        let nextVC = UserInfoViewController()
-        nextVC.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(nextVC, animated: true)
+        showViewController(UserInfoViewController())
     }
     
     @objc private func showNoticeViewController(_ sender: UIView) {
-        let nextVC = NoticeViewController()
-        navigationController?.pushViewController(nextVC, animated: true)
+        showViewController(NoticeViewController())
     }
     
     @objc private func showInquireViewController(_ sender: UIView) {
-        let nextVC = InquireViewController()
-        navigationController?.pushViewController(nextVC, animated: true)
+        showViewController(InquireViewController())
+    }
+    
+    // 다음 VC를 보여주는 공통 code
+    private func showViewController(_ vc: UIViewController) {
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func showLogoutPopup(_ sender: UIView) {
@@ -100,6 +93,18 @@ class MyPageViewController: UIViewController {
         present(popupVC, animated: true, completion: nil)
     }
     
+    // 회원정보 가져오기
+    private func getUser() {
+        MyPageAPI().getUser { name, imageUrl, _, _ in
+            self.nameLabel.text = name
+            guard let url = URL(string: imageUrl) else { return }
+            self.profileImage.kf.setImage(with: url)
+        }
+    }
+}
+
+// addView와 layoutConstraints에 대한 extension
+extension MyPageViewController {
     private func addView() {
         view.addSubview(titleLabel)
         
