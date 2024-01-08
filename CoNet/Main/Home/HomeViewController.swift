@@ -80,15 +80,6 @@ class HomeViewController: UIViewController {
     
     let calendarDateFormatter = CalendarDateFormatter()
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        dayPlanAPI(date: calendarDateFormatter.changeDateType(date: calendarDateFormatter.getCalendarDateIntArray()))
-        waitingPlanAPI()
-        
-        updateContentSize()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -106,10 +97,31 @@ class HomeViewController: UIViewController {
         calendarVC.homeVC = self
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        dayPlanAPI(date: calendarDateFormatter.changeDateType(date: calendarDateFormatter.getCalendarDateIntArray()))
+        waitingPlanAPI()
+        
+        updateContentSize()
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         updateContentSize()
+    }
+    
+    private func setupCollectionView() {
+        // 오늘 약속 collectionView
+        dayPlanCollectionView.delegate = self
+        dayPlanCollectionView.dataSource = self
+        dayPlanCollectionView.register(DayPlanCell.self, forCellWithReuseIdentifier: DayPlanCell.registerId)
+        
+        // 대기 중 약속 collectionView
+        waitingPlanCollectionView.delegate = self
+        waitingPlanCollectionView.dataSource = self
+        waitingPlanCollectionView.register(ShadowWaitingPlanCell.self, forCellWithReuseIdentifier: ShadowWaitingPlanCell.registerId)
     }
 
     // 특정 날짜 약속 조회 api 함수
@@ -151,18 +163,93 @@ class HomeViewController: UIViewController {
         scrollView.contentSize = contentView.frame.size
     }
     
-    private func setupCollectionView() {
-        // 오늘 약속 collectionView
-        dayPlanCollectionView.delegate = self
-        dayPlanCollectionView.dataSource = self
-        dayPlanCollectionView.register(DayPlanCell.self, forCellWithReuseIdentifier: DayPlanCell.registerId)
-        
-        // 대기 중 약속 collectionView
-        waitingPlanCollectionView.delegate = self
-        waitingPlanCollectionView.dataSource = self
-        waitingPlanCollectionView.register(ShadowWaitingPlanCell.self, forCellWithReuseIdentifier: ShadowWaitingPlanCell.registerId)
+    // change day label
+    func changeDate(month: String, day: String) {
+        if month == "" && day == "" {
+            dayPlanLabel.text = "오늘의 약속"
+        } else {
+            dayPlanLabel.text = month + "월 " + day + "일의 약속"
+        }
+    }
+}
+
+extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    // 각 셀을 클릭했을 때 이벤트 처리
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == dayPlanCollectionView {
+            let nextVC = DecidedPlanInfoViewController()
+            nextVC.planId = dayPlanData[indexPath.item].planId
+            nextVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(nextVC, animated: true)
+        } else {
+            let nextVC = TimeShareViewController()
+            nextVC.planId = waitingPlanData[indexPath.item].planId
+            nextVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(nextVC, animated: true)
+        }
     }
     
+    // 셀 개수
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        var count = 0
+        if collectionView == dayPlanCollectionView { // 오늘 약속
+            count = dayPlanData.count
+        } else if collectionView == waitingPlanCollectionView { // 대기 중 약속
+            count = waitingPlanData.count
+        }
+        
+        return count
+    }
+    
+    // 셀
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        if collectionView == dayPlanCollectionView {
+            // 오늘 약속
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayPlanCell.registerId, for: indexPath) as? DayPlanCell else {
+                return UICollectionViewCell()
+            }
+            
+            cell.timeLabel.text = dayPlanData[indexPath.item].time
+            cell.planTitleLabel.text = dayPlanData[indexPath.item].planName
+            cell.groupNameLabel.text = dayPlanData[indexPath.item].teamName
+            
+            return cell
+        } else if collectionView == waitingPlanCollectionView {
+            // 대기 중 약속
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShadowWaitingPlanCell.registerId, for: indexPath) as? ShadowWaitingPlanCell else {
+                return UICollectionViewCell()
+            }
+            
+            cell.startDateLabel.text = waitingPlanData[indexPath.item].startDate
+            cell.finishDateLabel.text = waitingPlanData[indexPath.item].endDate
+            cell.planTitleLabel.text = waitingPlanData[indexPath.item].planName
+            
+            return cell
+        }
+        
+        return UICollectionViewCell()
+    }
+    
+    // 셀 크기
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = collectionView.frame.width - 24
+        
+        return CGSize(width: width, height: 82)
+    }
+    
+    // 셀 사이의 위아래 간격
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
+    }
+    
+    // 양옆 space zero로 설정
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return .zero
+    }
+}
+
+extension HomeViewController {
     func addView() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
@@ -267,90 +354,5 @@ class HomeViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(12)
             make.height.equalTo(waitingPlanData.count*100 - 10)
         }
-    }
-    
-    // change day label
-    func changeDate(month: String, day: String) {
-        if month == "" && day == "" {
-            dayPlanLabel.text = "오늘의 약속"
-        } else {
-            dayPlanLabel.text = month + "월 " + day + "일의 약속"
-        }
-    }
-}
-
-extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    // 각 셀을 클릭했을 때 이벤트 처리
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == dayPlanCollectionView {
-            let nextVC = DecidedPlanInfoViewController()
-            nextVC.planId = dayPlanData[indexPath.item].planId
-            nextVC.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(nextVC, animated: true)
-        } else {
-            let nextVC = TimeShareViewController()
-            nextVC.planId = waitingPlanData[indexPath.item].planId
-            nextVC.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(nextVC, animated: true)
-        }
-    }
-    
-    // 셀 개수
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        var count = 0
-        if collectionView == dayPlanCollectionView { // 오늘 약속
-            count = dayPlanData.count
-        } else if collectionView == waitingPlanCollectionView { // 대기 중 약속
-            count = waitingPlanData.count
-        }
-        
-        return count
-    }
-    
-    // 셀
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        if collectionView == dayPlanCollectionView {
-            // 오늘 약속
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayPlanCell.registerId, for: indexPath) as? DayPlanCell else {
-                return UICollectionViewCell()
-            }
-            
-            cell.timeLabel.text = dayPlanData[indexPath.item].time
-            cell.planTitleLabel.text = dayPlanData[indexPath.item].planName
-            cell.groupNameLabel.text = dayPlanData[indexPath.item].teamName
-            
-            return cell
-        } else if collectionView == waitingPlanCollectionView {
-            // 대기 중 약속
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShadowWaitingPlanCell.registerId, for: indexPath) as? ShadowWaitingPlanCell else {
-                return UICollectionViewCell()
-            }
-            
-            cell.startDateLabel.text = waitingPlanData[indexPath.item].startDate
-            cell.finishDateLabel.text = waitingPlanData[indexPath.item].endDate
-            cell.planTitleLabel.text = waitingPlanData[indexPath.item].planName
-            
-            return cell
-        }
-        
-        return UICollectionViewCell()
-    }
-    
-    // 셀 크기
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.frame.width - 24
-        
-        return CGSize(width: width, height: 82)
-    }
-    
-    // 셀 사이의 위아래 간격
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
-    }
-    
-    // 양옆 space zero로 설정
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return .zero
     }
 }
