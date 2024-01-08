@@ -473,8 +473,8 @@ extension MeetingMainViewController {
         
         // 모임 이름
         meetingName.snp.makeConstraints { make in
-            make.width.equalTo(240)
             make.leading.equalTo(contentView.snp.leading).offset(24)
+            make.trailing.equalTo(addMeetingButton.snp.leading).offset(-10)
             make.top.equalTo(starButton.snp.bottom).offset(12)
         }
         
