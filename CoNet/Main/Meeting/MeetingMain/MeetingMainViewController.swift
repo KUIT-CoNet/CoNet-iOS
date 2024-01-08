@@ -144,11 +144,6 @@ class MeetingMainViewController: UIViewController {
         dataExchange()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.navigationBar.isHidden = true
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
@@ -179,9 +174,26 @@ class MeetingMainViewController: UIViewController {
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.isHidden = true
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateContentSize()
+    }
+    
+    private func setupCollectionView() {
+        // 오늘 약속 collectionView
+        dayPlanCollectionView.delegate = self
+        dayPlanCollectionView.dataSource = self
+        dayPlanCollectionView.register(DayPlanCell.self, forCellWithReuseIdentifier: DayPlanCell.registerId)
+        
+        // 대기 중 약속 collectionView
+        waitingPlanCollectionView.delegate = self
+        waitingPlanCollectionView.dataSource = self
+        waitingPlanCollectionView.register(ShadowWaitingPlanCell.self, forCellWithReuseIdentifier: ShadowWaitingPlanCell.registerId)
     }
     
     // 특정 날짜 약속 조회 api 함수
@@ -236,18 +248,6 @@ class MeetingMainViewController: UIViewController {
         nextVC.meetingId = meetingId
         nextVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(nextVC, animated: true)
-    }
-    
-    private func setupCollectionView() {
-        // 오늘 약속 collectionView
-        dayPlanCollectionView.delegate = self
-        dayPlanCollectionView.dataSource = self
-        dayPlanCollectionView.register(DayPlanCell.self, forCellWithReuseIdentifier: DayPlanCell.registerId)
-        
-        // 대기 중 약속 collectionView
-        waitingPlanCollectionView.delegate = self
-        waitingPlanCollectionView.dataSource = self
-        waitingPlanCollectionView.register(ShadowWaitingPlanCell.self, forCellWithReuseIdentifier: ShadowWaitingPlanCell.registerId)
     }
     
     private func addNavigationBarItem() {
@@ -473,6 +473,29 @@ extension MeetingMainViewController: UICollectionViewDelegate, UICollectionViewD
 
 // layout
 extension MeetingMainViewController {
+    
+    private func addView() {
+        view.addSubview(scrollview)
+        scrollview.addSubview(contentView)
+        contentView.addSubview(meetingImage)
+        contentView.addSubview(whiteGradientView)
+        contentView.addSubview(starButton)
+        contentView.addSubview(meetingName)
+        contentView.addSubview(addMeetingButton)
+        contentView.addSubview(memberImage)
+        contentView.addSubview(memberNum)
+        addChild(calendarVC)
+        contentView.addSubview(calendarVC.view)
+        contentView.addSubview(dayPlanLabel)
+        contentView.addSubview(planNumCircle)
+        contentView.addSubview(planNum)
+        contentView.addSubview(dayPlanCollectionView)
+        contentView.addSubview(waitingPlanLabel)
+        contentView.addSubview(planNumCircle2)
+        contentView.addSubview(waitingPlanNum)
+        contentView.addSubview(waitingPlanCollectionView)
+    }
+    
     // 전체 layout constraints
     private func layoutContraints() {
         scrollviewConstraints() // 스크롤뷰
@@ -484,12 +507,10 @@ extension MeetingMainViewController {
     
     // scrollview 추가
     private func scrollviewConstraints() {
-        view.addSubview(scrollview)
         scrollview.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(0)
         }
         
-        scrollview.addSubview(contentView)
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(scrollview.contentLayoutGuide)
             make.width.equalTo(scrollview.frameLayoutGuide)
@@ -499,14 +520,12 @@ extension MeetingMainViewController {
     
     // 상단 이미지 constraints
     private func imageConstraints() {
-        contentView.addSubview(meetingImage)
         meetingImage.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalTo(contentView.snp.width)
             make.top.equalTo(scrollview.snp.top).offset(-98)
         }
         
-        contentView.addSubview(whiteGradientView)
         whiteGradientView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalTo(100)
@@ -517,7 +536,6 @@ extension MeetingMainViewController {
     // 캘린더 뷰 위 모임 정보 constraints
     private func headerConstraints() {
         // 즐겨찾기 버튼
-        contentView.addSubview(starButton)
         starButton.snp.makeConstraints { make in
             make.height.width.equalTo(50)
             make.leading.equalTo(contentView.snp.leading).offset(24)
@@ -525,7 +543,6 @@ extension MeetingMainViewController {
         }
         
         // 모임 이름
-        contentView.addSubview(meetingName)
         meetingName.snp.makeConstraints { make in
             make.width.equalTo(240)
             make.leading.equalTo(contentView.snp.leading).offset(24)
@@ -533,7 +550,6 @@ extension MeetingMainViewController {
         }
         
         // 약속 만들기 버튼
-        contentView.addSubview(addMeetingButton)
         addMeetingButton.snp.makeConstraints { make in
             make.width.equalTo(103)
             make.height.equalTo(33)
@@ -542,7 +558,6 @@ extension MeetingMainViewController {
         }
         
         // 멤버 이미지
-        contentView.addSubview(memberImage)
         memberImage.snp.makeConstraints { make in
             make.width.height.equalTo(16)
             make.top.equalTo(meetingName.snp.bottom).offset(8)
@@ -550,7 +565,6 @@ extension MeetingMainViewController {
         }
         
         // 멤버 수
-        contentView.addSubview(memberNum)
         memberNum.snp.makeConstraints { make in
             make.height.equalTo(24)
             make.leading.equalTo(memberImage.snp.trailing).offset(4)
@@ -560,8 +574,6 @@ extension MeetingMainViewController {
     
     // 캘린더뷰
     func calendarViewConstraints() {
-        addChild(calendarVC)
-        contentView.addSubview(calendarVC.view)
         calendarVC.view.snp.makeConstraints { make in
             make.top.equalTo(memberImage.snp.bottom).offset(40)
             make.leading.trailing.equalTo(contentView)
@@ -571,13 +583,11 @@ extension MeetingMainViewController {
     
     func meetingPlanView() {
         // label: 오늘의 약속
-        contentView.addSubview(dayPlanLabel)
         dayPlanLabel.snp.makeConstraints { make in
             make.leading.equalTo(contentView.snp.leading).offset(24)
             make.top.equalTo(calendarVC.view.snp.bottom).offset(36)
         }
         
-        contentView.addSubview(planNumCircle)
         planNumCircle.snp.makeConstraints { make in
             make.width.height.equalTo(20)
             make.leading.equalTo(dayPlanLabel.snp.trailing).offset(6)
@@ -585,14 +595,12 @@ extension MeetingMainViewController {
         }
         
         // label: 약속 수
-        contentView.addSubview(planNum)
         planNum.snp.makeConstraints { make in
             make.centerY.equalTo(planNumCircle.snp.centerY)
             make.centerX.equalTo(planNumCircle.snp.centerX)
         }
 
         // collectionView: 오늘의 약속
-        contentView.addSubview(dayPlanCollectionView)
         dayPlanCollectionView.snp.makeConstraints { make in
             make.top.equalTo(dayPlanLabel.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
@@ -600,13 +608,11 @@ extension MeetingMainViewController {
         }
         
         // label: 대기 중 약속
-        contentView.addSubview(waitingPlanLabel)
         waitingPlanLabel.snp.makeConstraints { make in
             make.leading.equalTo(contentView.snp.leading).offset(24)
             make.top.equalTo(dayPlanCollectionView.snp.bottom).offset(40)
         }
 
-        contentView.addSubview(planNumCircle2)
         planNumCircle2.snp.makeConstraints { make in
             make.width.height.equalTo(20)
             make.leading.equalTo(waitingPlanLabel.snp.trailing).offset(6)
@@ -614,14 +620,12 @@ extension MeetingMainViewController {
         }
 
         // label: 대기 중인 약속 수
-        contentView.addSubview(waitingPlanNum)
         waitingPlanNum.snp.makeConstraints { make in
             make.centerY.equalTo(planNumCircle2.snp.centerY)
             make.centerX.equalTo(planNumCircle2.snp.centerX)
         }
 
         // collectionView: 대기 중 약속
-        contentView.addSubview(waitingPlanCollectionView)
         waitingPlanCollectionView.snp.makeConstraints { make in
             make.top.equalTo(waitingPlanLabel.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
