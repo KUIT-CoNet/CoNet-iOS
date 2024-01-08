@@ -63,7 +63,7 @@ class CalendarViewController: UIViewController {
         setupCollectionView()
         
         // 버튼 클릭 이벤트
-        btnEvents()
+        buttonActions()
         
         NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByMeetingMain(notification:)), name: NSNotification.Name("ToCalendarVC"), object: nil)
         
@@ -79,6 +79,16 @@ class CalendarViewController: UIViewController {
         
         // api 호출
         getMonthPlanAPI(date: format.string(from: Date()))
+    }
+    
+    private func setupCollectionView() {
+        calendarCollectionView.dataSource = self
+        calendarCollectionView.delegate = self
+    }
+    
+    func buttonActions() {
+        prevBtn.addTarget(self, action: #selector(didClickPrevBtn), for: .touchUpInside)
+        nextBtn.addTarget(self, action: #selector(didClickNextBtn), for: .touchUpInside)
     }
     
     // API: 특정 달 약속 조회
@@ -130,15 +140,137 @@ class CalendarViewController: UIViewController {
         calendarDateFormatter.updateCurrentMonthDays()
     }
     
-    func btnEvents() {
-        prevBtn.addTarget(self, action: #selector(didClickPrevBtn), for: .touchUpInside)
-        nextBtn.addTarget(self, action: #selector(didClickNextBtn), for: .touchUpInside)
+    // 이전 달로 이동 버튼
+    @objc func didClickPrevBtn() {
+        let header = calendarDateFormatter.minusMonth()
+        updateCalendar(header: header)
     }
     
-    private func setupCollectionView() {
-        calendarCollectionView.dataSource = self
-        calendarCollectionView.delegate = self
+    // 다음 달로 이동 버튼
+    @objc func didClickNextBtn() {
+        let header = calendarDateFormatter.plusMonth()
+        updateCalendar(header: header)
     }
+  
+    // 달 이동
+    func moveMonth(year: Int, month: Int) {
+        let header = calendarDateFormatter.moveDate(year: year, month: month)
+        updateCalendar(header: header)
+    }
+    
+    // 달 이동 후 캘린더 업데이트
+    func updateCalendar(header: String) {
+        updateCalendarData() // days 배열 update
+        calendarCollectionView.reloadData() // collectionView reload
+        yearMonth.setTitle(header, for: .normal) // yearMonth update
+        
+        // 날짜 포맷 변경: yyyy-MM
+        var changedHeader = header.replacingOccurrences(of: "년 ", with: "-")
+        changedHeader = header.replacingOccurrences(of: "월", with: "")
+        
+        // api: 특정 달 약속 조회
+        getMonthPlanAPI(date: changedHeader)
+    }
+}
+
+extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    // 각 셀을 클릭했을 때 이벤트 처리
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Selected cell at indexPath: \(indexPath)")
+        
+        // 오늘 날짜
+        let today = calendarDateFormatter.getToday()
+        
+        // 캘린더 날짜
+        let calendarDate = calendarDateFormatter.getCalendarDateIntArray()
+        var calendarDay = calendarDateFormatter.days[indexPath.item]
+        if calendarDay != "" {
+            calendarDay = calendarDateFormatter.formatNumberToTwoDigit(Int(calendarDay)!)
+        }
+        
+        // 선택한 날짜가 오늘일 때
+        // 날짜 label 변경
+        if today.year == calendarDate[0] && today.month == calendarDate[1] && today.day == Int(calendarDay) {
+            homeVC?.changeDate(month: "", day: "")
+            NotificationCenter.default.post(name: NSNotification.Name("ToMeetingMain"), object: nil, userInfo: ["dayPlanlabel": "오늘의 약속"])
+        } else {
+            homeVC?.changeDate(month: calendarDateFormatter.getMonthText(), day: calendarDay)
+            NotificationCenter.default.post(name: NSNotification.Name("ToMeetingMain"), object: nil, userInfo: ["dayPlanlabel": calendarDateFormatter.getMonthText() + "월 " + calendarDay + "일의 약속"])
+        }
+        
+        // yyyy-MM-dd 형식
+        let clickDate = calendarDateFormatter.changeDateType(date: calendarDate) + calendarDay
+        
+        if let parentVC = parent {
+            if parentVC is HomeViewController {
+                // 부모 뷰컨트롤러가 HomeViewController
+                // api: 특정 날짜 약속
+                homeVC?.dayPlanAPI(date: clickDate)
+            } else if parentVC is MeetingMainViewController {
+                // 부모 뷰컨트롤러가 MeetingMainViewController
+                meetingMainVC?.dayPlanAPI(date: clickDate)
+                NotificationCenter.default.post(name: NSNotification.Name("ToMeetingMain"), object: nil, userInfo: ["clickDate": clickDate])
+            }
+        }
+    }
+    
+    // 셀 수
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return calendarDateFormatter.days.count
+    }
+    
+    // 셀 사이즈 설정
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = weekStackView.frame.width / 7
+        return CGSize(width: width, height: 50)
+    }
+    
+    // 위 아래 space zero로 설정
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return .zero
+    }
+    
+    // 양옆 space zero로 설정
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return .zero
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CalendarCollectionViewCell.identifier, for: indexPath) as? CalendarCollectionViewCell else { return UICollectionViewCell() }
+        
+        let cellDay = calendarDateFormatter.days[indexPath.item]
+        
+        // 날짜 설정
+        cell.configureday(text: cellDay)
+        
+        let today = calendarDateFormatter.getToday()
+        
+        // 달력 날짜
+        let calendarDate = calendarDateFormatter.getCalendarDateIntArray()
+        
+        if Int(cellDay) == today.day && calendarDate[1] == today.month && calendarDate[0] == today.year {
+            // day, month, year 모두 같을 경우
+            // 오늘 날짜 보라색으로 설정
+            cell.setTodayColor()
+        } else if indexPath.item % 7 == 0 {
+            // 일요일 날짜 빨간색으로 설정
+            cell.setSundayColor()
+        } else {
+            cell.setWeekdayColor()
+        }
+        
+        // 약속 있는 날 표시하기
+        if planDates.contains(Int(cellDay) ?? 0) {
+            cell.configurePlan()
+        } else {
+            cell.reloadPlanMark()
+        }
+        
+        return cell
+    }
+}
+
+extension CalendarViewController {
     
     func addView() {
         view.addSubview(prevBtn)
@@ -213,131 +345,5 @@ class CalendarViewController: UIViewController {
             make.top.equalTo(weekStackView.snp.bottom).offset(0)
             make.bottom.equalTo(view.snp.bottom).offset(-19)
         }
-    }
-    
-    // 이전 달로 이동 버튼
-    @objc func didClickPrevBtn() {
-        let header = calendarDateFormatter.minusMonth()
-        updateCalendar(header: header)
-    }
-    
-    // 다음 달로 이동 버튼
-    @objc func didClickNextBtn() {
-        let header = calendarDateFormatter.plusMonth()
-        updateCalendar(header: header)
-    }
-  
-    // 달 이동
-    func moveMonth(year: Int, month: Int) {
-        let header = calendarDateFormatter.moveDate(year: year, month: month)
-        updateCalendar(header: header)
-    }
-    
-    // 달 이동 후 캘린더 업데이트
-    func updateCalendar(header: String) {
-        updateCalendarData() // days 배열 update
-        calendarCollectionView.reloadData() // collectionView reload
-        yearMonth.setTitle(header, for: .normal) // yearMonth update
-        
-        // 날짜 포맷 변경: yyyy-MM
-        var changedHeader = header.replacingOccurrences(of: "년 ", with: "-")
-        changedHeader = header.replacingOccurrences(of: "월", with: "")
-        
-        // api: 특정 달 약속 조회
-        getMonthPlanAPI(date: changedHeader)
-    }
-}
-
-extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    // 각 셀을 클릭했을 때 이벤트 처리
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Selected cell at indexPath: \(indexPath)")
-        
-        // 오늘 날짜
-        let today = calendarDateFormatter.getToday()
-        
-        // 캘린더 날짜
-        let calendarDate = calendarDateFormatter.getCalendarDateIntArray()
-        let calendarDay = calendarDateFormatter.days[indexPath.item]
-        
-        // 선택한 날짜가 오늘일 때
-        // 날짜 label 변경
-        if today.year == calendarDate[0] && today.month == calendarDate[1] && today.day == Int(calendarDay) {
-            homeVC?.changeDate(month: "", day: "")
-            NotificationCenter.default.post(name: NSNotification.Name("ToMeetingMain"), object: nil, userInfo: ["dayPlanlabel": "오늘의 약속"])
-        } else {
-            homeVC?.changeDate(month: calendarDateFormatter.getMonthText(), day: calendarDay)
-            NotificationCenter.default.post(name: NSNotification.Name("ToMeetingMain"), object: nil, userInfo: ["dayPlanlabel": calendarDateFormatter.getMonthText() + "월 " + calendarDay + "일의 약속"])
-        }
-        
-        // yyyy-mm-dd 형식
-        let clickDate = calendarDateFormatter.changeDateType(date: calendarDate)
-        
-        if let parentVC = parent {
-            if parentVC is HomeViewController {
-                // 부모 뷰컨트롤러가 HomeViewController
-                // api: 특정 날짜 약속
-                homeVC?.dayPlanAPI(date: clickDate)
-            } else if parentVC is MeetingMainViewController {
-                // 부모 뷰컨트롤러가 MeetingMainViewController
-                meetingMainVC?.dayPlanAPI(date: clickDate)
-                NotificationCenter.default.post(name: NSNotification.Name("ToMeetingMain"), object: nil, userInfo: ["clickDate": clickDate])
-            }
-        }
-    }
-    
-    // 셀 수
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return calendarDateFormatter.days.count
-    }
-    
-    // 셀 사이즈 설정
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = weekStackView.frame.width / 7
-        return CGSize(width: width, height: 50)
-    }
-    
-    // 위 아래 space zero로 설정
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return .zero
-    }
-    
-    // 양옆 space zero로 설정
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return .zero
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CalendarCollectionViewCell.identifier, for: indexPath) as? CalendarCollectionViewCell else { return UICollectionViewCell() }
-        
-        let cellDay = calendarDateFormatter.days[indexPath.item]
-        
-        // 날짜 설정
-        cell.configureday(text: cellDay)
-        
-        let today = calendarDateFormatter.getToday()
-        
-        // 달력 날짜
-        let calendarDate = calendarDateFormatter.getCalendarDateIntArray()
-        
-        if Int(cellDay) == today.day && calendarDate[1] == today.month && calendarDate[0] == today.year {
-            // day, month, year 모두 같을 경우
-            // 오늘 날짜 보라색으로 설정
-            cell.setTodayColor()
-        } else if indexPath.item % 7 == 0 {
-            // 일요일 날짜 빨간색으로 설정
-            cell.setSundayColor()
-        } else {
-            cell.setWeekdayColor()
-        }
-        
-        // 약속 있는 날 표시하기
-        if planDates.contains(Int(cellDay) ?? 0) {
-            cell.configurePlan()
-        } else {
-            cell.reloadPlanMark()
-        }
-        
-        return cell
     }
 }

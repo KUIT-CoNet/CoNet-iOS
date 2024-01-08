@@ -78,6 +78,8 @@ class HomeViewController: UIViewController {
     // 대기 중 약속 데이터
     private var waitingPlanData: [WaitingPlan] = []
     
+    let calendarDateFormatter = CalendarDateFormatter()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -89,30 +91,17 @@ class HomeViewController: UIViewController {
         // layout
         addView()
         layoutConstraints()
+        setupCollectionView()
         
         // HomeViewController의 인스턴스를 CalendarViewController의 프로퍼티에 할당
         calendarVC.homeVC = self
-        
-        setupCollectionView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let format = DateFormatter()
-        format.dateFormat = "yyyy-MM-dd"
-        format.locale = Locale(identifier: "ko_KR")
-        format.timeZone = TimeZone(abbreviation: "KST")
-        
-        dayPlanAPI(date: format.string(from: Date()))
-        
-        // api: 대기 중인 약속
-        HomeAPI().getWaitingPlan { count, plans in
-            self.waitingPlanNum.text = String(count)
-            self.waitingPlanData = plans
-            self.waitingPlanCollectionView.reloadData()
-            self.layoutConstraints()
-        }
+        dayPlanAPI(date: calendarDateFormatter.changeDateType(date: calendarDateFormatter.getCalendarDateIntArray()))
+        waitingPlanAPI()
         
         updateContentSize()
     }
@@ -122,6 +111,18 @@ class HomeViewController: UIViewController {
         
         updateContentSize()
     }
+    
+    private func setupCollectionView() {
+        // 오늘 약속 collectionView
+        dayPlanCollectionView.delegate = self
+        dayPlanCollectionView.dataSource = self
+        dayPlanCollectionView.register(DayPlanCell.self, forCellWithReuseIdentifier: DayPlanCell.registerId)
+        
+        // 대기 중 약속 collectionView
+        waitingPlanCollectionView.delegate = self
+        waitingPlanCollectionView.dataSource = self
+        waitingPlanCollectionView.register(ShadowWaitingPlanCell.self, forCellWithReuseIdentifier: ShadowWaitingPlanCell.registerId)
+    }
 
     // 특정 날짜 약속 조회 api 함수
     func dayPlanAPI(date: String) {
@@ -130,6 +131,16 @@ class HomeViewController: UIViewController {
             self.planNum.text = String(count)
             self.dayPlanData = plans
             self.dayPlanCollectionView.reloadData()
+            self.layoutConstraints()
+        }
+    }
+    
+    func waitingPlanAPI() {
+        // api: 대기 중인 약속
+        HomeAPI().getWaitingPlan { count, plans in
+            self.waitingPlanNum.text = String(count)
+            self.waitingPlanData = plans
+            self.waitingPlanCollectionView.reloadData()
             self.layoutConstraints()
         }
     }
@@ -150,124 +161,6 @@ class HomeViewController: UIViewController {
         
         contentView.frame.size.height = contentHeight
         scrollView.contentSize = contentView.frame.size
-    }
-    
-    private func setupCollectionView() {
-        // 오늘 약속 collectionView
-        dayPlanCollectionView.delegate = self
-        dayPlanCollectionView.dataSource = self
-        dayPlanCollectionView.register(DayPlanCell.self, forCellWithReuseIdentifier: DayPlanCell.registerId)
-        
-        // 대기 중 약속 collectionView
-        waitingPlanCollectionView.delegate = self
-        waitingPlanCollectionView.dataSource = self
-        waitingPlanCollectionView.register(ShadowWaitingPlanCell.self, forCellWithReuseIdentifier: ShadowWaitingPlanCell.registerId)
-    }
-    
-    func addView() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
-        contentView.addSubview(logoImage)
-        
-        addChild(calendarVC)
-        contentView.addSubview(calendarVC.view)
-        contentView.addSubview(dayPlanLabel)
-        contentView.addSubview(planNumCircle)
-        contentView.addSubview(planNum)
-        contentView.addSubview(dayPlanCollectionView)
-        contentView.addSubview(waitingPlanLabel)
-        contentView.addSubview(planNumCircle2)
-        contentView.addSubview(waitingPlanNum)
-        contentView.addSubview(waitingPlanCollectionView)
-    }
-    
-    // layout
-    func layoutConstraints() {
-        // 안전 영역
-        let safeArea = view.safeAreaLayoutGuide
-        
-        // 스크롤뷰
-        scrollView.snp.makeConstraints { make in
-            make.leading.equalTo(safeArea.snp.leading).offset(0)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(0)
-            make.top.equalTo(safeArea.snp.top).offset(0)
-            make.bottom.equalTo(safeArea.snp.bottom).offset(0)
-        }
-        
-        // 컴포넌트들이 들어갈 뷰
-        contentView.snp.makeConstraints { make in
-            make.edges.equalTo(scrollView.contentLayoutGuide)
-            make.width.equalTo(scrollView.frameLayoutGuide)
-            make.height.equalTo(2000) // 높이를 설정해야 스크롤이 됨
-        }
-        
-        // logo
-        logoImage.snp.makeConstraints { make in
-            make.width.equalTo(91)
-            make.height.equalTo(30)
-            make.leading.equalTo(contentView.snp.leading).offset(26)
-            make.top.equalTo(contentView.snp.top).offset(8)
-        }
-        
-        // 캘린더 뷰
-        calendarVC.didMove(toParent: self)
-        calendarVC.view.snp.makeConstraints { make in
-            make.top.equalTo(logoImage.snp.bottom).offset(5)
-            make.leading.equalTo(contentView.snp.leading).offset(0)
-            make.trailing.equalTo(contentView.snp.trailing).offset(0)
-            make.height.equalTo(448)
-        }
-        
-        // label: 오늘의 약속
-        dayPlanLabel.snp.makeConstraints { make in
-            make.leading.equalTo(contentView.snp.leading).offset(24)
-            make.top.equalTo(calendarVC.view.snp.bottom).offset(36)
-        }
-        
-        planNumCircle.snp.makeConstraints { make in
-            make.width.height.equalTo(20)
-            make.leading.equalTo(dayPlanLabel.snp.trailing).offset(6)
-            make.centerY.equalTo(dayPlanLabel.snp.centerY)
-        }
-        
-        // label: 약속 수
-        planNum.snp.makeConstraints { make in
-            make.centerY.equalTo(planNumCircle.snp.centerY)
-            make.centerX.equalTo(planNumCircle.snp.centerX)
-        }
-        
-        // collectionView: 오늘의 약속
-        dayPlanCollectionView.snp.makeConstraints { make in
-            let height = (dayPlanData.count - 1) * 100 + 90
-            make.height.equalTo(height)
-            make.top.equalTo(dayPlanLabel.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(12)
-        }
-        
-        // label: 대기 중 약속
-        waitingPlanLabel.snp.makeConstraints { make in
-            make.leading.equalTo(contentView.snp.leading).offset(24)
-            make.top.equalTo(dayPlanCollectionView.snp.bottom).offset(40)
-        }
-        
-        planNumCircle2.snp.makeConstraints { make in
-            make.width.height.equalTo(20)
-            make.leading.equalTo(waitingPlanLabel.snp.trailing).offset(6)
-            make.centerY.equalTo(waitingPlanLabel.snp.centerY)
-        }
-        
-        // label: 대기 중인 약속 수
-        waitingPlanNum.snp.makeConstraints { make in
-            make.centerY.equalTo(planNumCircle2.snp.centerY)
-            make.centerX.equalTo(planNumCircle2.snp.centerX)
-        }
-        
-        // collectionView: 대기 중 약속
-        waitingPlanCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(waitingPlanLabel.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(12)
-            make.height.equalTo(waitingPlanData.count*100 - 10)
-        }
     }
     
     // change day label
@@ -353,5 +246,107 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     // 양옆 space zero로 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return .zero
+    }
+}
+
+extension HomeViewController {
+    func addView() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubview(logoImage)
+        
+        addChild(calendarVC)
+        contentView.addSubview(calendarVC.view)
+        contentView.addSubview(dayPlanLabel)
+        contentView.addSubview(planNumCircle)
+        contentView.addSubview(planNum)
+        contentView.addSubview(dayPlanCollectionView)
+        contentView.addSubview(waitingPlanLabel)
+        contentView.addSubview(planNumCircle2)
+        contentView.addSubview(waitingPlanNum)
+        contentView.addSubview(waitingPlanCollectionView)
+    }
+    
+    // layout
+    func layoutConstraints() {
+        // 안전 영역
+        let safeArea = view.safeAreaLayoutGuide
+        
+        // 스크롤뷰
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(safeArea.snp.edges)
+        }
+        
+        // 컴포넌트들이 들어갈 뷰
+        contentView.snp.makeConstraints { make in
+            make.edges.equalTo(scrollView.contentLayoutGuide)
+            make.width.equalTo(scrollView.frameLayoutGuide)
+            make.height.equalTo(2000) // 높이를 설정해야 스크롤이 됨
+        }
+        
+        // logo
+        logoImage.snp.makeConstraints { make in
+            make.width.equalTo(91)
+            make.height.equalTo(30)
+            make.leading.equalTo(contentView.snp.leading).offset(26)
+            make.top.equalTo(contentView.snp.top).offset(8)
+        }
+        
+        // 캘린더 뷰
+        calendarVC.didMove(toParent: self)
+        calendarVC.view.snp.makeConstraints { make in
+            make.top.equalTo(logoImage.snp.bottom).offset(5)
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(448)
+        }
+        
+        // label: 오늘의 약속
+        dayPlanLabel.snp.makeConstraints { make in
+            make.leading.equalTo(contentView.snp.leading).offset(24)
+            make.top.equalTo(calendarVC.view.snp.bottom).offset(36)
+        }
+        
+        planNumCircle.snp.makeConstraints { make in
+            make.width.height.equalTo(20)
+            make.leading.equalTo(dayPlanLabel.snp.trailing).offset(6)
+            make.centerY.equalTo(dayPlanLabel.snp.centerY)
+        }
+        
+        // label: 약속 수
+        planNum.snp.makeConstraints { make in
+            make.center.equalTo(planNumCircle.snp.center)
+        }
+        
+        // collectionView: 오늘의 약속
+        dayPlanCollectionView.snp.makeConstraints { make in
+            let height = (dayPlanData.count - 1) * 100 + 90
+            make.height.equalTo(height)
+            make.top.equalTo(dayPlanLabel.snp.bottom).offset(16)
+            make.leading.trailing.equalToSuperview().inset(12)
+        }
+        
+        // label: 대기 중 약속
+        waitingPlanLabel.snp.makeConstraints { make in
+            make.leading.equalTo(contentView.snp.leading).offset(24)
+            make.top.equalTo(dayPlanCollectionView.snp.bottom).offset(40)
+        }
+        
+        planNumCircle2.snp.makeConstraints { make in
+            make.width.height.equalTo(20)
+            make.leading.equalTo(waitingPlanLabel.snp.trailing).offset(6)
+            make.centerY.equalTo(waitingPlanLabel.snp.centerY)
+        }
+        
+        // label: 대기 중인 약속 수
+        waitingPlanNum.snp.makeConstraints { make in
+            make.center.equalTo(planNumCircle2.snp.center)
+        }
+        
+        // collectionView: 대기 중 약속
+        waitingPlanCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(waitingPlanLabel.snp.bottom).offset(16)
+            make.leading.trailing.equalToSuperview().inset(12)
+            make.height.equalTo(waitingPlanData.count*100 - 10)
+        }
     }
 }

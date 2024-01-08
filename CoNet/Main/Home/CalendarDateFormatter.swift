@@ -22,7 +22,7 @@ class CalendarDateFormatter {
         configureCalendar()
     }
     
-    // 오늘 날짜 Int 배열 
+    // 오늘 날짜 Int 배열
     func getToday() -> DateComponents {
         let calendarInfo = calendar.dateComponents([.year, .month, .day], from: Date())
         
@@ -36,22 +36,21 @@ class CalendarDateFormatter {
         return [calendarInfo.year!, calendarInfo.month!, calendarInfo.day!]
     }
     
-    // [Int] -> yyyy-mm-dd
+    // [Int] -> yyyy-MM-dd
     func changeDateType(date: [Int]) -> String {
         // year
         var returnDate = String(date[0])+"-"
         
         // month
-        if date[1] < 10 {
-            returnDate += "0"
-        }
-        returnDate += String(date[1])+"-"
+        returnDate += formatNumberToTwoDigit(date[1])+"-"
         
-        // day
-        if date[2] < 10 {
-            returnDate += "0"
-        }
-        returnDate += String(date[2])+"-"
+        /*
+         // day
+         if date[2] < 10 {
+             returnDate += "0"
+         }
+         returnDate += String(date[2])
+          */
         
         return returnDate
     }
@@ -59,7 +58,7 @@ class CalendarDateFormatter {
     // year, month text
     func getYearMonthText() -> String {
         let date = getCalendarDateIntArray()
-        let yearMonthText = String(date[0])+"년 "+String(date[1])+"월"
+        let yearMonthText = String(date[0])+"년 "+formatNumberToTwoDigit(date[1])+"월"
         
         return yearMonthText
     }
@@ -68,7 +67,7 @@ class CalendarDateFormatter {
     func getMonthText() -> String {
         let date = getCalendarDateIntArray()
         
-        return String(date[1])
+        return formatNumberToTwoDigit(date[1])
     }
     
     // 이번 달 날짜로 update
@@ -77,14 +76,14 @@ class CalendarDateFormatter {
         
         // 1일 요일
         let startDayOfWeek = getStartingDayOfWeek()
-        let totalDaysOfMonth = startDayOfWeek + getEndDateOfMonth()
+        let totalDaysOfMonth = startDayOfWeek+getEndDateOfMonth()
         
         for day in 0 ..< totalDaysOfMonth {
             if day < startDayOfWeek {
                 days.append("")
                 continue
             }
-            days.append("\(day - startDayOfWeek + 1)")
+            days.append("\(day - startDayOfWeek+1)")
         }
     }
     
@@ -104,7 +103,7 @@ class CalendarDateFormatter {
         return getYearMonthText()
     }
     
-    // 달 이동 
+    // 달 이동
     func moveMonth(month: Int) -> String {
         let addMonth = month - Int(currentMonth())!
         nowCalendarDate = calendar.date(byAdding: DateComponents(month: addMonth), to: nowCalendarDate) ?? Date()
@@ -136,6 +135,11 @@ class CalendarDateFormatter {
         formatter.dateFormat = "yyyy"
         
         return formatter.string(from: nowCalendarDate)
+    }
+    
+    // 숫자를 두 자리로 포맷팅
+    func formatNumberToTwoDigit(_ number: Int) -> String {
+        return String(format: "%02d", number)
     }
 }
 
