@@ -3,6 +3,7 @@
 //  CoNet
 //
 //  Created by 이안진 on 2023/07/08.
+//  Refactored by 이안진 on 2024/01/09.
 //
 
 import SnapKit
