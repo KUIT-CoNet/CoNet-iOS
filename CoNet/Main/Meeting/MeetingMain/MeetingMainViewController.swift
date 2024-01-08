@@ -131,11 +131,11 @@ class MeetingMainViewController: UIViewController {
         // 네비게이션 바 item 추가 - 뒤로가기, 사이드바 버튼
         addNavigationBarItem()
         
+        addView()
         layoutContraints()
-        
         setupCollectionView()
-        addMeetingButton.addTarget(self, action: #selector(showMakePlanViewController), for: .touchUpInside)
-        starButton.addTarget(self, action: #selector(starButtonTapped), for: .touchUpInside)
+        
+        buttonActions()
         
         // view height 동적 설정
         updateContentSize()
@@ -194,6 +194,11 @@ class MeetingMainViewController: UIViewController {
         waitingPlanCollectionView.delegate = self
         waitingPlanCollectionView.dataSource = self
         waitingPlanCollectionView.register(ShadowWaitingPlanCell.self, forCellWithReuseIdentifier: ShadowWaitingPlanCell.registerId)
+    }
+    
+    private func buttonActions() {
+        addMeetingButton.addTarget(self, action: #selector(showMakePlanViewController), for: .touchUpInside)
+        starButton.addTarget(self, action: #selector(starButtonTapped), for: .touchUpInside)
     }
     
     // 특정 날짜 약속 조회 api 함수
