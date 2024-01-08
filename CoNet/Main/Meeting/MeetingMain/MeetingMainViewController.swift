@@ -161,7 +161,6 @@ class MeetingMainViewController: UIViewController {
         MeetingAPI().getMeetingDetailInfo(teamId: meetingId) { meeting in
             self.meetingName.text = meeting.name
             self.memberNum.text = "\(meeting.memberCount)명"
-            
             self.isBookmarked = meeting.bookmark
             self.starButton.setImage(UIImage(named: meeting.bookmark ? "meetingStarOn" : "meetingStarOff"), for: .normal)
             guard let url = URL(string: meeting.imgUrl) else { return }
@@ -219,8 +218,7 @@ class MeetingMainViewController: UIViewController {
         let nextVC = MakePlanViewController()
         nextVC.delegate = self
         nextVC.meetingId = meetingId
-        nextVC.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(nextVC, animated: true)
+        pushViewController(nextVC)
     }
     
     private func addNavigationBarItem() {
@@ -245,9 +243,7 @@ class MeetingMainViewController: UIViewController {
         let popupVC = SideBarViewController()
         popupVC.meetingId = meetingId
         popupVC.delegate = self
-        popupVC.modalPresentationStyle = .overCurrentContext
-        popupVC.modalTransitionStyle = .crossDissolve
-        present(popupVC, animated: true, completion: nil)
+        presentViewControllerModaly(popupVC)
     }
     
     // 즐겨찾기 버튼 클릭
