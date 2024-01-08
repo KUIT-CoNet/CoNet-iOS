@@ -44,12 +44,7 @@ class MyPageViewController: UIViewController {
     lazy var termView = myPageList.arrowView(title: "이용약관", labelFont: UIFont.body1Regular!)
     lazy var logoutView = myPageList.noArrowView(title: "로그아웃")
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        getUser()
-    }
-    
-    override func viewDidLoad() {
+   override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = true
         
@@ -58,7 +53,12 @@ class MyPageViewController: UIViewController {
         
         addView()
         layoutConstraints()
-        buttonActions() // button 동작
+        buttonActions()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getUser()
     }
     
     private func buttonActions() {
