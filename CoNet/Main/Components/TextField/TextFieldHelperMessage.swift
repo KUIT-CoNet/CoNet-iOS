@@ -30,7 +30,8 @@ class TextFieldHelperMessage: UIView {
         layoutConstraints()
     }
     
-    enum HelperMessageStatus { case basic, error}
+    // Helper Message의 상태 변경 - 기본, 에러
+    enum HelperMessageStatus { case basic, error }
     func setType(_ type: HelperMessageStatus) {
         switch type {
         case .basic:
@@ -42,6 +43,7 @@ class TextFieldHelperMessage: UIView {
         }
     }
     
+    // Helper Message의 메시지 설정
     func setTitle(_ title: String) {
         label.text = title
     }
