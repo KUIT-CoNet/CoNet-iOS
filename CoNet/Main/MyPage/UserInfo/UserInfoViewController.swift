@@ -3,15 +3,14 @@
 //  CoNet
 //
 //  Created by 이안진 on 2023/07/09.
+//  Refactored by 이안진 on 2024/01/09.
 //
 
 import SnapKit
 import Then
 import UIKit
 
-class UserInfoViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FunctionDelegate {
-    let myPageList = MyPageList()
-    
+class UserInfoViewController: UIViewController, UINavigationControllerDelegate, FunctionDelegate {
     // 프로필 이미지 - 현재 기본 이미지로 보여줌
     let profileImage = UIImageView().then {
         $0.image = UIImage(named: "defaultProfile")
@@ -34,7 +33,6 @@ class UserInfoViewController: UIViewController, UIImagePickerControllerDelegate,
     
     // 이름 변경 버튼 row
     var name: String = ""
-//    lazy var changeNameView = myPageList.arrowView(title: name, labelFont: UIFont.headline3Medium!)
     let changeNameButton = UIButton().then { $0.backgroundColor = .clear }
     let changeNameView = ArrowList().then { $0.setTitle("") }
 
@@ -71,9 +69,18 @@ class UserInfoViewController: UIViewController, UIImagePickerControllerDelegate,
         $0.titleLabel?.font = UIFont.body2Medium
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.navigationController?.navigationBar.isHidden = true
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.navigationController?.navigationBar.isHidden = false
+        navigationItem.title = "회원정보"
+        
+        // background color를 white로 설정 (default: black)
+        view.backgroundColor = .white
+        
+        addView()
+        layoutConstraints()
+        
+        buttonActions()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,29 +90,37 @@ class UserInfoViewController: UIViewController, UIImagePickerControllerDelegate,
         fetchUser()
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.navigationController?.navigationBar.isHidden = false
-        navigationItem.title = "회원정보"
-        
-        // background color를 white로 설정 (default: black)
-        view.backgroundColor = .white
-        
-        profileImageConstraints() // 프로필 이미지 수정 constraint
-        nameViewConstraits() // 이름 변경 버튼 constraint
-        linkedSocialConstraints() // 연결된 계정 constraint
-        signOutConstraints() // 회원 탈퇴 constraint
-        
-        editProfileImageButton.addTarget(self, action: #selector(showImagePicker), for: .touchUpInside)
-        changeNameView.delegate = self
-        signOutButton.addTarget(self, action: #selector(showPopup(_:)), for: .touchUpInside)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.navigationBar.isHidden = true
     }
     
+    private func buttonActions() {
+        editProfileImageButton.addTarget(self, action: #selector(showImagePicker), for: .touchUpInside)
+        changeNameView.delegate = self
+        signOutButton.addTarget(self, action: #selector(showSignOutPopUp(_:)), for: .touchUpInside)
+    }
+    
+    @objc func showImagePicker(_ sender: UIView) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary // 갤러리에서 이미지 선택
+        
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    // show ChangeNameVC
     func didExecuteFunction() {
-        // 실행시킬 함수 내용 구현
         let nextVC = ChangeNameViewController()
         nextVC.nameTextField.text = self.name
         navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    @objc func showSignOutPopUp(_ sender: UIView) {
+        let popupVC = SignOutPopUpViewController()
+        popupVC.modalPresentationStyle = .overCurrentContext
+        popupVC.modalTransitionStyle = .crossDissolve
+        present(popupVC, animated: true, completion: nil)
     }
     
     private func fetchUser() {
@@ -122,15 +137,9 @@ class UserInfoViewController: UIViewController, UIImagePickerControllerDelegate,
             self.linkedSocialImage.image = UIImage(named: social == "APPLE" ? "linkedApple" : "linkedKakao")
         }
     }
-    
-    @objc func showImagePicker(_ sender: UIView) {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary // 갤러리에서 이미지 선택
-        
-        present(imagePicker, animated: true, completion: nil)
-    }
-    
+}
+
+extension UserInfoViewController: UIImagePickerControllerDelegate {
     // 프로필 이미지 서버 전송
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
@@ -147,27 +156,43 @@ class UserInfoViewController: UIViewController, UIImagePickerControllerDelegate,
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
+}
+
+// addView와 layoutConstraints에 대한 extension
+extension UserInfoViewController {
+    private func addView() {
+        view.addSubview(profileImage)
+        view.addSubview(editProfileImageButton)
+        
+        view.addSubview(nameLabel)
+        view.addSubview(changeNameButton)
+        changeNameButton.addSubview(changeNameView)
+        view.addSubview(divider)
+        
+        view.addSubview(linkedSocialLabel)
+        view.addSubview(emailLabel)
+        view.addSubview(linkedSocialImage)
+        
+        view.addSubview(signOutButton)
+    }
     
-    @objc func showPopup(_ sender: UIView) {
-        let popupVC = SignOutPopUpViewController()
-        popupVC.modalPresentationStyle = .overCurrentContext
-        popupVC.modalTransitionStyle = .crossDissolve
-        present(popupVC, animated: true, completion: nil)
+    private func layoutConstraints() {
+        profileImageConstraints() // 프로필 이미지 수정 constraint
+        nameViewConstraits() // 이름 변경 버튼 constraint
+        linkedSocialConstraints() // 연결된 계정 constraint
+        signOutConstraints() // 회원 탈퇴 constraint
     }
     
     // 프로필 이미지 수정 버튼의 constraint
     func profileImageConstraints() {
         let safeArea = view.safeAreaLayoutGuide
         
-        // 프로필 이미지
-        view.addSubview(profileImage)
         profileImage.snp.makeConstraints { make in
             make.width.height.equalTo(100)
             make.top.equalTo(safeArea.snp.top).offset(48)
-            make.centerX.equalTo(safeArea.snp.centerX)
+            make.centerX.equalTo(view.snp.centerX)
         }
         
-        view.addSubview(editProfileImageButton)
         editProfileImageButton.snp.makeConstraints { make in
             make.width.height.equalTo(26)
             make.trailing.equalTo(profileImage.snp.trailing).offset(2)
@@ -177,71 +202,55 @@ class UserInfoViewController: UIViewController, UIImagePickerControllerDelegate,
     
     // 이름 변경 버튼의 constraint
     func nameViewConstraits() {
-        let safeArea = view.safeAreaLayoutGuide
-        
-        // 이름 레이블
-        view.addSubview(nameLabel)
         nameLabel.snp.makeConstraints { make in
             make.height.equalTo(18)
             make.top.equalTo(profileImage.snp.bottom).offset(30)
-            verticalPadding(make: make)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
         }
         
-        view.addSubview(changeNameButton)
         changeNameButton.snp.makeConstraints { make in
             make.height.equalTo(24)
-            make.width.equalTo(safeArea.snp.width).offset(-48)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
             make.top.equalTo(nameLabel.snp.bottom).offset(6)
-            verticalPadding(make: make)
         }
         
         // 이름 변경 버튼 row
-        changeNameButton.addSubview(changeNameView)
         changeNameView.snp.makeConstraints { make in
             make.height.equalTo(24)
-            make.width.equalTo(safeArea.snp.width).offset(-48)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
             make.top.equalTo(nameLabel.snp.bottom).offset(6)
-            verticalPadding(make: make)
         }
         
         // 구분선
-        view.addSubview(divider)
         divider.snp.makeConstraints { make in
             make.height.equalTo(1)
-            make.width.equalTo(safeArea.snp.width).offset(-48)
-            
+            make.width.equalTo(view.snp.width).offset(-48)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
             make.top.equalTo(changeNameView.snp.bottom).offset(16)
-            verticalPadding(make: make)
         }
     }
     
     // 연결된 계정 row의 constraint
     func linkedSocialConstraints() {
-        let safeArea = view.safeAreaLayoutGuide
-        
         // 연결된 계정 레이블
-        view.addSubview(linkedSocialLabel)
         linkedSocialLabel.snp.makeConstraints { make in
             make.height.equalTo(18)
             make.top.equalTo(divider.snp.bottom).offset(16)
-            verticalPadding(make: make)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
         }
         
         // 연결된 계정 - 카카오/애플
-        view.addSubview(emailLabel)
         emailLabel.snp.makeConstraints { make in
             make.height.equalTo(22)
             make.top.equalTo(linkedSocialLabel.snp.bottom).offset(8)
-            verticalPadding(make: make)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
         }
         
         // 카카오/애플 아이콘
-        view.addSubview(linkedSocialImage)
         linkedSocialImage.snp.makeConstraints { make in
-            make.width.equalTo(34)
-            make.height.equalTo(34)
+            make.width.height.equalTo(34)
             make.centerY.equalTo(emailLabel.snp.centerY)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
+            make.trailing.equalTo(view.snp.trailing).offset(-24)
         }
     }
     
@@ -250,19 +259,9 @@ class UserInfoViewController: UIViewController, UIImagePickerControllerDelegate,
         let safeArea = view.safeAreaLayoutGuide
         
         // 회원탈퇴 버튼
-        view.addSubview(signOutButton)
         signOutButton.snp.makeConstraints { make in
             make.bottom.equalTo(safeArea.snp.bottom).offset(-12)
             make.centerX.equalTo(safeArea.snp.centerX)
         }
     }
-    
-    // 왼쪽과 오른쪽 여백을 24로
-    func verticalPadding(make: ConstraintMaker) {
-        let safeArea = view.safeAreaLayoutGuide
-        
-        make.leading.equalTo(safeArea.snp.leading).offset(24)
-        make.trailing.equalTo(safeArea.snp.trailing).offset(24)
-    }
-
 }

@@ -360,6 +360,7 @@
 			isa = PBXGroup;
 			children = (
 				514D73D12A59B42A00404E64 /* UserInfoViewController.swift */,
+				51046AA82A6147F500AD543D /* ChangeNameViewController.swift */,
 				518F55D42A683780002D8F0F /* SignOutPopUpViewController.swift */,
 				518F55DC2A685F2A002D8F0F /* CompleteSignOutViewController.swift */,
 			);
@@ -566,7 +567,6 @@
 			children = (
 				518F55D62A683E15002D8F0F /* UserInfo */,
 				51F72C5A2A592C0E0055E8C4 /* MyPageViewController.swift */,
-				51046AA82A6147F500AD543D /* ChangeNameViewController.swift */,
 				514D73D32A59D19A00404E64 /* NoticeViewController.swift */,
 				514D73D52A59D2FB00404E64 /* InquireViewController.swift */,
 				518F55DE2A6868C2002D8F0F /* LogoutPopUpViewController.swift */,
@@ -917,7 +917,7 @@
 				CODE_SIGN_ENTITLEMENTS = CoNet/CoNet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 99KH3TLG9V;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CoNet/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -948,7 +948,7 @@
 				CODE_SIGN_ENTITLEMENTS = CoNet/CoNet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 99KH3TLG9V;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CoNet/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
