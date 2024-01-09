@@ -67,11 +67,15 @@ class DecidedPlanInfoViewController: UIViewController {
         
         self.navigationController?.navigationBar.isHidden = false
         navigationItem.title = "상세 페이지"
+        let backButtonItem = UIBarButtonItem(customView: backButton)
+        let barButtonItem = UIBarButtonItem(customView: bottomSheetButton)
+        navigationItem.leftBarButtonItem = backButtonItem
+        navigationItem.rightBarButtonItem = barButtonItem
         
         addView()
         layoutConstraints()
-        buttonActions()
         setupCollectionView()
+        buttonActions()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -105,10 +109,6 @@ class DecidedPlanInfoViewController: UIViewController {
     func buttonActions() {
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         bottomSheetButton.addTarget(self, action: #selector(showBottomSheet), for: .touchUpInside)
-        let backButtonItem = UIBarButtonItem(customView: backButton)
-        let barButtonItem = UIBarButtonItem(customView: bottomSheetButton)
-        navigationItem.leftBarButtonItem = backButtonItem
-        navigationItem.rightBarButtonItem = barButtonItem
     }
     
     @objc private func showBottomSheet() {
