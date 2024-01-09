@@ -101,7 +101,7 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
         
         addView()
         layoutConstriants()
-        buttonClicks()
+        buttonActions()
         meetingnameTextField.delegate = self
     }
     
