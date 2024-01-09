@@ -35,27 +35,12 @@ class ChangeNameViewController: UIViewController {
         $0.layer.backgroundColor = UIColor.gray100?.cgColor
     }
     
-    // FIXME: 헬퍼 message custom view로 만들기
-    // Component: 느낌표 마크 1
-    let eMarkView1 = UIImageView().then {
-        $0.image = UIImage(named: "emarkPurple")
+    let nameVaildCondition = TextFieldHelperMessage().then {
+        $0.setTitle("공백 없이 20자 이내의 한글, 영어, 숫자로 입력해주세요.")
     }
     
-    // Component: 이름 입력 조건 label 1
-    let nameCondition1 = UILabel().then {
-        $0.text = "공백 없이 20자 이내의 한글, 영어, 숫자로 입력해주세요."
-        $0.font = UIFont.caption
-    }
-    
-    // Component: 느낌표 마크 2
-    let eMarkView2 = UIImageView().then {
-        $0.image = UIImage(named: "emarkPurple")
-    }
-    
-    // Component: 이름 입력 조건 label 2
-    let nameCondition2 = UILabel().then {
-        $0.text = "참여자 간 원활한 소통을 위해 실명을 권장합니다."
-        $0.font = UIFont.caption
+    let realNameCondition = TextFieldHelperMessage().then {
+        $0.setTitle("참여자 간 원활한 소통을 위해 실명을 권장합니다.")
     }
     
     // Component: 확인 버튼
@@ -106,17 +91,17 @@ class ChangeNameViewController: UIViewController {
         if newName.isEmpty {
             // 아무것도 입력되지 않았을 경우 return true
             textFieldStatus(.nothing)
-            isConditionCorrect(true)
+            nameVaildCondition.setType(.basic)
             nextButtonEnable(false)
         } else if isValidName(newName) == false {
             // 조건 만족하지 않을 경우 return false
             textFieldStatus(.error)
-            isConditionCorrect(false)
+            nameVaildCondition.setType(.error)
             nextButtonEnable(false)
         } else {
             // 조건 모두 만족
             textFieldStatus(.correct)
-            isConditionCorrect(true)
+            nameVaildCondition.setType(.basic)
             nextButtonEnable(true)
         }
     }
@@ -140,16 +125,6 @@ class ChangeNameViewController: UIViewController {
         let nameRegEx = "^[0-9A-Za-z가-힣]{1,20}$"
         let namePred = NSPredicate(format: "SELF MATCHES %@", nameRegEx)
         return namePred.evaluate(with: newName)
-    }
-    
-    private func isConditionCorrect(_ status: Bool) {
-        if status {
-            nameCondition1.textColor = UIColor.black
-            eMarkView1.image = UIImage(named: "emarkPurple")
-        } else {
-            nameCondition1.textColor = UIColor.error
-            eMarkView1.image = UIImage(named: "emarkRed")
-        }
     }
     
     private func nextButtonEnable(_ status: Bool) {
@@ -196,10 +171,8 @@ extension ChangeNameViewController {
         view.addSubview(underlineView)
         view.addSubview(clearButton)
         
-        view.addSubview(eMarkView1)
-        view.addSubview(nameCondition1)
-        view.addSubview(eMarkView2)
-        view.addSubview(nameCondition2)
+        view.addSubview(nameVaildCondition)
+        view.addSubview(realNameCondition)
         
         view.addSubview(nextBtn)
     }
@@ -238,32 +211,18 @@ extension ChangeNameViewController {
             make.bottom.equalTo(nameTextField.snp.bottom).offset(-2)
         }
         
-        // Component: 느낌표 마크 1
-        eMarkView1.snp.makeConstraints { make in
-            make.height.width.equalTo(12)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
+        // 한글, 영어, 숫자 조건 helper message
+        nameVaildCondition.snp.makeConstraints { make in
+            make.height.equalTo(16)
             make.top.equalTo(underlineView.snp.bottom).offset(12)
+            make.horizontalEdges.equalToSuperview().offset(24)
         }
         
-        // Component: 이름 입력 조건 label 1
-        nameCondition1.snp.makeConstraints { make in
+        // 실명 조건 helper message
+        realNameCondition.snp.makeConstraints { make in
             make.height.equalTo(16)
-            make.leading.equalTo(eMarkView1.snp.trailing).offset(5)
-            make.top.equalTo(underlineView.snp.bottom).offset(10)
-        }
-        
-        // Component: 느낌표 마크 2
-        eMarkView2.snp.makeConstraints { make in
-            make.height.width.equalTo(12)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.top.equalTo(eMarkView1.snp.bottom).offset(8)
-        }
-        
-        // Component: 이름 입력 조건 label 2
-        nameCondition2.snp.makeConstraints { make in
-            make.height.equalTo(16)
-            make.leading.equalTo(eMarkView2.snp.trailing).offset(5)
-            make.top.equalTo(nameCondition1.snp.bottom).offset(4)
+            make.top.equalTo(nameVaildCondition.snp.bottom).offset(4)
+            make.horizontalEdges.equalToSuperview().offset(24)
         }
         
         // Component: 확인 버튼

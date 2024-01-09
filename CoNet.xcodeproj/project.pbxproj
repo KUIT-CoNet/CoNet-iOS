@@ -65,6 +65,7 @@
 		512856352A8110A100C1FBA7 /* DeletePlanPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512856342A8110A100C1FBA7 /* DeletePlanPopUpViewController.swift */; };
 		512856372A81671100C1FBA7 /* FixPlanPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512856362A81671100C1FBA7 /* FixPlanPopUpViewController.swift */; };
 		512856392A81678200C1FBA7 /* FixPlanPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512856382A81678200C1FBA7 /* FixPlanPopUpView.swift */; };
+		513898132B4D06E600AFA327 /* TextFieldHelperMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513898122B4D06E600AFA327 /* TextFieldHelperMessage.swift */; };
 		513D6B892A4BFCCC00E9ACDA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513D6B882A4BFCCC00E9ACDA /* AppDelegate.swift */; };
 		513D6B8B2A4BFCCC00E9ACDA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513D6B8A2A4BFCCC00E9ACDA /* SceneDelegate.swift */; };
 		513D6B922A4BFCCE00E9ACDA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 513D6B912A4BFCCE00E9ACDA /* Assets.xcassets */; };
@@ -165,6 +166,7 @@
 		512856342A8110A100C1FBA7 /* DeletePlanPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePlanPopUpViewController.swift; sourceTree = "<group>"; };
 		512856362A81671100C1FBA7 /* FixPlanPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixPlanPopUpViewController.swift; sourceTree = "<group>"; };
 		512856382A81678200C1FBA7 /* FixPlanPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixPlanPopUpView.swift; sourceTree = "<group>"; };
+		513898122B4D06E600AFA327 /* TextFieldHelperMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldHelperMessage.swift; sourceTree = "<group>"; };
 		513D6B852A4BFCCC00E9ACDA /* CoNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		513D6B882A4BFCCC00E9ACDA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		513D6B8A2A4BFCCC00E9ACDA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -310,6 +312,14 @@
 			path = InfoVC;
 			sourceTree = "<group>";
 		};
+		513898112B4D06CD00AFA327 /* TextField */ = {
+			isa = PBXGroup;
+			children = (
+				513898122B4D06E600AFA327 /* TextFieldHelperMessage.swift */,
+			);
+			path = TextField;
+			sourceTree = "<group>";
+		};
 		513D6B7C2A4BFCCC00E9ACDA = {
 			isa = PBXGroup;
 			children = (
@@ -380,6 +390,7 @@
 		518F55E52A691731002D8F0F /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				513898112B4D06CD00AFA327 /* TextField */,
 				5126758B2A82155A00AFC46C /* Plan */,
 				5199BCD32A72414200CE585C /* SideBar */,
 				5199BCDB2A72435800CE585C /* PlanList */,
@@ -734,6 +745,7 @@
 				5126758A2A82100300AFC46C /* DecidedPlanInfoViewController.swift in Sources */,
 				1AE5C7892A6F683D001B88D1 /* PlanInfoEditViewController.swift in Sources */,
 				518F55E72A69173F002D8F0F /* Divider.swift in Sources */,
+				513898132B4D06E600AFA327 /* TextFieldHelperMessage.swift in Sources */,
 				23F6F90A2A7011C000772AFF /* Home.swift in Sources */,
 				1AA197C12A816432001064F8 /* MemberCollectionViewCell.swift in Sources */,
 				513D6B8B2A4BFCCC00E9ACDA /* SceneDelegate.swift in Sources */,
