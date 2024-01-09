@@ -13,7 +13,7 @@ class TextFieldHelperMessage: UIView {
     let messageView = UIView().then { $0.backgroundColor = .clear }
     let icon = UIImageView().then { $0.image = UIImage(named: "emarkPurple") }
     let label = UILabel().then {
-        $0.text = "공백 없이 20자 이내의 한글, 영어, 숫자로 입력해주세요."
+        $0.text = ""
         $0.font = UIFont.caption
     }
     
