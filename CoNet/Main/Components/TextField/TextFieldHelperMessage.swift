@@ -20,34 +20,14 @@ class TextFieldHelperMessage: UIView {
     // Custom View 초기화
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViews()
+        addView()
+        layoutConstraints()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupViews()
-    }
-    
-    // 구성 요소들을 Custom View에 추가하고 레이아웃 설정
-    private func setupViews() {
-        addSubview(messageView)
-        messageView.snp.makeConstraints { make in
-            make.height.equalTo(16)
-            make.width.equalToSuperview()
-        }
-        
-        messageView.addSubview(icon)
-        icon.snp.makeConstraints { make in
-            make.width.height.equalTo(12)
-            make.leading.equalTo(messageView.snp.leading)
-            make.centerY.equalToSuperview()
-        }
-        
-        messageView.addSubview(label)
-        label.snp.makeConstraints { make in
-            make.height.equalTo(16)
-            make.leading.equalTo(icon.snp.trailing).offset(5)
-        }
+        addView()
+        layoutConstraints()
     }
     
     enum HelperMessageStatus { case basic, error}
@@ -64,5 +44,32 @@ class TextFieldHelperMessage: UIView {
     
     func setTitle(_ title: String) {
         label.text = title
+    }
+}
+
+// addView & layoutConstraints
+extension TextFieldHelperMessage {
+    private func addView() {
+        addSubview(messageView)
+        messageView.addSubview(icon)
+        messageView.addSubview(label)
+    }
+    
+    private func layoutConstraints() {
+        messageView.snp.makeConstraints { make in
+            make.height.equalTo(16)
+            make.width.equalToSuperview()
+        }
+        
+        icon.snp.makeConstraints { make in
+            make.width.height.equalTo(12)
+            make.leading.equalTo(messageView.snp.leading)
+            make.centerY.equalToSuperview()
+        }
+        
+        label.snp.makeConstraints { make in
+            make.height.equalTo(16)
+            make.leading.equalTo(icon.snp.trailing).offset(5)
+        }
     }
 }
