@@ -25,7 +25,7 @@ class ChangeNameViewController: UIViewController {
         $0.becomeFirstResponder()
     }
     
-    // 텍스트 지우기 버튼 
+    // 텍스트 지우기 버튼
     let clearButton = UIButton().then {
         $0.setImage(UIImage(), for: .normal)
     }
@@ -35,6 +35,7 @@ class ChangeNameViewController: UIViewController {
         $0.layer.backgroundColor = UIColor.gray100?.cgColor
     }
     
+    // FIXME: 헬퍼 message custom view로 만들기
     // Component: 느낌표 마크 1
     let eMarkView1 = UIImageView().then {
         $0.image = UIImage(named: "emarkPurple")
@@ -67,7 +68,7 @@ class ChangeNameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.isHidden = false
         navigationItem.title = "이름변경"
         
         // background color를 white로 설정 (default: black)
@@ -80,82 +81,108 @@ class ChangeNameViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.isHidden = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.navigationBar.isHidden = true
+        navigationController?.navigationBar.isHidden = true
     }
 
     private func buttonActions() {
         // .editingChanged: editing이 될 때마다 didChangeNameTextField 함수가 호출됩니다.
-        self.nameTextField.addTarget(self, action: #selector(self.didChangeNameTextField(_:)), for: .editingChanged)
+        nameTextField.addTarget(self, action: #selector(didChangeNameTextField(_:)), for: .editingChanged)
         // 텍스트필드 클리어버튼
-        self.clearButton.addTarget(self, action: #selector(didClickClearButton), for: .touchUpInside)
+        clearButton.addTarget(self, action: #selector(didClickClearButton), for: .touchUpInside)
         // 확인 버튼
-        self.nextBtn.addTarget(self, action: #selector(showTabView(_:)), for: .touchUpInside)
+        nextBtn.addTarget(self, action: #selector(showTabView(_:)), for: .touchUpInside)
     }
     
     // 이름 입력 텍스트필드에 값이 입력될 경우 입력한 값이 이름 조건에 맞는지 확인합니다.
     // - Return: 조건에 맞는 경우 -> true, 조건에 맞지 않은 경우 -> false
-    @objc func didChangeNameTextField(_ sender: Any?) -> Bool {
-        let editText = nameTextField.text
+    @objc func didChangeNameTextField(_ sender: Any?) {
+        guard let newName = nameTextField.text else { return }
         
-        // 아무것도 입력되지 않았을 경우 return true
-        if editText == "" {
+        if newName.isEmpty {
+            // 아무것도 입력되지 않았을 경우 return true
+            textFieldStatus(.nothing)
+            isConditionCorrect(true)
+            nextButtonEnable(false)
+        } else if isValidName(newName) == false {
+            // 조건 만족하지 않을 경우 return false
+            textFieldStatus(.error)
+            isConditionCorrect(false)
+            nextButtonEnable(false)
+        } else {
+            // 조건 모두 만족
+            textFieldStatus(.correct)
+            isConditionCorrect(true)
+            nextButtonEnable(true)
+        }
+    }
+    
+    enum TextFieldStatus { case nothing, correct, error }
+    private func textFieldStatus(_ type: TextFieldStatus) {
+        switch type {
+        case .nothing:
             underlineView.layer.backgroundColor = UIColor.gray100?.cgColor
+            clearButton.setImage(UIImage(), for: .normal)
+        case .correct:
+            underlineView.layer.backgroundColor = UIColor.purpleMain?.cgColor
+            clearButton.setImage(UIImage(named: "clearBtn"), for: .normal)
+        case .error:
+            underlineView.layer.backgroundColor = UIColor.error?.cgColor
+            clearButton.setImage(UIImage(named: "emarkRedEmpty"), for: .normal)
+        }
+    }
+    
+    private func isValidName(_ newName: String) -> Bool {
+        let nameRegEx = "^[0-9A-Za-z가-힣]{1,20}$"
+        let namePred = NSPredicate(format: "SELF MATCHES %@", nameRegEx)
+        return namePred.evaluate(with: newName)
+    }
+    
+    private func isConditionCorrect(_ status: Bool) {
+        if status {
             nameCondition1.textColor = UIColor.black
             eMarkView1.image = UIImage(named: "emarkPurple")
-            nextBtn.layer.backgroundColor = UIColor.gray200?.cgColor
-            clearButton.setImage(UIImage(), for: .normal)
-            return true
-        }
-        
-        // 공백없이 한글, 영어, 숫자로만 20자 이내
-        let regexPattern = "^[0-9A-Za-z가-힣]{1,20}$"
-        guard let _ = editText!.range(of: regexPattern, options: .regularExpression)
-        else {
-            // 조건 만족하지 않을 경우 return false
-            clearButton.setImage(UIImage(named: "emarkRedEmpty"), for: .normal)
-            underlineView.layer.backgroundColor = UIColor.error?.cgColor
+        } else {
             nameCondition1.textColor = UIColor.error
             eMarkView1.image = UIImage(named: "emarkRed")
-            nextBtn.layer.backgroundColor = UIColor.gray200?.cgColor
-            
-            return false
         }
-        
-        // 조건 만족한 경우 return true
-        clearButton.setImage(UIImage(named: "clearBtn"), for: .normal)
-        underlineView.layer.backgroundColor = UIColor.purpleMain?.cgColor
-        nameCondition1.textColor = UIColor.black
-        eMarkView1.image = UIImage(named: "emarkPurple")
-        nextBtn.layer.backgroundColor = UIColor.purpleMain?.cgColor
-        
-        return true
+    }
+    
+    private func nextButtonEnable(_ status: Bool) {
+        if status {
+            // 다음 버튼 활성화
+            nextBtn.layer.backgroundColor = UIColor.purpleMain?.cgColor
+            nextBtn.isEnabled = true
+        } else {
+            // 다음 버튼 비활성화
+            nextBtn.layer.backgroundColor = UIColor.gray200?.cgColor
+            nextBtn.isEnabled = false
+        }
     }
     
     // 이름 입력 텍스트필드의 클리어 버튼을 클릭했을 때
     // 입력된 텍스트를 지웁니다.
     @objc func didClickClearButton() {
         nameTextField.text = ""
+        nextButtonEnable(false)
     }
     
     // 텍스트필드 외의 공간 클릭시 키보드가 내려갑니다.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
+        view.endEditing(true)
     }
     
     // 확인 버튼 클릭 시
     @objc func showTabView(_ sender: UIView) {
-        if nextBtn.backgroundColor?.cgColor == UIColor.purpleMain?.cgColor {
-            let newName = nameTextField.text ?? ""
-            MyPageAPI().editName(name: newName) { isSuccess in
-                if isSuccess {
-                    // 현재 화면 pop
-                    self.navigationController?.popViewController(animated: true)
-                }
+        let newName = nameTextField.text ?? ""
+        MyPageAPI().editName(name: newName) { isSuccess in
+            if isSuccess {
+                // 현재 화면 pop
+                self.navigationController?.popViewController(animated: true)
             }
         }
     }
