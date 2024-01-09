@@ -82,16 +82,7 @@ class DecidedPlanInfoViewController: UIViewController {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = false
         
-        PlanAPI().getPlanDetail(planId: planId) { plans in
-            self.nameRow.setText(plans.planName)
-            self.dateRow.setText(plans.date)
-            self.timeRow.setText(plans.time)
-            
-            self.members = plans.members
-            self.memberCollectionView.reloadData()
-            
-            self.layoutConstraints()
-        }
+        getPlanDetailAPI()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -109,6 +100,19 @@ class DecidedPlanInfoViewController: UIViewController {
     func buttonActions() {
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         bottomSheetButton.addTarget(self, action: #selector(showBottomSheet), for: .touchUpInside)
+    }
+    
+    // 상세정보 조회
+    func getPlanDetailAPI() {
+        PlanAPI().getPlanDetail(planId: planId) { plans in
+            self.nameRow.setText(plans.planName)
+            self.dateRow.setText(plans.date)
+            self.timeRow.setText(plans.time)
+            
+            self.members = plans.members
+            self.memberCollectionView.reloadData()
+            self.layoutConstraints()
+        }
     }
     
     @objc private func showBottomSheet() {
@@ -248,5 +252,4 @@ extension DecidedPlanInfoViewController {
             make.leading.trailing.equalToSuperview().inset(24)
         }
     }
-    
 }
