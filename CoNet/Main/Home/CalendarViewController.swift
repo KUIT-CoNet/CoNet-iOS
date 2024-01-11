@@ -68,7 +68,6 @@ class CalendarViewController: UIViewController {
         
         // 년월 헤더 설정
         yearMonth.setTitle(calendarDateFormatter.getYearMonthText(), for: .normal)
-        yearMonth.addTarget(self, action: #selector(didClickYearBtn), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -88,6 +87,7 @@ class CalendarViewController: UIViewController {
     func buttonActions() {
         prevBtn.addTarget(self, action: #selector(didClickPrevBtn), for: .touchUpInside)
         nextBtn.addTarget(self, action: #selector(didClickNextBtn), for: .touchUpInside)
+        yearMonth.addTarget(self, action: #selector(didClickYearBtn), for: .touchUpInside)
     }
     
     // API: 특정 달 약속 조회
