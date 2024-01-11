@@ -35,26 +35,24 @@ class PlanDateButtonSheetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubview(background)
-        view.addSubview(bottomSheetView)
-        view.addSubview(grayLine)
-        addChild(calendarVC)
-        view.addSubview(calendarVC.view)
-        view.addSubview(applyButton)
-        
+        addView()
         layoutConstraints()
+        
+        buttonActions()
         
         // PlanDateButtonSheetViewController의 인스턴스를 CalendarViewController의 프로퍼티에 할당
         calendarVC.makePlanDateSheetVC = self
         
+        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarVC(notification:)), name: NSNotification.Name("ToPlanDateSheetVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarVC(notification:)), name: NSNotification.Name("ToMakePlanVC"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarV(notification:)), name: NSNotification.Name("ToPlanInfoEditVC"), object: nil)
+    }
+    
+    func buttonActions() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(closePopUp))
         background.addGestureRecognizer(tapGesture)
         
         applyButton.addTarget(self, action: #selector(applyButtonTapped), for: .touchUpInside)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarVC(notification:)), name: NSNotification.Name("ToPlanDateSheetVC"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarVC(notification:)), name: NSNotification.Name("ToMakePlanVC"), object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarV(notification:)), name: NSNotification.Name("ToPlanInfoEditVC"), object: nil)
     }
     
     @objc func closePopUp() {
@@ -73,6 +71,17 @@ class PlanDateButtonSheetViewController: UIViewController {
             self.date = data
             
         }
+    }
+}
+
+extension PlanDateButtonSheetViewController {
+    private func addView() {
+        view.addSubview(background)
+        view.addSubview(bottomSheetView)
+        view.addSubview(grayLine)
+        addChild(calendarVC)
+        view.addSubview(calendarVC.view)
+        view.addSubview(applyButton)
     }
     
     private func layoutConstraints() {
