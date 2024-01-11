@@ -34,9 +34,12 @@ class CompleteSignOutViewController: UIViewController {
         // background color를 white로 설정 (default: black)
         view.backgroundColor = .white
         
-        // 전체 레이아웃
+        addView()
         layoutConstraints()
-        
+        buttonActions()
+    }
+    
+    private func buttonActions() {
         // 확인 버튼: 로그인 화면으로
         confirmButton.addTarget(self, action: #selector(showLoginViewController), for: .touchUpInside)
     }
@@ -49,6 +52,14 @@ class CompleteSignOutViewController: UIViewController {
         let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
         sceneDelegate?.changeRootVC(LoginViewController(), animated: false)
     }
+}
+
+extension CompleteSignOutViewController {
+    private func addView() {
+        view.addSubview(completeImage)
+        view.addSubview(completeLabel)
+        view.addSubview(confirmButton)
+    }
     
     // 전체 레이아웃 constraints
     private func layoutConstraints() {
@@ -57,15 +68,12 @@ class CompleteSignOutViewController: UIViewController {
     }
     
     private func contentsConstraints() {
-        view.addSubview(completeImage)
         completeImage.snp.makeConstraints { make in
-            make.width.equalTo(68)
-            make.height.equalTo(68)
+            make.width.height.equalTo(68)
             make.centerX.equalTo(view.snp.centerX)
             make.top.equalTo(view.snp.top).offset(320)
         }
         
-        view.addSubview(completeLabel)
         completeLabel.snp.makeConstraints { make in
             make.height.equalTo(48)
             make.centerX.equalTo(view.snp.centerX)
@@ -74,7 +82,6 @@ class CompleteSignOutViewController: UIViewController {
     }
     
     private func confirmButtonConstraints() {
-        view.addSubview(confirmButton)
         confirmButton.snp.makeConstraints { make in
             make.height.equalTo(52)
             make.leading.equalTo(view.snp.leading).offset(24)
