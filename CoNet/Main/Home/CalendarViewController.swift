@@ -49,6 +49,7 @@ class CalendarViewController: UIViewController {
     
     weak var homeVC: HomeViewController?
     weak var meetingMainVC: MeetingMainViewController?
+    weak var makePlanDateSheetVC: PlanDateButtonSheetViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -222,6 +223,11 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
     // 셀 사이즈 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = weekStackView.frame.width / 7
+        if let parentVC = parent {
+            if parentVC is PlanDateButtonSheetViewController {
+                return CGSize(width: width, height: 38)
+            }
+        }
         return CGSize(width: width, height: 50)
     }
     
