@@ -42,7 +42,6 @@
 		23B681DA2A5FF9580039A67B /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 23B681D92A5FF9580039A67B /* FSCalendar */; };
 		23C9BF712A7C126A00B3D9C9 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C9BF702A7C126A00B3D9C9 /* CalendarViewController.swift */; };
 		23CAB74E2A82A06F000F05D3 /* FixPlanInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CAB74D2A82A06F000F05D3 /* FixPlanInfoViewController.swift */; };
-		23DA182A2A694551004EC6A6 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DA18292A694551004EC6A6 /* CalendarView.swift */; };
 		23DA182C2A695541004EC6A6 /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DA182B2A695541004EC6A6 /* CalendarCollectionViewCell.swift */; };
 		23DE37C12A7287BD00F1DFE0 /* TimeShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DE37C02A7287BD00F1DFE0 /* TimeShareViewController.swift */; };
 		23DE37C32A72A40C00F1DFE0 /* TimeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DE37C22A72A40C00F1DFE0 /* TimeTableView.swift */; };
@@ -141,7 +140,6 @@
 		23A7DEE12A657C0600D52436 /* PlanTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanTableViewCell.swift; sourceTree = "<group>"; };
 		23C9BF702A7C126A00B3D9C9 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		23CAB74D2A82A06F000F05D3 /* FixPlanInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixPlanInfoViewController.swift; sourceTree = "<group>"; };
-		23DA18292A694551004EC6A6 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		23DA182B2A695541004EC6A6 /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
 		23DE37C02A7287BD00F1DFE0 /* TimeShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeShareViewController.swift; sourceTree = "<group>"; };
 		23DE37C22A72A40C00F1DFE0 /* TimeTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableView.swift; sourceTree = "<group>"; };
@@ -229,7 +227,6 @@
 			children = (
 				515E53BB2A77B9A900536C6D /* PlanCell */,
 				236054F62A593F3B00CA991E /* HomeViewController.swift */,
-				23DA18292A694551004EC6A6 /* CalendarView.swift */,
 				23DA182B2A695541004EC6A6 /* CalendarCollectionViewCell.swift */,
 				235F5B722A69893F00ADC0D6 /* CalendarDateFormatter.swift */,
 				231E97CE2A6BCA04000BB2AD /* MonthViewController.swift */,
@@ -725,7 +722,6 @@
 				514D73D42A59D19A00404E64 /* NoticeViewController.swift in Sources */,
 				23C9BF712A7C126A00B3D9C9 /* CalendarViewController.swift in Sources */,
 				51B526C62A6C324D009DBFB4 /* SideBarMenu.swift in Sources */,
-				23DA182A2A694551004EC6A6 /* CalendarView.swift in Sources */,
 				235F5B732A69893F00ADC0D6 /* CalendarDateFormatter.swift in Sources */,
 				512856392A81678200C1FBA7 /* FixPlanPopUpView.swift in Sources */,
 				51046AAB2A62F60200AD543D /* PreviewExtension.swift in Sources */,
