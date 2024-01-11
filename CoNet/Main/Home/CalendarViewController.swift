@@ -211,6 +211,11 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
                 // 부모 뷰컨트롤러가 MeetingMainViewController
                 meetingMainVC?.dayPlanAPI(date: clickDate)
                 NotificationCenter.default.post(name: NSNotification.Name("ToMeetingMain"), object: nil, userInfo: ["clickDate": clickDate])
+            } else if parentVC is PlanDateButtonSheetViewController {
+                // 부모 뷰컨트롤러가 PlanDateButtonSheetViewController
+                // 약속만들기 화면으로 선택한 날짜 정보 전송
+                NotificationCenter.default.post(name: NSNotification.Name("ToMakePlanVC"), object: nil, userInfo: ["date": clickDate])
+                NotificationCenter.default.post(name: NSNotification.Name("ToPlanDateSheetVC"), object: nil)
             }
         }
     }
