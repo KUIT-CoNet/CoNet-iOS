@@ -54,17 +54,15 @@ class CalendarViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
-        view.layer.borderWidth = 0.2
-        view.layer.borderColor = UIColor.gray300?.cgColor
-
-        updateCalendarData()
+        viewSetting()
         addView()
         layoutConstraints()
         setupCollectionView()
         
         // 버튼 클릭 이벤트
         buttonActions()
+        
+        updateCalendarData()
         
         NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByMeetingMain(notification:)), name: NSNotification.Name("ToCalendarVC"), object: nil)
         
@@ -287,6 +285,15 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
 }
 
 extension CalendarViewController {
+    
+    func viewSetting() {
+        view.backgroundColor = .white
+        // calendarView border 설정
+        if !(parent is PlanDateButtonSheetViewController) {
+            view.layer.borderWidth = 0.2
+            view.layer.borderColor = UIColor.gray300?.cgColor
+        }
+    }
     
     func addView() {
         view.addSubview(prevBtn)
