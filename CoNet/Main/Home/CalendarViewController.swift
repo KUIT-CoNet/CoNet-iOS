@@ -124,6 +124,11 @@ class CalendarViewController: UIViewController {
     
     // yearMonth 클릭
     @objc func didClickYearBtn(_ sender: UIView) {
+        // 부모 뷰가 PlanDateButtonSheetViewController 인 경우 팝업을 띄우지 않음
+        if parent is PlanDateButtonSheetViewController {
+            return
+        }
+        
         let popupVC = MonthViewController(year: calendarDateFormatter.currentYear()).then {
             $0.modalPresentationStyle = .overCurrentContext
             $0.modalTransitionStyle = .crossDissolve
