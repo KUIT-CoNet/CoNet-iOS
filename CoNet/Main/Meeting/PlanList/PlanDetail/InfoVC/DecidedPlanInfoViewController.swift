@@ -12,11 +12,23 @@ class DecidedPlanInfoViewController: UIViewController {
     var members: [PlanDetailMember] = []
     
     // 배경 - .clear
-    let scrollview = UIScrollView().then { $0.backgroundColor = .clear }
-    let contentsView = UIView().then { $0.backgroundColor = .clear }
+    let scrollview = UIScrollView().then {
+        $0.backgroundColor = .clear
+    }
+    
+    let contentsView = UIView().then {
+        $0.backgroundColor = .clear
+    }
+    
+    // 뒤로가기 아이콘
+    let backButton = UIButton().then {
+        $0.setImage(UIImage(named: "prevBtn"), for: .normal)
+    }
     
     // 우측 상단 점 세개 아이콘 - bottom sheet 버튼
-    let bottomSheetButton = UIButton().then { $0.setImage(UIImage(named: "sidebar"), for: .normal) }
+    let bottomSheetButton = UIButton().then {
+        $0.setImage(UIImage(named: "sidebar"), for: .normal)
+    }
     
     // 약속 이름
     let nameRow = PlanInfoRow().then {
@@ -56,13 +68,18 @@ class DecidedPlanInfoViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = false
         navigationItem.title = "상세 페이지"
         
-        // bottom sheet 버튼 추가
-        bottomSheetButton.addTarget(self, action: #selector(showBottomSheet), for: .touchUpInside)
-        let barButtonItem = UIBarButtonItem(customView: bottomSheetButton)
-        navigationItem.rightBarButtonItem = barButtonItem
-        
+        addView()
         layoutConstraints()
         setupCollectionView()
+        setupNavigationBar()
+        buttonActions()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = false
+        
+        getPlanDetailAPI()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -70,10 +87,28 @@ class DecidedPlanInfoViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.isHidden = false
-        
+    private func setupCollectionView() {
+        memberCollectionView.delegate = self
+        memberCollectionView.dataSource = self
+        memberCollectionView.register(MemberCollectionViewCell.self, forCellWithReuseIdentifier: MemberCollectionViewCell.cellId)
+    }
+    
+    // 뒤로가기, bottom sheet 버튼
+    func buttonActions() {
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        bottomSheetButton.addTarget(self, action: #selector(showBottomSheet), for: .touchUpInside)
+    }
+    
+    // 네비게이션바 설정
+    func setupNavigationBar() {
+        let backButtonItem = UIBarButtonItem(customView: backButton)
+        let barButtonItem = UIBarButtonItem(customView: bottomSheetButton)
+        navigationItem.leftBarButtonItem = backButtonItem
+        navigationItem.rightBarButtonItem = barButtonItem
+    }
+    
+    // 상세정보 조회
+    func getPlanDetailAPI() {
         PlanAPI().getPlanDetail(planId: planId) { plans in
             self.nameRow.setText(plans.planName)
             self.dateRow.setText(plans.date)
@@ -81,15 +116,8 @@ class DecidedPlanInfoViewController: UIViewController {
             
             self.members = plans.members
             self.memberCollectionView.reloadData()
-            
             self.layoutConstraints()
         }
-    }
-    
-    private func setupCollectionView() {
-        memberCollectionView.delegate = self
-        memberCollectionView.dataSource = self
-        memberCollectionView.register(MemberCollectionViewCell.self, forCellWithReuseIdentifier: MemberCollectionViewCell.cellId)
     }
     
     @objc private func showBottomSheet() {
@@ -101,75 +129,8 @@ class DecidedPlanInfoViewController: UIViewController {
         present(bottomSheetViewController, animated: true, completion: nil)
     }
     
-    // 전체 layout
-    private func layoutConstraints() {
-        viewConstraints()
-        rowConstraints()
-        memberConstraints()
-    }
-    
-    // scrollview, contentsview layout
-    private func viewConstraints() {
-        view.addSubview(scrollview)
-        scrollview.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(0)
-        }
-        
-        scrollview.addSubview(contentsView)
-        contentsView.snp.makeConstraints { make in
-            make.edges.equalTo(scrollview.contentLayoutGuide)
-            make.width.equalTo(scrollview.frameLayoutGuide)
-            make.height.equalTo(1000)
-        }
-    }
-    
-    // row layout
-    private func rowConstraints() {
-        contentsView.addSubview(nameRow)
-        nameRow.snp.makeConstraints { make in
-            make.width.equalToSuperview().offset(-48)
-            make.height.equalTo(54)
-            make.top.equalTo(contentsView.snp.top).offset(12)
-            make.leading.equalTo(contentsView.snp.leading).offset(24)
-        }
-        
-        contentsView.addSubview(dateRow)
-        dateRow.snp.makeConstraints { make in
-            make.width.equalToSuperview().offset(-48)
-            make.height.equalTo(54)
-            make.top.equalTo(nameRow.snp.bottom).offset(26)
-            make.leading.equalTo(contentsView.snp.leading).offset(24)
-        }
-        
-        contentsView.addSubview(timeRow)
-        timeRow.snp.makeConstraints { make in
-            make.width.equalToSuperview().offset(-48)
-            make.height.equalTo(54)
-            make.top.equalTo(dateRow.snp.bottom).offset(26)
-            make.leading.equalTo(contentsView.snp.leading).offset(24)
-        }
-    }
-    
-    // 참여자 layout
-    private func memberConstraints() {
-        contentsView.addSubview(memberLabel)
-        memberLabel.snp.makeConstraints { make in
-            make.height.equalTo(14)
-            make.top.equalTo(timeRow.snp.bottom).offset(26)
-            make.leading.equalTo(contentsView.snp.leading).offset(24)
-        }
-        
-        contentsView.addSubview(memberCollectionView)
-        memberCollectionView.snp.makeConstraints { make in
-            make.width.equalToSuperview().offset(-48)
-            
-            let memberRow = ceil(Double(members.count) / 2.0)
-            let height = (memberRow * 42) + ((memberRow - 1) * 10)
-            make.height.equalTo(height)
-            
-            make.top.equalTo(memberLabel.snp.bottom).offset(14)
-            make.leading.trailing.equalToSuperview().inset(24)
-        }
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
 }
 
@@ -222,6 +183,78 @@ extension DecidedPlanInfoViewController: PlanInfoViewControllerDelegate {
             popUpVC.modalPresentationStyle = .overCurrentContext
             popUpVC.modalTransitionStyle = .crossDissolve
             present(popUpVC, animated: true, completion: nil)
+        }
+    }
+}
+
+// addView, layout
+extension DecidedPlanInfoViewController {
+    func addView() {
+        view.addSubview(scrollview)
+        scrollview.addSubview(contentsView)
+        contentsView.addSubview(nameRow)
+        contentsView.addSubview(dateRow)
+        contentsView.addSubview(timeRow)
+        contentsView.addSubview(memberLabel)
+        contentsView.addSubview(memberCollectionView)
+    }
+    
+    private func layoutConstraints() {
+        viewConstraints()
+        rowConstraints()
+        memberConstraints()
+    }
+    
+    // scrollview, contentsview layout
+    private func viewConstraints() {
+        scrollview.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(0)
+        }
+        contentsView.snp.makeConstraints { make in
+            make.edges.equalTo(scrollview.contentLayoutGuide)
+            make.width.equalTo(scrollview.frameLayoutGuide)
+            make.height.equalTo(1000)
+        }
+    }
+    
+    // row layout
+    private func rowConstraints() {
+        nameRow.snp.makeConstraints { make in
+            make.width.equalToSuperview().offset(-48)
+            make.height.equalTo(54)
+            make.top.equalTo(contentsView.snp.top).offset(12)
+            make.leading.equalTo(contentsView.snp.leading).offset(24)
+        }
+        dateRow.snp.makeConstraints { make in
+            make.width.equalToSuperview().offset(-48)
+            make.height.equalTo(54)
+            make.top.equalTo(nameRow.snp.bottom).offset(26)
+            make.leading.equalTo(contentsView.snp.leading).offset(24)
+        }
+        timeRow.snp.makeConstraints { make in
+            make.width.equalToSuperview().offset(-48)
+            make.height.equalTo(54)
+            make.top.equalTo(dateRow.snp.bottom).offset(26)
+            make.leading.equalTo(contentsView.snp.leading).offset(24)
+        }
+    }
+    
+    // 참여자 layout
+    private func memberConstraints() {
+        memberLabel.snp.makeConstraints { make in
+            make.height.equalTo(14)
+            make.top.equalTo(timeRow.snp.bottom).offset(26)
+            make.leading.equalTo(contentsView.snp.leading).offset(24)
+        }
+        memberCollectionView.snp.makeConstraints { make in
+            make.width.equalToSuperview().offset(-48)
+            
+            let memberRow = ceil(Double(members.count) / 2.0)
+            let height = (memberRow * 42) + ((memberRow - 1) * 10)
+            make.height.equalTo(height)
+            
+            make.top.equalTo(memberLabel.snp.bottom).offset(14)
+            make.leading.trailing.equalToSuperview().inset(24)
         }
     }
 }
