@@ -67,14 +67,11 @@ class DecidedPlanInfoViewController: UIViewController {
         
         self.navigationController?.navigationBar.isHidden = false
         navigationItem.title = "상세 페이지"
-        let backButtonItem = UIBarButtonItem(customView: backButton)
-        let barButtonItem = UIBarButtonItem(customView: bottomSheetButton)
-        navigationItem.leftBarButtonItem = backButtonItem
-        navigationItem.rightBarButtonItem = barButtonItem
         
         addView()
         layoutConstraints()
         setupCollectionView()
+        setupNavigationBar()
         buttonActions()
     }
     
@@ -100,6 +97,14 @@ class DecidedPlanInfoViewController: UIViewController {
     func buttonActions() {
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         bottomSheetButton.addTarget(self, action: #selector(showBottomSheet), for: .touchUpInside)
+    }
+    
+    // 네비게이션바 설정
+    func setupNavigationBar() {
+        let backButtonItem = UIBarButtonItem(customView: backButton)
+        let barButtonItem = UIBarButtonItem(customView: bottomSheetButton)
+        navigationItem.leftBarButtonItem = backButtonItem
+        navigationItem.rightBarButtonItem = barButtonItem
     }
     
     // 상세정보 조회
