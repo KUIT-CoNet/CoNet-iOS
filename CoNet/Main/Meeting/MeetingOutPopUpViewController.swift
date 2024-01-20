@@ -31,8 +31,13 @@ class MeetingOutPopUpViewController: UIViewController {
         // background color를 clear로 설정 (default: black)
         view.backgroundColor = .clear
         
+        addView()
         layoutConstraints()
         
+        buttonActions()
+    }
+    
+    private func buttonActions() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopUp))
         background.addGestureRecognizer(tapGesture)
     }
@@ -41,9 +46,6 @@ class MeetingOutPopUpViewController: UIViewController {
     @objc func dismissPopUp() {
         dismiss(animated: true, completion: nil)
     }
-    
-    // 이전 ViewController로 데이터를 전달하는 delegate
-    weak var delegate: MeetingMainViewControllerDelegate?
     
     // 모임 나가기 버튼 동작
     @objc func outMeeting(_ sender: UIView) {
@@ -54,6 +56,9 @@ class MeetingOutPopUpViewController: UIViewController {
         }
     }
     
+    // 이전 ViewController로 데이터를 전달하는 delegate
+    weak var delegate: MeetingMainViewControllerDelegate?
+    
     private func showMeetingVC() {
         let nextVC = TabbarViewController()
         self.navigationController?.pushViewController(nextVC, animated: true)
@@ -61,31 +66,24 @@ class MeetingOutPopUpViewController: UIViewController {
         let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
         sceneDelegate?.changeRootVC(TabbarViewController(), animated: false)
     }
-    
+}
+
+// addView, layoutConstraints()
+extension MeetingOutPopUpViewController {
+    private func addView() {
+        view.addSubview(background)
+        view.addSubview(popUp)
+    }
     // 모든 layout Constraints
     private func layoutConstraints() {
-        backgroundConstraints()
-        popUpConstraints()
-    }
-    
-    // 배경 Constraints
-    private func backgroundConstraints() {
-        view.addSubview(background)
         background.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(0)
         }
-    }
-    
-    // 팝업 Constraints
-    private func popUpConstraints() {
-        view.addSubview(popUp)
+        
         popUp.snp.makeConstraints { make in
             make.width.equalTo(view.snp.width).offset(-48)
-            make.leading.equalTo(view.snp.leading).offset(24)
-            make.trailing.equalTo(view.snp.trailing).offset(24)
-            
-            make.centerX.equalTo(view.snp.centerX)
-            make.centerY.equalTo(view.snp.centerY)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
+            make.center.equalTo(view.snp.center)
         }
     }
 }
