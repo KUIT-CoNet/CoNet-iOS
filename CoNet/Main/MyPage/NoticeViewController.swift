@@ -22,6 +22,7 @@ class NoticeViewController: UIViewController {
         // background color를 white로 설정 (default: black)
         view.backgroundColor = .white
         
+        addView()
         layoutConstraints()
     }
     
@@ -34,11 +35,16 @@ class NoticeViewController: UIViewController {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = false
     }
-    
-    func layoutConstraints() {
-        let safeArea = view.safeAreaLayoutGuide
-        
+}
+
+// addView, layoutConstraints
+extension NoticeViewController {
+    private func addView() {
         view.addSubview(nothingNoticeLabel)
+    }
+    
+    private func layoutConstraints() {
+        let safeArea = view.safeAreaLayoutGuide
         nothingNoticeLabel.snp.makeConstraints { make in
             make.height.equalTo(18)
             make.top.equalTo(safeArea.snp.top).offset(40)
