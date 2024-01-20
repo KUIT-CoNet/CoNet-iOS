@@ -60,6 +60,8 @@ class InquireViewController: UIViewController, MFMailComposeViewControllerDelega
         
         addView()
         layoutConstraints()
+        
+        buttonActions()
     }
     
     override func viewWillAppear(_ animated: Bool) {
