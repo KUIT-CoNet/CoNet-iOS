@@ -58,10 +58,13 @@ class InquireViewController: UIViewController, MFMailComposeViewControllerDelega
         // background color를 white로 설정 (default: black)
         view.backgroundColor = .white
         
+        addView()
         layoutConstraints()
-        emailButtonConstraints()
-        
-        emailButton.addTarget(self, action: #selector(showEmail(_:)), for: .touchUpInside)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -69,9 +72,8 @@ class InquireViewController: UIViewController, MFMailComposeViewControllerDelega
         self.navigationController?.navigationBar.isHidden = true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.isHidden = false
+    private func buttonActions() {
+        emailButton.addTarget(self, action: #selector(showEmail(_:)), for: .touchUpInside)
     }
     
     @objc func showEmail(_ sender: UIButton) {
@@ -92,27 +94,46 @@ class InquireViewController: UIViewController, MFMailComposeViewControllerDelega
         present(mailComposer, animated: true, completion: nil)
     }
     
-    func layoutConstraints() {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        dismiss(animated: true, completion: nil)
+    }
+}
+
+// addView, layoutConstraints
+extension InquireViewController {
+    private func addView() {
+        view.addSubview(titleLabel)
+        view.addSubview(descriptionLabel)
+        
+        view.addSubview(emailButton)
+        emailButton.addSubview(mailImage)
+        emailButton.addSubview(emailLabel)
+    }
+    
+    private func layoutConstraints() {
+        titleConstraints()
+        emailButtonConstraints()
+    }
+    
+    private func titleConstraints() {
         let safeArea = view.safeAreaLayoutGuide
         
-        view.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(26)
             make.top.equalTo(safeArea.snp.top).offset(48)
             make.leading.equalTo(safeArea.snp.leading).offset(24)
         }
         
-        view.addSubview(descriptionLabel)
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.leading.equalTo(safeArea.snp.leading).offset(24)
         }
     }
     
-    func emailButtonConstraints() {
+    private func emailButtonConstraints() {
         let safeArea = view.safeAreaLayoutGuide
         
-        view.addSubview(emailButton)
+        
         emailButton.snp.makeConstraints { make in
             make.width.equalTo(140)
             make.height.equalTo(40)
@@ -120,22 +141,22 @@ class InquireViewController: UIViewController, MFMailComposeViewControllerDelega
             make.leading.equalTo(safeArea.snp.leading).offset(24)
         }
         
-        emailButton.addSubview(mailImage)
+        
         mailImage.snp.makeConstraints { make in
-            make.width.equalTo(16)
-            make.height.equalTo(16)
+            make.width.height.equalTo(16)
             make.centerY.equalTo(emailButton.snp.centerY)
             make.leading.equalTo(emailButton.snp.leading).offset(20)
         }
         
-        emailButton.addSubview(emailLabel)
+        
         emailLabel.snp.makeConstraints { make in
             make.centerY.equalTo(mailImage.snp.centerY)
             make.leading.equalTo(mailImage.snp.trailing).offset(6)
         }
     }
     
-    func impossibleMailAppConstraints() {
+    // 메일 앱이 비활성화인 경우, 추가되는 constraints로 addView와 분리하지 않음!
+    private func impossibleMailAppConstraints() {
         let safeArea = view.safeAreaLayoutGuide
         
         view.addSubview(impossibleMailAppLabel)
@@ -143,12 +164,5 @@ class InquireViewController: UIViewController, MFMailComposeViewControllerDelega
             make.top.equalTo(emailButton.snp.bottom).offset(12)
             make.leading.equalTo(safeArea.snp.leading).offset(24)
         }
-    }
-}
-
-extension InquireViewController {
-    func mailComposeController(_ controller: MFMailComposeViewController,
-                               didFinishWith result: MFMailComposeResult, error: Error?) {
-        dismiss(animated: true, completion: nil)
     }
 }
