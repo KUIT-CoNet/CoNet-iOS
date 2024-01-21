@@ -135,7 +135,6 @@ extension InquireViewController {
     private func emailButtonConstraints() {
         let safeArea = view.safeAreaLayoutGuide
         
-        
         emailButton.snp.makeConstraints { make in
             make.width.equalTo(140)
             make.height.equalTo(40)
@@ -143,13 +142,11 @@ extension InquireViewController {
             make.leading.equalTo(safeArea.snp.leading).offset(24)
         }
         
-        
         mailImage.snp.makeConstraints { make in
             make.width.height.equalTo(16)
             make.centerY.equalTo(emailButton.snp.centerY)
             make.leading.equalTo(emailButton.snp.leading).offset(20)
         }
-        
         
         emailLabel.snp.makeConstraints { make in
             make.centerY.equalTo(mailImage.snp.centerY)

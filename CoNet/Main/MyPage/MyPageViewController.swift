@@ -82,9 +82,9 @@ class MyPageViewController: UIViewController {
     }
     
     // 다음 VC를 보여주는 공통 code
-    private func showViewController(_ vc: UIViewController) {
-        vc.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(vc, animated: true)
+    private func showViewController(_ viewController: UIViewController) {
+        viewController.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     @objc func showLogoutPopup(_ sender: UIView) {

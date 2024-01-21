@@ -74,6 +74,7 @@ extension MeetingOutPopUpViewController {
         view.addSubview(background)
         view.addSubview(popUp)
     }
+    
     // 모든 layout Constraints
     private func layoutConstraints() {
         background.snp.makeConstraints { make in
@@ -81,8 +82,7 @@ extension MeetingOutPopUpViewController {
         }
         
         popUp.snp.makeConstraints { make in
-            make.width.equalTo(view.snp.width).offset(-48)
-            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
             make.center.equalTo(view.snp.center)
         }
     }
