@@ -93,31 +93,6 @@ class MeetingMainViewController: UIViewController {
     // 오늘 약속 데이터
     private var dayPlanData: [MeetingDayPlan] = []
     
-    // label: 대기 중 약속
-    let waitingPlanLabel = UILabel().then {
-        $0.text = "대기 중인 약속"
-        $0.font = UIFont.headline2Bold
-    }
-    
-    let planNumCircle2 = UIImageView().then {
-        $0.image = UIImage(named: "purpleLineCircle")
-    }
-    
-    // 약속 수
-    let waitingPlanNum = UILabel().then {
-        $0.text = "2"
-        $0.textColor = UIColor.purpleMain
-        $0.font = UIFont.body3Bold
-    }
-    
-    // 대기 중 약속 collectionView
-    private lazy var waitingPlanCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
-        $0.isScrollEnabled = false
-    }
-    
-    // 대기 중 약속 데이터
-    private var waitingPlanData: [MeetingWaitingPlan] = []
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -131,22 +106,20 @@ class MeetingMainViewController: UIViewController {
         // 네비게이션 바 item 추가 - 뒤로가기, 사이드바 버튼
         addNavigationBarItem()
         
+        addView()
         layoutContraints()
-        
         setupCollectionView()
-        addMeetingButton.addTarget(self, action: #selector(showMakePlanViewController), for: .touchUpInside)
-        starButton.addTarget(self, action: #selector(starButtonTapped), for: .touchUpInside)
+        
+        buttonActions()
+        
+        // 모임 정보 조회 api 
+        getMeetingInfo()
         
         // view height 동적 설정
         updateContentSize()
         
         // 데이터 교환
         dataExchange()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.navigationBar.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -159,29 +132,42 @@ class MeetingMainViewController: UIViewController {
         format.timeZone = TimeZone(abbreviation: "KST")
         
         dayPlanAPI(date: format.string(from: Date()))
-        
-        // api: 대기 중인 약속
-        MeetingMainAPI().getMeetingWaitingPlan(teamId: meetingId) { count, plans in
-            self.waitingPlanNum.text = String(count)
-            self.waitingPlanData = plans
-            self.waitingPlanCollectionView.reloadData()
-            self.layoutContraints()
-        }
-        
-        MeetingAPI().getMeetingDetailInfo(teamId: meetingId) { meeting in
-            self.meetingName.text = meeting.name
-            self.memberNum.text = "\(meeting.memberCount)명"
-            
-            self.isBookmarked = meeting.bookmark
-            self.starButton.setImage(UIImage(named: meeting.bookmark ? "meetingStarOn" : "meetingStarOff"), for: .normal)
-            guard let url = URL(string: meeting.imgUrl) else { return }
-            self.meetingImage.kf.setImage(with: url, placeholder: UIImage(named: "uploadImage"))
-        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.isHidden = true
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateContentSize()
+    }
+    
+    private func setupCollectionView() {
+        // 오늘 약속 collectionView
+        dayPlanCollectionView.delegate = self
+        dayPlanCollectionView.dataSource = self
+        dayPlanCollectionView.register(DayPlanCell.self, forCellWithReuseIdentifier: DayPlanCell.registerId)
+    }
+    
+    private func buttonActions() {
+        addMeetingButton.addTarget(self, action: #selector(showMakePlanViewController), for: .touchUpInside)
+        starButton.addTarget(self, action: #selector(starButtonTapped), for: .touchUpInside)
+        sidebarButton.addTarget(self, action: #selector(sidebarButtonTapped), for: .touchUpInside)
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+    }
+    
+    // 모임 정보 조회 api
+    func getMeetingInfo() {
+        MeetingAPI().getMeetingDetailInfo(teamId: meetingId) { meeting in
+            self.meetingName.text = meeting.name
+            self.memberNum.text = "\(meeting.memberCount)명"
+            self.isBookmarked = meeting.bookmark
+            self.starButton.setImage(UIImage(named: meeting.bookmark ? "meetingStarOn" : "meetingStarOff"), for: .normal)
+            guard let url = URL(string: meeting.imgUrl) else { return }
+            self.meetingImage.kf.setImage(with: url, placeholder: UIImage(named: "uploadImage"))
+        }
     }
     
     // 특정 날짜 약속 조회 api 함수
@@ -216,7 +202,7 @@ class MeetingMainViewController: UIViewController {
     func updateContentSize() {
         var contentHeight: CGFloat = 1100
         var dayCollectionHeight: CGFloat = 0
-        for collectionView in [dayPlanCollectionView, waitingPlanCollectionView] {
+        for collectionView in [dayPlanCollectionView] {
             collectionView.layoutIfNeeded()
             if collectionView == dayPlanCollectionView {
                 dayCollectionHeight += collectionView.contentSize.height+10
@@ -234,32 +220,17 @@ class MeetingMainViewController: UIViewController {
         let nextVC = MakePlanViewController()
         nextVC.delegate = self
         nextVC.meetingId = meetingId
-        nextVC.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(nextVC, animated: true)
-    }
-    
-    private func setupCollectionView() {
-        // 오늘 약속 collectionView
-        dayPlanCollectionView.delegate = self
-        dayPlanCollectionView.dataSource = self
-        dayPlanCollectionView.register(DayPlanCell.self, forCellWithReuseIdentifier: DayPlanCell.registerId)
-        
-        // 대기 중 약속 collectionView
-        waitingPlanCollectionView.delegate = self
-        waitingPlanCollectionView.dataSource = self
-        waitingPlanCollectionView.register(ShadowWaitingPlanCell.self, forCellWithReuseIdentifier: ShadowWaitingPlanCell.registerId)
+        pushViewController(nextVC)
     }
     
     private func addNavigationBarItem() {
         // 사이드바 버튼 추가
-        sidebarButton.addTarget(self, action: #selector(sidebarButtonTapped), for: .touchUpInside)
         let barButtonItem = UIBarButtonItem(customView: sidebarButton)
         navigationItem.rightBarButtonItem = barButtonItem
         
         // 뒤로가기 버튼 추가
-//        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-//        let leftbarButtonItem = UIBarButtonItem(customView: backButton)
-//        navigationItem.leftBarButtonItem = leftbarButtonItem
+        let leftbarButtonItem = UIBarButtonItem(customView: backButton)
+        navigationItem.leftBarButtonItem = leftbarButtonItem
     }
     
     // 뒤로가기 버튼 동작
@@ -272,9 +243,7 @@ class MeetingMainViewController: UIViewController {
         let popupVC = SideBarViewController()
         popupVC.meetingId = meetingId
         popupVC.delegate = self
-        popupVC.modalPresentationStyle = .overCurrentContext
-        popupVC.modalTransitionStyle = .crossDissolve
-        present(popupVC, animated: true, completion: nil)
+        presentViewControllerModaly(popupVC)
     }
     
     // 즐겨찾기 버튼 클릭
@@ -286,6 +255,7 @@ class MeetingMainViewController: UIViewController {
         }
     }
     
+    // 즐겨찾기 on
     private func bookmark() {
         MeetingAPI().postBookmark(teamId: meetingId) { isSuccess in
             if isSuccess {
@@ -295,6 +265,7 @@ class MeetingMainViewController: UIViewController {
         }
     }
     
+    // 즐겨찾기 off
     private func deleteBookmark() {
         MeetingAPI().postDeleteBookmark(teamId: meetingId) { isSuccess in
             if isSuccess {
@@ -310,8 +281,7 @@ extension MeetingMainViewController: MeetingMainViewControllerDelegate {
     func sendIntDataBack(data: Int) {
         let nextVC = TimeShareViewController()
         nextVC.planId = data
-        nextVC.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(nextVC, animated: true)
+        pushViewController(nextVC)
     }
     
     func sendDataBack(data: SideBarMenu) {
@@ -334,8 +304,7 @@ extension MeetingMainViewController: MeetingMainViewControllerDelegate {
     func showMeetingInfoEditVC() {
         let nextVC = MeetingInfoEditViewController()
         nextVC.meetingId = meetingId
-        nextVC.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(nextVC, animated: true)
+        pushViewController(nextVC)
     }
     
     // 초대 코드 발급 팝업
@@ -349,16 +318,14 @@ extension MeetingMainViewController: MeetingMainViewControllerDelegate {
     func showWaitingPlansVC() {
         let nextVC = WaitingPlanListViewController()
         nextVC.meetingId = meetingId
-        nextVC.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(nextVC, animated: true)
+        pushViewController(nextVC)
     }
     
     // 지난 약속 페이지
     func showDecidedPlansVC() {
         let nextVC = DecidedPlanListViewController()
         nextVC.meetingId = meetingId
-        nextVC.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(nextVC, animated: true)
+        pushViewController(nextVC)
     }
     
     // 모임 삭제 팝업
@@ -396,67 +363,33 @@ extension MeetingMainViewController: MeetingMainViewControllerDelegate {
 extension MeetingMainViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     // 각 셀을 클릭했을 때 이벤트 처리
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == dayPlanCollectionView {
-            let nextVC = DecidedPlanInfoViewController()
-            nextVC.planId = dayPlanData[indexPath.item].planId
-            nextVC.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(nextVC, animated: true)
-        } else {
-            let nextVC = TimeShareViewController()
-            nextVC.planId = waitingPlanData[indexPath.item].planId
-            nextVC.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(nextVC, animated: true)
-        }
+        let nextVC = DecidedPlanInfoViewController()
+        nextVC.planId = dayPlanData[indexPath.item].planId
+        pushViewController(nextVC)
     }
     
     // 셀 개수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        var count = 0
-        if collectionView == dayPlanCollectionView { // 오늘 약속
-            count = dayPlanData.count
-        } else if collectionView == waitingPlanCollectionView { // 대기 중 약속
-            count = waitingPlanData.count
-        }
-        
-        return count
+        return dayPlanData.count
     }
     
     // 셀
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == dayPlanCollectionView {
-            // 오늘 약속
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayPlanCell.registerId, for: indexPath) as? DayPlanCell else {
-                return UICollectionViewCell()
-            }
-            
-            cell.timeLabel.text = dayPlanData[indexPath.item].time
-            cell.planTitleLabel.text = dayPlanData[indexPath.item].planName
-            cell.groupNameLabel.text = dayPlanData[indexPath.item].teamName
-            
-            return cell
-        } else if collectionView == waitingPlanCollectionView {
-            // 대기 중 약속
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShadowWaitingPlanCell.registerId, for: indexPath) as? ShadowWaitingPlanCell else {
-                return UICollectionViewCell()
-            }
-            
-            cell.startDateLabel.text = waitingPlanData[indexPath.item].startDate
-            cell.finishDateLabel.text = waitingPlanData[indexPath.item].endDate
-            cell.planTitleLabel.text = waitingPlanData[indexPath.item].planName
-            
-            return cell
+        // 오늘 약속
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayPlanCell.registerId, for: indexPath) as? DayPlanCell else {
+            return UICollectionViewCell()
         }
         
-        return UICollectionViewCell()
+        cell.timeLabel.text = dayPlanData[indexPath.item].time
+        cell.planTitleLabel.text = dayPlanData[indexPath.item].planName
+        cell.groupNameLabel.text = dayPlanData[indexPath.item].teamName
+        
+        return cell
     }
     
     // 셀 크기
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width - 24
-        
-        if collectionView == dayPlanCollectionView {
-            return CGSize(width: width, height: 66)
-        }
         return CGSize(width: width, height: 82)
     }
     
@@ -473,6 +406,25 @@ extension MeetingMainViewController: UICollectionViewDelegate, UICollectionViewD
 
 // layout
 extension MeetingMainViewController {
+    
+    private func addView() {
+        view.addSubview(scrollview)
+        scrollview.addSubview(contentView)
+        contentView.addSubview(meetingImage)
+        contentView.addSubview(whiteGradientView)
+        contentView.addSubview(starButton)
+        contentView.addSubview(meetingName)
+        contentView.addSubview(addMeetingButton)
+        contentView.addSubview(memberImage)
+        contentView.addSubview(memberNum)
+        addChild(calendarVC)
+        contentView.addSubview(calendarVC.view)
+        contentView.addSubview(dayPlanLabel)
+        contentView.addSubview(planNumCircle)
+        contentView.addSubview(planNum)
+        contentView.addSubview(dayPlanCollectionView)
+    }
+    
     // 전체 layout constraints
     private func layoutContraints() {
         scrollviewConstraints() // 스크롤뷰
@@ -484,12 +436,10 @@ extension MeetingMainViewController {
     
     // scrollview 추가
     private func scrollviewConstraints() {
-        view.addSubview(scrollview)
         scrollview.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(0)
         }
         
-        scrollview.addSubview(contentView)
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(scrollview.contentLayoutGuide)
             make.width.equalTo(scrollview.frameLayoutGuide)
@@ -499,14 +449,12 @@ extension MeetingMainViewController {
     
     // 상단 이미지 constraints
     private func imageConstraints() {
-        contentView.addSubview(meetingImage)
         meetingImage.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalTo(contentView.snp.width)
             make.top.equalTo(scrollview.snp.top).offset(-98)
         }
         
-        contentView.addSubview(whiteGradientView)
         whiteGradientView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalTo(100)
@@ -517,7 +465,6 @@ extension MeetingMainViewController {
     // 캘린더 뷰 위 모임 정보 constraints
     private func headerConstraints() {
         // 즐겨찾기 버튼
-        contentView.addSubview(starButton)
         starButton.snp.makeConstraints { make in
             make.height.width.equalTo(50)
             make.leading.equalTo(contentView.snp.leading).offset(24)
@@ -525,15 +472,13 @@ extension MeetingMainViewController {
         }
         
         // 모임 이름
-        contentView.addSubview(meetingName)
         meetingName.snp.makeConstraints { make in
-            make.width.equalTo(240)
             make.leading.equalTo(contentView.snp.leading).offset(24)
+            make.trailing.equalTo(addMeetingButton.snp.leading).offset(-10)
             make.top.equalTo(starButton.snp.bottom).offset(12)
         }
         
         // 약속 만들기 버튼
-        contentView.addSubview(addMeetingButton)
         addMeetingButton.snp.makeConstraints { make in
             make.width.equalTo(103)
             make.height.equalTo(33)
@@ -542,7 +487,6 @@ extension MeetingMainViewController {
         }
         
         // 멤버 이미지
-        contentView.addSubview(memberImage)
         memberImage.snp.makeConstraints { make in
             make.width.height.equalTo(16)
             make.top.equalTo(meetingName.snp.bottom).offset(8)
@@ -550,7 +494,6 @@ extension MeetingMainViewController {
         }
         
         // 멤버 수
-        contentView.addSubview(memberNum)
         memberNum.snp.makeConstraints { make in
             make.height.equalTo(24)
             make.leading.equalTo(memberImage.snp.trailing).offset(4)
@@ -560,8 +503,6 @@ extension MeetingMainViewController {
     
     // 캘린더뷰
     func calendarViewConstraints() {
-        addChild(calendarVC)
-        contentView.addSubview(calendarVC.view)
         calendarVC.view.snp.makeConstraints { make in
             make.top.equalTo(memberImage.snp.bottom).offset(40)
             make.leading.trailing.equalTo(contentView)
@@ -571,13 +512,11 @@ extension MeetingMainViewController {
     
     func meetingPlanView() {
         // label: 오늘의 약속
-        contentView.addSubview(dayPlanLabel)
         dayPlanLabel.snp.makeConstraints { make in
             make.leading.equalTo(contentView.snp.leading).offset(24)
             make.top.equalTo(calendarVC.view.snp.bottom).offset(36)
         }
         
-        contentView.addSubview(planNumCircle)
         planNumCircle.snp.makeConstraints { make in
             make.width.height.equalTo(20)
             make.leading.equalTo(dayPlanLabel.snp.trailing).offset(6)
@@ -585,47 +524,16 @@ extension MeetingMainViewController {
         }
         
         // label: 약속 수
-        contentView.addSubview(planNum)
         planNum.snp.makeConstraints { make in
             make.centerY.equalTo(planNumCircle.snp.centerY)
             make.centerX.equalTo(planNumCircle.snp.centerX)
         }
 
         // collectionView: 오늘의 약속
-        contentView.addSubview(dayPlanCollectionView)
         dayPlanCollectionView.snp.makeConstraints { make in
             make.top.equalTo(dayPlanLabel.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
             make.height.equalTo(dayPlanData.count * 92 - 10)
-        }
-        
-        // label: 대기 중 약속
-        contentView.addSubview(waitingPlanLabel)
-        waitingPlanLabel.snp.makeConstraints { make in
-            make.leading.equalTo(contentView.snp.leading).offset(24)
-            make.top.equalTo(dayPlanCollectionView.snp.bottom).offset(40)
-        }
-
-        contentView.addSubview(planNumCircle2)
-        planNumCircle2.snp.makeConstraints { make in
-            make.width.height.equalTo(20)
-            make.leading.equalTo(waitingPlanLabel.snp.trailing).offset(6)
-            make.centerY.equalTo(waitingPlanLabel.snp.centerY)
-        }
-
-        // label: 대기 중인 약속 수
-        contentView.addSubview(waitingPlanNum)
-        waitingPlanNum.snp.makeConstraints { make in
-            make.centerY.equalTo(planNumCircle2.snp.centerY)
-            make.centerX.equalTo(planNumCircle2.snp.centerX)
-        }
-
-        // collectionView: 대기 중 약속
-        contentView.addSubview(waitingPlanCollectionView)
-        waitingPlanCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(waitingPlanLabel.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(12)
-            make.height.equalTo(waitingPlanData.count * 100 - 10)
         }
     }
 }
