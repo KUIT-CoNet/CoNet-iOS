@@ -16,7 +16,12 @@ class InvitationCodeViewController: UIViewController {
         $0.backgroundColor = UIColor.black.withAlphaComponent(0.5)
     }
     
-    var popUpView = InviteCodePopUp()
+    var popUpView = InviteCodePopUp().then {
+        $0.setTitle("초대코드가\n발급되었어요.")
+        $0.setCode("초대코드 불러오는중...")
+        $0.setHelperMessage("초대 코드 유효 기간 : 불러오는중...")
+        $0.setButtonTitle("보내기")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

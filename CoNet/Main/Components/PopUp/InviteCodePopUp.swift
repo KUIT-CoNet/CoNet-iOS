@@ -21,14 +21,14 @@ class InviteCodePopUp: UIView {
     }
     
     let title = UILabel().then {
-        $0.text = "초대코드가\n발급되었어요."
+        $0.text = ""
         $0.font = UIFont.headline2Bold
         $0.textColor = UIColor.textHigh
         $0.numberOfLines = 2
     }
     
     let code = UILabel().then {
-        $0.text = "초대코드 불러오는중..."
+        $0.text = ""
         $0.font = UIFont.body1Medium
         $0.tintColor = UIColor.black
     }
@@ -38,7 +38,7 @@ class InviteCodePopUp: UIView {
     }
     
     let helperMessage = UILabel().then {
-        $0.text = "초대 코드 유효 기간 : 불러오는중..."
+        $0.text = ""
         $0.textColor = .textMedium
         $0.font = UIFont.overline
         $0.numberOfLines = 0
@@ -50,7 +50,7 @@ class InviteCodePopUp: UIView {
     }
     
     let buttonTitle = UILabel().then {
-        $0.text = "보내기"
+        $0.text = ""
         $0.font = .body1Medium
         $0.textColor = .white
     }
@@ -98,6 +98,10 @@ class InviteCodePopUp: UIView {
     
     func setHelperMessage(_ message: String) {
         helperMessage.text = message
+    }
+    
+    func setButtonTitle(_ title: String) {
+        buttonTitle.text = title
     }
 }
 
