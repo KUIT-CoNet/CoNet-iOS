@@ -183,7 +183,7 @@ extension ChangeNameViewController {
         nameLabel.snp.makeConstraints { make in
             make.height.equalTo(18)
             make.top.equalTo(safeArea.snp.top).offset(46)
-            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
         }
         
         // 이름 텍스트필드

@@ -82,8 +82,7 @@ extension LogoutPopUpViewController {
     // 팝업 Constraints
     private func popUpConstraints() {
         popUp.snp.makeConstraints { make in
-            make.width.equalTo(view.snp.width).offset(-48)
-            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
             make.center.equalTo(view.snp.center)
         }
     }

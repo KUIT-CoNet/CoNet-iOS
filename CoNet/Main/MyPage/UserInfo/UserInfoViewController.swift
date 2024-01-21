@@ -205,27 +205,26 @@ extension UserInfoViewController {
         nameLabel.snp.makeConstraints { make in
             make.height.equalTo(18)
             make.top.equalTo(profileImage.snp.bottom).offset(30)
-            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
         }
         
         changeNameButton.snp.makeConstraints { make in
             make.height.equalTo(24)
-            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
             make.top.equalTo(nameLabel.snp.bottom).offset(6)
         }
         
         // 이름 변경 버튼 row
         changeNameView.snp.makeConstraints { make in
             make.height.equalTo(24)
-            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
             make.top.equalTo(nameLabel.snp.bottom).offset(6)
         }
         
         // 구분선
         divider.snp.makeConstraints { make in
             make.height.equalTo(1)
-            make.width.equalTo(view.snp.width).offset(-48)
-            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
             make.top.equalTo(changeNameView.snp.bottom).offset(16)
         }
     }
@@ -236,14 +235,14 @@ extension UserInfoViewController {
         linkedSocialLabel.snp.makeConstraints { make in
             make.height.equalTo(18)
             make.top.equalTo(divider.snp.bottom).offset(16)
-            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
         }
         
         // 연결된 계정 - 카카오/애플
         emailLabel.snp.makeConstraints { make in
             make.height.equalTo(22)
             make.top.equalTo(linkedSocialLabel.snp.bottom).offset(8)
-            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
         }
         
         // 카카오/애플 아이콘
