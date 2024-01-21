@@ -165,13 +165,3 @@ extension InviteCodePopUp {
         }
     }
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct InvitationCodeViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        InvitationCodeViewController().showPreview(.iPhone14Pro)
-    }
-}
-#endif
