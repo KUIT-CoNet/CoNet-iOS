@@ -78,8 +78,7 @@ extension SignOutPopUpViewController {
             make.width.equalTo(view.snp.width).offset(-48)
             make.horizontalEdges.equalTo(24)
             
-            make.centerX.equalTo(view.snp.centerX)
-            make.centerY.equalTo(view.snp.centerY)
+            make.center.equalTo(view.snp.center)
         }
     }
 }
