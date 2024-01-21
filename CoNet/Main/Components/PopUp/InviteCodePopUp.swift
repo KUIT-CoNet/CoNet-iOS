@@ -93,12 +93,11 @@ extension InviteCodePopUp {
         xButton.snp.makeConstraints { make in
             make.width.height.equalTo(24)
             make.top.equalTo(background.snp.top).offset(18)
-            make.trailing.equalTo(background.snp.trailing).offset(-18)
+            make.trailing.equalTo(background.snp.trailing).inset(18)
         }
         
         title.snp.makeConstraints { make in
-            make.width.equalToSuperview().offset(-64)
-            make.horizontalEdges.equalToSuperview().offset(32)
+            make.horizontalEdges.equalToSuperview().inset(32)
             make.top.equalTo(background.snp.top).offset(64)
         }
         
@@ -109,26 +108,20 @@ extension InviteCodePopUp {
         
         divider.snp.makeConstraints { make in
             make.height.equalTo(1)
-            make.width.equalToSuperview().offset(-64)
-            make.horizontalEdges.equalToSuperview().offset(32)
-            
+            make.horizontalEdges.equalToSuperview().inset(32)
             make.bottom.equalTo(helperMessage.snp.top).offset(-4)
         }
         
         helperMessage.snp.makeConstraints { make in
             make.height.equalTo(12)
-            make.width.equalToSuperview().offset(-64)
-            make.horizontalEdges.equalToSuperview().offset(32)
-            
+            make.horizontalEdges.equalToSuperview().inset(32)
             make.bottom.equalTo(button.snp.top).offset(-16)
         }
         
         button.snp.makeConstraints { make in
             make.height.equalTo(54)
-            make.width.equalToSuperview().offset(-64)
-            make.horizontalEdges.equalToSuperview().offset(32)
-            
-            make.bottom.equalTo(background.snp.bottom).offset(-32)
+            make.horizontalEdges.equalToSuperview().inset(32)
+            make.bottom.equalTo(background.snp.bottom).inset(32)
         }
         
         buttonTitle.snp.makeConstraints { make in
