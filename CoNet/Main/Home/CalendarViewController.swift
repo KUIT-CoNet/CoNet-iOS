@@ -49,15 +49,12 @@ class CalendarViewController: UIViewController {
     
     weak var homeVC: HomeViewController?
     weak var meetingMainVC: MeetingMainViewController?
+    weak var makePlanDateSheetVC: PlanDateButtonSheetViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
-        view.layer.borderWidth = 0.2
-        view.layer.borderColor = UIColor.gray300?.cgColor
-
-        updateCalendarData()
+        viewSetting()
         addView()
         layoutConstraints()
         setupCollectionView()
@@ -65,11 +62,12 @@ class CalendarViewController: UIViewController {
         // 버튼 클릭 이벤트
         buttonActions()
         
+        updateCalendarData()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByMeetingMain(notification:)), name: NSNotification.Name("ToCalendarVC"), object: nil)
         
         // 년월 헤더 설정
         yearMonth.setTitle(calendarDateFormatter.getYearMonthText(), for: .normal)
-        yearMonth.addTarget(self, action: #selector(didClickYearBtn), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -89,6 +87,7 @@ class CalendarViewController: UIViewController {
     func buttonActions() {
         prevBtn.addTarget(self, action: #selector(didClickPrevBtn), for: .touchUpInside)
         nextBtn.addTarget(self, action: #selector(didClickNextBtn), for: .touchUpInside)
+        yearMonth.addTarget(self, action: #selector(didClickYearBtn), for: .touchUpInside)
     }
     
     // API: 특정 달 약속 조회
@@ -123,6 +122,11 @@ class CalendarViewController: UIViewController {
     
     // yearMonth 클릭
     @objc func didClickYearBtn(_ sender: UIView) {
+        // 부모 뷰가 PlanDateButtonSheetViewController 인 경우 팝업을 띄우지 않음
+        if parent is PlanDateButtonSheetViewController {
+            return
+        }
+        
         let popupVC = MonthViewController(year: calendarDateFormatter.currentYear()).then {
             $0.modalPresentationStyle = .overCurrentContext
             $0.modalTransitionStyle = .crossDissolve
@@ -210,6 +214,11 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
                 // 부모 뷰컨트롤러가 MeetingMainViewController
                 meetingMainVC?.dayPlanAPI(date: clickDate)
                 NotificationCenter.default.post(name: NSNotification.Name("ToMeetingMain"), object: nil, userInfo: ["clickDate": clickDate])
+            } else if parentVC is PlanDateButtonSheetViewController {
+                // 부모 뷰컨트롤러가 PlanDateButtonSheetViewController
+                // 약속만들기 화면으로 선택한 날짜 정보 전송
+                NotificationCenter.default.post(name: NSNotification.Name("ToMakePlanVC"), object: nil, userInfo: ["date": clickDate])
+                NotificationCenter.default.post(name: NSNotification.Name("ToPlanDateSheetVC"), object: nil)
             }
         }
     }
@@ -222,6 +231,11 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
     // 셀 사이즈 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = weekStackView.frame.width / 7
+        if let parentVC = parent {
+            if parentVC is PlanDateButtonSheetViewController {
+                return CGSize(width: width, height: 38)
+            }
+        }
         return CGSize(width: width, height: 50)
     }
     
@@ -271,6 +285,15 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
 }
 
 extension CalendarViewController {
+    
+    func viewSetting() {
+        view.backgroundColor = .white
+        // calendarView border 설정
+        if !(parent is PlanDateButtonSheetViewController) {
+            view.layer.borderWidth = 0.2
+            view.layer.borderColor = UIColor.gray300?.cgColor
+        }
+    }
     
     func addView() {
         view.addSubview(prevBtn)

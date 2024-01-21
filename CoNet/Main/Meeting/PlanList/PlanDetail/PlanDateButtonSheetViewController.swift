@@ -18,7 +18,7 @@ class PlanDateButtonSheetViewController: UIViewController {
         $0.layer.cornerRadius = 1.5
     }
     
-    let calendarView = CalendarView()
+    let calendarVC = CalendarViewController()
     
     let applyButton = UIButton().then {
         $0.frame = CGRect(x: 0, y: 0, width: 345, height: 44)
@@ -35,22 +35,24 @@ class PlanDateButtonSheetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubview(background)
-        view.addSubview(bottomSheetView)
-        view.addSubview(grayLine)
-        view.addSubview(calendarView)
-        view.addSubview(applyButton)
-        
+        addView()
         layoutConstraints()
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(closePopUp))
-        background.addGestureRecognizer(tapGesture)
+        buttonActions()
         
-        applyButton.addTarget(self, action: #selector(applyButtonTapped), for: .touchUpInside)
+        // PlanDateButtonSheetViewController의 인스턴스를 CalendarViewController의 프로퍼티에 할당
+        calendarVC.makePlanDateSheetVC = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarVC(notification:)), name: NSNotification.Name("ToPlanDateSheetVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarVC(notification:)), name: NSNotification.Name("ToMakePlanVC"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarV(notification:)), name: NSNotification.Name("ToPlanInfoEditVC"), object: nil)
+    }
+    
+    func buttonActions() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(closePopUp))
+        background.addGestureRecognizer(tapGesture)
+        
+        applyButton.addTarget(self, action: #selector(applyButtonTapped), for: .touchUpInside)
     }
     
     @objc func closePopUp() {
@@ -70,6 +72,17 @@ class PlanDateButtonSheetViewController: UIViewController {
             
         }
     }
+}
+
+extension PlanDateButtonSheetViewController {
+    private func addView() {
+        view.addSubview(background)
+        view.addSubview(bottomSheetView)
+        view.addSubview(grayLine)
+        addChild(calendarVC)
+        view.addSubview(calendarVC.view)
+        view.addSubview(applyButton)
+    }
     
     private func layoutConstraints() {
         background.snp.makeConstraints { make in
@@ -86,16 +99,16 @@ class PlanDateButtonSheetViewController: UIViewController {
             make.top.equalTo(bottomSheetView.snp.top).offset(10)
             make.centerX.equalTo(bottomSheetView)
         }
-        calendarView.snp.makeConstraints { make in
+        calendarVC.didMove(toParent: self)
+        calendarVC.view.snp.makeConstraints { make in
             make.height.equalTo(350)
-            make.top.equalTo(grayLine.snp.bottom).offset(25)
-            make.leading.equalTo(bottomSheetView.snp.leading).offset(0)
-            make.trailing.equalTo(bottomSheetView.snp.trailing).offset(0)
+            make.top.equalTo(grayLine.snp.bottom).offset(5)
+            make.horizontalEdges.equalTo(bottomSheetView.snp.horizontalEdges)
         }
         applyButton.snp.makeConstraints { make in
             make.width.equalTo(345)
             make.height.equalTo(44)
-            make.top.equalTo(calendarView.snp.bottom).offset(22)
+            make.top.equalTo(calendarVC.view.snp.bottom).offset(22)
             make.leading.equalTo(bottomSheetView.snp.leading).offset(24)
             make.trailing.equalTo(bottomSheetView.snp.trailing).offset(-24)
             make.bottom.equalTo(view.snp.bottom).offset(-45)
