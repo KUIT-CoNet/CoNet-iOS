@@ -60,12 +60,44 @@ class InviteCodePopUp: UIView {
         super.init(frame: frame)
         addView()
         layoutConstraints()
+        
+        buttonActions()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         addView()
         layoutConstraints()
+        
+        buttonActions()
+    }
+    
+    // 버튼 action
+    private func buttonActions() {
+        xButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
+        button.addTarget(self, action: #selector(buttonActionSelector), for: .touchUpInside)
+    }
+    
+    var dismissPopUp: (() -> Void) = {}
+    @objc func dismiss(_ sender: UIButton) {
+        dismissPopUp()
+    }
+    
+    var buttonAction: (() -> Void) = {}
+    @objc func buttonActionSelector(_ sender: UIButton) {
+        buttonAction()
+    }
+    
+    func setTitle(_ title: String) {
+        self.title.text = title
+    }
+    
+    func setCode(_ code: String) {
+        self.text.text = code
+    }
+    
+    func setHelperMessage(_ message: String) {
+        helperMessage.text = message
     }
 }
 
