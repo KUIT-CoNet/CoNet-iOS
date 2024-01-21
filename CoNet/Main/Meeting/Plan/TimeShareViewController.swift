@@ -146,7 +146,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         layoutConstraints()
         timeTableSetting()
         
-        btnClickEvents()
+        buttonActions()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -255,7 +255,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         peopleNum4.text = sectionMemberCount[3]
     }
     
-    func btnClickEvents() {
+    func buttonActions() {
         xButton.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
         inputTimeButton.addTarget(self, action: #selector(didClickInputTimeButton), for: .touchUpInside)
         prevBtn.addTarget(self, action: #selector(didClickPrevButton), for: .touchUpInside)
@@ -318,24 +318,28 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     // 약속 수정 페이지로 이동
     func pushEditPlanPage() {
         let nextVC = MakePlanViewController()
-        
-        // setting
-        nextVC.titleLabel.text = "약속 수정하기"
-        nextVC.planNameTextField.text = planTitle.text
-        nextVC.planStartDateField.text = sendDate[0].replacingOccurrences(of: "-", with: ". ")
-        nextVC.calendarButton.isEnabled = false
-        nextVC.cautionLabel.text = "약속 기간은 수정할 수 없습니다."
-        nextVC.cautionLabel.textColor = UIColor.textDisabled
-        nextVC.cautionLabel.snp.makeConstraints { make in
-            make.leading.equalTo(nextVC.view.safeAreaLayoutGuide.snp.leading).offset(24)
-        }
-        nextVC.cautionImage.isHidden = true
-        nextVC.planStartDateField.isUserInteractionEnabled = false
-        nextVC.makeButton.setTitle("수정", for: .normal)
-        nextVC.planId = planId
+        setupEditPlanPage(nextVC)
         
         nextVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    // 약속 수정페이지 설정
+    func setupEditPlanPage(_ viewController: MakePlanViewController) {
+        viewController.titleLabel.text = "약속 수정하기"
+        
+        viewController.planNameTextField.text = planTitle.text
+        viewController.planStartDateField.text = sendDate[0].replacingOccurrences(of: "-", with: ". ")
+        viewController.planStartDateField.textColor = UIColor.textDisabled
+        viewController.calendarButton.isEnabled = false
+        
+        viewController.cautionLabel.text = "약속 기간은 수정할 수 없습니다."
+        viewController.cautionLabel.textColor = UIColor.textDisabled
+        viewController.cautionImage.isHidden = true
+        
+        viewController.planStartDateField.isUserInteractionEnabled = false
+        viewController.makeButton.setTitle("수정", for: .normal)
+        viewController.planId = planId
     }
     
     // 약속 삭제 팝업

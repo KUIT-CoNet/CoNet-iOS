@@ -32,7 +32,6 @@ class DeletePlanPopUpViewController: UIViewController {
         view.backgroundColor = .clear
         
         layoutConstraints()
-        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopUp))
         background.addGestureRecognizer(tapGesture)
     }
@@ -54,8 +53,10 @@ class DeletePlanPopUpViewController: UIViewController {
             }
         }
     }
-    
-    // 모든 layout Constraints
+}
+
+// layout
+extension DeletePlanPopUpViewController {
     private func layoutConstraints() {
         backgroundConstraints()
         popUpConstraints()
@@ -74,11 +75,8 @@ class DeletePlanPopUpViewController: UIViewController {
         view.addSubview(popUp)
         popUp.snp.makeConstraints { make in
             make.width.equalTo(view.snp.width).offset(-48)
-            make.leading.equalTo(view.snp.leading).offset(24)
-            make.trailing.equalTo(view.snp.trailing).offset(24)
-            
-            make.centerX.equalTo(view.snp.centerX)
-            make.centerY.equalTo(view.snp.centerY)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(24)
+            make.center.equalTo(view.snp.center)
         }
     }
 }
