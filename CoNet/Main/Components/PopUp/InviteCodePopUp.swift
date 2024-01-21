@@ -27,7 +27,7 @@ class InviteCodePopUp: UIView {
         $0.numberOfLines = 2
     }
     
-    let text = UILabel().then {
+    let code = UILabel().then {
         $0.text = "초대코드 불러오는중..."
         $0.font = UIFont.body1Medium
         $0.tintColor = UIColor.black
@@ -93,7 +93,7 @@ class InviteCodePopUp: UIView {
     }
     
     func setCode(_ code: String) {
-        self.text.text = code
+        self.code.text = code
     }
     
     func setHelperMessage(_ message: String) {
@@ -108,7 +108,7 @@ extension InviteCodePopUp {
         background.addSubview(xButton)
         background.addSubview(title)
         
-        background.addSubview(text)
+        background.addSubview(code)
         background.addSubview(divider)
         background.addSubview(helperMessage)
         
@@ -133,7 +133,7 @@ extension InviteCodePopUp {
             make.top.equalTo(background.snp.top).offset(64)
         }
         
-        text.snp.makeConstraints { make in
+        code.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.bottom.equalTo(divider.snp.top).offset(-6)
         }
