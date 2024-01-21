@@ -154,6 +154,8 @@ class MeetingMainViewController: UIViewController {
     private func buttonActions() {
         addMeetingButton.addTarget(self, action: #selector(showMakePlanViewController), for: .touchUpInside)
         starButton.addTarget(self, action: #selector(starButtonTapped), for: .touchUpInside)
+        sidebarButton.addTarget(self, action: #selector(sidebarButtonTapped), for: .touchUpInside)
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
     }
     
     // 모임 정보 조회 api
@@ -223,12 +225,10 @@ class MeetingMainViewController: UIViewController {
     
     private func addNavigationBarItem() {
         // 사이드바 버튼 추가
-        sidebarButton.addTarget(self, action: #selector(sidebarButtonTapped), for: .touchUpInside)
         let barButtonItem = UIBarButtonItem(customView: sidebarButton)
         navigationItem.rightBarButtonItem = barButtonItem
         
         // 뒤로가기 버튼 추가
-        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         let leftbarButtonItem = UIBarButtonItem(customView: backButton)
         navigationItem.leftBarButtonItem = leftbarButtonItem
     }
