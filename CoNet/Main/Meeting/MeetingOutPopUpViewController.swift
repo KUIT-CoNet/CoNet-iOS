@@ -74,6 +74,7 @@ extension MeetingOutPopUpViewController {
         view.addSubview(background)
         view.addSubview(popUp)
     }
+    
     // 모든 layout Constraints
     private func layoutConstraints() {
         background.snp.makeConstraints { make in
