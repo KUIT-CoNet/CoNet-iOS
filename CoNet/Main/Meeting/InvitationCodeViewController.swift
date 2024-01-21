@@ -18,34 +18,34 @@ class InvitationCodeViewController: UIViewController {
     
     var popUpView = InviteCodePopUp()
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = .clear
+        
+        addView()
+        layoutConstraints()
+        
+        buttonActions()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         MeetingAPI().postMeetingInviteCode(teamId: meetingId) { code, deadline in
             self.popUpView.setCode(code)
             self.popUpView.setHelperMessage("초대 코드 유효 기간 : \(deadline)")
         }
     }
-  
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = .clear
-        
-        layoutConstraints()
-        clickEvents()
-    }
     
-    // 버튼의 click events
-    private func clickEvents() {
+    private func buttonActions() {
         // 배경 탭
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopUp))
         background.addGestureRecognizer(tapGesture)
         
         popUpView.dismissPopUp = { self.dismissPopUp() }
-        
-//        sendButton.addTarget(self, action: #selector(sendInviteCode), for: .touchUpInside)
+        popUpView.buttonAction = { self.sendInviteCode(self.popUpView.button) }
     }
     
-    // 팝업 사라지게
     @objc private func dismissPopUp() {
         dismiss(animated: true)
     }
@@ -53,43 +53,39 @@ class InvitationCodeViewController: UIViewController {
     // 초대코드 공유
     @objc func sendInviteCode(_ sender: UIButton) {
         // 공유할 콘텐츠를 생성
-//        let textToShare = "CoNet 모임 초대 코드\n\(self.codeLabel.text ?? "")"
-//        let activityItems = [textToShare]
+        let textToShare = "CoNet 모임 초대 코드\n\(self.popUpView.code.text ?? "")"
+        let activityItems = [textToShare]
         
         // UIActivityViewController를 생성
-//        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
         
         // 공유 시트가 iPad에서도 정상적으로 표시되도록 처리
-//        if let popoverController = activityViewController.popoverPresentationController {
-//            popoverController.sourceView = sender
-//            popoverController.sourceRect = sender.bounds
-//        }
+        if let popoverController = activityViewController.popoverPresentationController {
+            popoverController.sourceView = sender
+            popoverController.sourceRect = sender.bounds
+        }
         
         // 공유 시트를 표시
-//        present(activityViewController, animated: true, completion: nil)
+        present(activityViewController, animated: true, completion: nil)
+    }
+}
+
+// addView, layoutConstraints
+extension InvitationCodeViewController {
+    private func addView() {
+        view.addSubview(background)
+        view.addSubview(popUpView)
     }
     
-    // 전체 layout
     private func layoutConstraints() {
-        self.view.addSubview(background)
-        self.view.addSubview(popUpView)
+        let safeArea = view.safeAreaLayoutGuide
         
-        backgroundConstraints()
-        applyConstraintsToComponents()
-    }
-    
-    func backgroundConstraints() {
         background.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(0)
         }
-    }
-    
-    func applyConstraintsToComponents() {
-        let safeArea = view.safeAreaLayoutGuide
         
         popUpView.snp.makeConstraints { make in
-            make.width.equalTo(view.snp.width).offset(-136)
-            make.horizontalEdges.equalTo(view.snp.horizontalEdges).offset(68)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(68)
             make.height.equalTo(340)
             make.centerY.equalTo(safeArea.snp.centerY)
         }
