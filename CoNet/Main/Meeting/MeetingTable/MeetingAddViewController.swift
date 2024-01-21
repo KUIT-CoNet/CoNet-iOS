@@ -15,7 +15,7 @@ class MeetingAddViewController: UIViewController, UITextFieldDelegate {
     }
 
     // label: 모임추가 타이틀
-    let gatherAddLabel = UILabel().then {
+    let meetingAddLabel = UILabel().then {
         $0.text = "모임 추가하기"
         $0.font = UIFont.headline3Bold
         $0.textColor = UIColor.black
@@ -29,7 +29,7 @@ class MeetingAddViewController: UIViewController, UITextFieldDelegate {
     }
     
     // label: 모임이름
-    let gathernameLabel = UILabel().then {
+    let meetingnameLabel = UILabel().then {
         $0.text = "모임 이름"
         $0.font = UIFont.body2Bold
         $0.textColor = UIColor.textDisabled
@@ -41,7 +41,7 @@ class MeetingAddViewController: UIViewController, UITextFieldDelegate {
         $0.isHidden = true
     }
     
-    let gathernameTextField = UITextField().then {
+    let meetingnameTextField = UITextField().then {
         $0.placeholder = "모임 이름 입력"
         $0.font = UIFont.headline3Regular
         $0.tintColor = UIColor.textDisabled
@@ -60,7 +60,7 @@ class MeetingAddViewController: UIViewController, UITextFieldDelegate {
     }
     
     // label: 모임 대표 사진
-    let gatherphotoLabel = UILabel().then {
+    let meetingphotoLabel = UILabel().then {
         $0.text = "모임 대표 사진"
         $0.font = UIFont.body2Bold
         $0.textColor = UIColor.textDisabled
@@ -103,14 +103,14 @@ class MeetingAddViewController: UIViewController, UITextFieldDelegate {
         layoutConstriants()
         buttonActions()
         
-        gathernameTextField.delegate = self
+        meetingnameTextField.delegate = self
     }
     
     // 버튼 addTarget
     func buttonActions() {
         xButton.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
         photoUploadButton.addTarget(self, action: #selector(uploadButtonTapped), for: .touchUpInside)
-        gathernameTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
+        meetingnameTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
         xnameButton.addTarget(self, action: #selector(xnameButtonTapped), for: .touchUpInside)
         completionButton.addTarget(self, action: #selector(createMeeting), for: .touchUpInside)
     }
@@ -123,6 +123,20 @@ class MeetingAddViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
+    // 텍스트필드 관련 색상 설정(수정시)
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == meetingnameTextField {
+            grayLine.backgroundColor = UIColor.purpleMain
+        }
+    }
+
+    // 텍스트필드 관련 색상 설정(수정 완료시)
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == meetingnameTextField {
+            grayLine.backgroundColor = UIColor.iconDisabled
+        }
+    }
+
     @objc private func xButtonTapped() {
         dismiss(animated: true) {
             if let tabBarController = self.presentingViewController as? TabbarViewController {
@@ -133,7 +147,7 @@ class MeetingAddViewController: UIViewController, UITextFieldDelegate {
     
     // 텍스트 필드 내용 변경 시
     @objc private func textFieldEditingChanged() {
-        guard let text = gathernameTextField.text else { return }
+        guard let text = meetingnameTextField.text else { return }
         let nameCount = text.count
         xnameButton.isHidden = nameCount == 0
         completionButton.isEnabled = !text.isEmpty && photoImageView.image != nil
@@ -150,7 +164,7 @@ class MeetingAddViewController: UIViewController, UITextFieldDelegate {
     
     // x버튼 클릭 시
     @objc private func xnameButtonTapped() {
-        gathernameTextField.text = ""
+        meetingnameTextField.text = ""
         textFieldEditingChanged()
     }
     
@@ -163,7 +177,7 @@ class MeetingAddViewController: UIViewController, UITextFieldDelegate {
     
     // 모임 생성
     @objc func createMeeting() {
-        guard let newName = gathernameTextField.text else { return }
+        guard let newName = meetingnameTextField.text else { return }
         guard let selectedImage = photoImageView.image else { return }
         MeetingAPI().createMeeting(name: newName, image: selectedImage) { isSuccess in
             if isSuccess {
@@ -193,14 +207,14 @@ extension MeetingAddViewController: UIImagePickerControllerDelegate, UINavigatio
 extension MeetingAddViewController {
     func addView() {
         self.view.addSubview(xButton)
-        self.view.addSubview(gatherAddLabel)
+        self.view.addSubview(meetingAddLabel)
         self.view.addSubview(completionButton)
-        self.view.addSubview(gathernameLabel)
+        self.view.addSubview(meetingnameLabel)
         self.view.addSubview(xnameButton)
-        self.view.addSubview(gathernameTextField)
+        self.view.addSubview(meetingnameTextField)
         self.view.addSubview(grayLine)
         self.view.addSubview(textcountLabel)
-        self.view.addSubview(gatherphotoLabel)
+        self.view.addSubview(meetingphotoLabel)
         self.view.addSubview(photoImageView)
         self.view.addSubview(photoUploadImage)
         self.view.addSubview(photoUploadLabel)
@@ -226,7 +240,7 @@ extension MeetingAddViewController {
             make.top.equalTo(safeArea.snp.top).offset(42)
             make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
         }
-        gatherAddLabel.snp.makeConstraints { make in
+        meetingAddLabel.snp.makeConstraints { make in
             make.top.equalTo(safeArea.snp.top).offset(42)
             make.leading.equalTo(safeArea.snp.leading).offset(149)
         }
@@ -235,24 +249,24 @@ extension MeetingAddViewController {
     func applyConstraintsToGathername() {
         let safeArea = view.safeAreaLayoutGuide
         
-        gathernameLabel.snp.makeConstraints { make in
+        meetingnameLabel.snp.makeConstraints { make in
             make.top.equalTo(xButton.snp.bottom).offset(45)
             make.horizontalEdges.equalTo(safeArea.snp.horizontalEdges).offset(24)
         }
-        gathernameTextField.snp.makeConstraints { make in
-            make.top.equalTo(gathernameLabel.snp.bottom).offset(10)
+        meetingnameTextField.snp.makeConstraints { make in
+            make.top.equalTo(meetingnameLabel.snp.bottom).offset(10)
             make.leading.equalTo(safeArea.snp.leading).offset(24)
             make.trailing.equalTo(safeArea.snp.trailing).offset(-40)
         }
         xnameButton.snp.makeConstraints { make in
             make.width.height.equalTo(16)
-            make.top.equalTo(gathernameLabel.snp.bottom).offset(13)
+            make.top.equalTo(meetingnameLabel.snp.bottom).offset(13)
             make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
         }
         grayLine.snp.makeConstraints { make in
             make.height.equalTo(1)
             make.width.equalTo(345)
-            make.top.equalTo(gathernameLabel.snp.bottom).offset(40)
+            make.top.equalTo(meetingnameLabel.snp.bottom).offset(40)
             make.centerX.equalTo(safeArea.snp.centerX)
         }
         textcountLabel.snp.makeConstraints { make in
@@ -265,19 +279,19 @@ extension MeetingAddViewController {
     func applyConstraintsToGatherphoto() {
         let safeArea = view.safeAreaLayoutGuide
         
-        gatherphotoLabel.snp.makeConstraints { make in
+        meetingphotoLabel.snp.makeConstraints { make in
             make.height.equalTo(14)
             make.top.equalTo(grayLine.snp.bottom).offset(32)
             make.leading.equalTo(safeArea.snp.leading).offset(24)
         }
         photoImageView.snp.makeConstraints { make in
             make.width.height.equalTo(345)
-            make.top.equalTo(gatherphotoLabel.snp.bottom).offset(8)
+            make.top.equalTo(meetingphotoLabel.snp.bottom).offset(8)
             make.centerX.equalTo(safeArea.snp.centerX)
         }
         photoUploadImage.snp.makeConstraints { make in
             make.width.height.equalTo(32)
-            make.top.equalTo(gatherphotoLabel.snp.bottom).offset(122)
+            make.top.equalTo(meetingphotoLabel.snp.bottom).offset(122)
             make.centerX.equalTo(photoImageView.snp.centerX)
         }
         photoUploadLabel.snp.makeConstraints { make in
