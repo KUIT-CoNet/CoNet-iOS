@@ -41,6 +41,7 @@ class PlanTimePickerViewController: UIViewController {
     }
     
     var formattedTime = ""
+    var onDismiss: (() -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,10 +63,12 @@ class PlanTimePickerViewController: UIViewController {
     }
     
     @objc func dismissPopUp() {
+        self.onDismiss?()
         dismiss(animated: true, completion: nil)
     }
     
     @objc func didClickApplyButton() {
+        self.onDismiss?()
         NotificationCenter.default.post(name: NSNotification.Name("ToPlanInfoEditVC"), object: nil, userInfo: ["time": formattedTime])
         dismissPopUp()
     }

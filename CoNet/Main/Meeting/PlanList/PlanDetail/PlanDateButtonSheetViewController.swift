@@ -31,6 +31,7 @@ class PlanDateButtonSheetViewController: UIViewController {
     }
     
     var date: String = ""
+    var onDismiss: (() -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,10 +57,12 @@ class PlanDateButtonSheetViewController: UIViewController {
     }
     
     @objc func closePopUp() {
+        self.onDismiss?()
         dismiss(animated: true, completion: nil)
     }
     
     @objc func applyButtonTapped() {
+        self.onDismiss?()
         dismiss(animated: true) {
             NotificationCenter.default.post(name: NSNotification.Name("SendDateToMakePlanVC"), object: nil, userInfo: ["date": self.date])
         }
