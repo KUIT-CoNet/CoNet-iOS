@@ -196,6 +196,7 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         memberCollectionView.register(EditMemberCollectionViewCell.self, forCellWithReuseIdentifier: EditMemberCollectionViewCell.cellId)
     }
     
+    // 네비게이션바 설정
     private func setupNavigationBar() {
         // 사이드바 버튼 추가
         let completionButtonItem = UIBarButtonItem(customView: completionButton)
