@@ -39,7 +39,6 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
     }
     
     let planNameTextField = UITextField().then {
-        $0.placeholder = "모임모임"
         $0.font = UIFont.headline3Regular
         $0.tintColor = UIColor.black
         $0.becomeFirstResponder()
@@ -132,14 +131,14 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        navigationController?.navigationBar.isHidden = false
+        self.navigationController?.navigationBar.isHidden = false
         navigationItem.title = "약속 수정하기"
         
         addView()
         layoutConstraints()
-        buttonActions()
         setupCollectionView()
         setupNavigationBar()
+        buttonActions()
         
         planNameTextField.delegate = self
         planDateTextField.delegate = self
@@ -152,7 +151,12 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = false
+        self.navigationController?.navigationBar.isHidden = false
+        
+        getPlanDetailAPI()
+    }
+    
+    func getPlanDetailAPI() {
         PlanAPI().getPlanDetail(planId: planId) { plans in
             self.planNameTextField.text = plans.planName
             self.planDateTextField.text = plans.date
@@ -186,6 +190,22 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    private func setupCollectionView() {
+        memberCollectionView.delegate = self
+        memberCollectionView.dataSource = self
+        memberCollectionView.register(EditMemberCollectionViewCell.self, forCellWithReuseIdentifier: EditMemberCollectionViewCell.cellId)
+    }
+    
+    private func setupNavigationBar() {
+        // 사이드바 버튼 추가
+        let completionButtonItem = UIBarButtonItem(customView: completionButton)
+        navigationItem.rightBarButtonItem = completionButtonItem
+        
+        // 뒤로가기 버튼 추가
+        let leftbarButtonItem = UIBarButtonItem(customView: backButton)
+        navigationItem.leftBarButtonItem = leftbarButtonItem
+    }
+    
     func buttonActions() {
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         completionButton.addTarget(self, action: #selector(updatePlan), for: .touchUpInside)
@@ -198,43 +218,12 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         planTimeTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
     }
     
-    private func setupCollectionView() {
-        memberCollectionView.delegate = self
-        memberCollectionView.dataSource = self
-        memberCollectionView.register(EditMemberCollectionViewCell.self, forCellWithReuseIdentifier: EditMemberCollectionViewCell.cellId)
-    }
-    
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
     
     @objc private func updatePlan() {
         guard let name = planNameTextField.text else { return }
-    }
-    
-    private func setupNavigationBar() {
-        
-        // 사이드바 버튼 추가
-        let completionButtonItem = UIBarButtonItem(customView: completionButton)
-        navigationItem.rightBarButtonItem = completionButtonItem
-        
-        // 뒤로가기 버튼 추가
-        let leftbarButtonItem = UIBarButtonItem(customView: backButton)
-        navigationItem.leftBarButtonItem = leftbarButtonItem
-    }
-    
-    @objc private func textFieldEditingChanged(_ textField: UITextField) {
-        if textField == planNameTextField {
-            guard let text = textField.text else { return }
-            let nameCount = text.count
-
-            textCountLabel.text = "\(nameCount)/20"
-            xnameButton.isHidden = text.isEmpty
-        }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
     }
     
     @objc private func xnameButtonTapped() {
@@ -317,13 +306,35 @@ extension PlanInfoEditViewController: UICollectionViewDelegate, UICollectionView
     }
 }
 
+// textfield 관련 설정
 extension PlanInfoEditViewController {
+    @objc private func textFieldEditingChanged(_ textField: UITextField) {
+        if textField == planNameTextField {
+            if let text = textField.text {
+                let maxLength = 20
+                var newText = text
+                if text.count > maxLength {
+                    let index = text.index(text.startIndex, offsetBy: maxLength)
+                    newText = String(text[..<index])
+                }
+                textCountLabel.text = "\(newText.count)/20"
+                xnameButton.isHidden = newText.isEmpty
+                textField.text = newText
+            }
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == planNameTextField {
             grayLine1.backgroundColor = UIColor.purpleMain
         }
         xnameButton.isHidden = false
     }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == planNameTextField {
             grayLine1.backgroundColor = UIColor.iconDisabled
@@ -332,7 +343,7 @@ extension PlanInfoEditViewController {
     }
 }
 
-// layout
+// addView, layout
 extension PlanInfoEditViewController {
     func addView() {
 //        self.view.addSubview(backButton)
@@ -389,7 +400,7 @@ extension PlanInfoEditViewController {
     func applyConstraintsToPlanName() {
         let safeArea = view.safeAreaLayoutGuide
         planNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(safeArea.snp.top).offset(109)
+            make.top.equalTo(safeArea.snp.top).offset(44)
             make.leading.equalTo(safeArea.snp.leading).offset(24)
         }
         planNameTextField.snp.makeConstraints { make in
