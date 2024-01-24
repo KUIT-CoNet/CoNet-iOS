@@ -97,7 +97,10 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        navigationController?.navigationBar.isHidden = true
+        navigationController?.navigationBar.isHidden = false
+        navigationItem.title = "약속 만들기"
+        
+        addNavigationBarItem()
         
         addView()
         layoutConstraints()
@@ -112,7 +115,7 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = true
+        navigationController?.navigationBar.isHidden = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -239,6 +242,12 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    private func addNavigationBarItem() {
+        // 뒤로가기 버튼 추가
+        let leftbarButtonItem = UIBarButtonItem(customView: backButton)
+        navigationItem.leftBarButtonItem = leftbarButtonItem
+    }
+    
     // 텍스트필드 외의 화면 클릭시 키보드 숨김
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
@@ -248,8 +257,6 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
 // addview, layout
 extension MakePlanViewController {
     func addView() {
-        view.addSubview(backButton)
-        view.addSubview(titleLabel)
         view.addSubview(planNameLabel)
         view.addSubview(xnameButton)
         view.addSubview(planNameTextField)
@@ -272,18 +279,8 @@ extension MakePlanViewController {
     
     func applyConstraintsToPlanName() {
         let safeArea = view.safeAreaLayoutGuide
-        backButton.snp.makeConstraints { make in
-            make.height.width.equalTo(24)
-            make.top.equalTo(safeArea.snp.top).offset(41)
-            make.leading.equalTo(safeArea.snp.leading).offset(17)
-        }
-        titleLabel.snp.makeConstraints { make in
-            make.height.equalTo(22)
-            make.centerX.equalTo(safeArea.snp.centerX)
-            make.centerY.equalTo(backButton.snp.centerY)
-        }
         planNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(backButton.snp.bottom).offset(44)
+            make.top.equalTo(safeArea.snp.top).offset(46)
             make.leading.equalTo(safeArea.snp.leading).offset(24)
         }
         planNameTextField.snp.makeConstraints { make in
