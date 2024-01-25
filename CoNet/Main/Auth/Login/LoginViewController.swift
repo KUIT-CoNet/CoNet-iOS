@@ -6,19 +6,26 @@
 //
 
 import AuthenticationServices
+
 import KakaoSDKAuth
+import KakaoSDKCommon
 import KakaoSDKUser
+
 import KeychainSwift
 import SnapKit
 import Then
 import UIKit
 
 class LoginViewController: UIViewController {
+    let keychain = KeychainSwift()
+    
+    // 임시 버튼
     let showSignUpButton = UIButton().then {
         $0.setTitle("회원가입(이용약관) 페이지로", for: .normal)
         $0.setTitleColor(UIColor.purpleMain, for: .normal)
     }
     
+    // 임시 버튼
     let showMainButton = UIButton().then {
         $0.setTitle("메인 페이지로", for: .normal)
         $0.setTitleColor(UIColor.purpleMain, for: .normal)
@@ -36,7 +43,8 @@ class LoginViewController: UIViewController {
         $0.backgroundColor = .clear
     }
     
-    let kakaoLoginButtonReal = KakaoLoginButton()
+    var kakaoLoginButtonReal = KakaoLoginButton()
+    let appleLoginButton = AppleLoginButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,140 +52,22 @@ class LoginViewController: UIViewController {
         // 배경색 .white로 지정
         view.backgroundColor = .white
         
-        tempButtonUI()
-        
         addView()
         layoutConstraints()
         buttonActions()
         
-        setupUI()
-        
-        showSignUpButton.addTarget(self, action: #selector(showSignUp(_:)), for: .touchUpInside)
-        showMainButton.addTarget(self, action: #selector(showMain(_:)), for: .touchUpInside)
-        
-        print("DEBUG(loginVC) keychain에 저장된 모든 Key: \(KeychainSwift().allKeys)")
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        AuthAPI().regenerateToken { isSuccess in
-            print("Login VC isSuccess \(isSuccess)")
-        }
+        tempButton()
     }
     
     private func buttonActions() {
-        kakaoLoginButtonReal.addTarget(self, action: #selector(kakaoButtonTapped), for: .touchUpInside)
-    }
-    
-    @objc func showSignUp(_ sender: UIView) {
-        let nextVC = TermsOfUseViewController()
-        navigationController?.pushViewController(nextVC, animated: true)
-    }
-    
-    @objc func showMain(_ sender: UIView) {
-        let nextVC = TabbarViewController()
-        navigationController?.pushViewController(nextVC, animated: true)
-        
-        let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
-        sceneDelegate?.changeRootVC(TabbarViewController(), animated: false)
-    }
-    
-    // MARK: - UI Setup
-    
-    private func setupUI() {
-        setupAppleButton()
+        appleLoginButton.buttonAction = { self.appleLogin() }
+        kakaoLoginButtonReal.buttonAction = { self.kakaoLogin() }
     }
         
-    private func setupAppleButton() {
-        let appleButton = UIButton().then {
-            $0.backgroundColor = .black
-            $0.layer.cornerRadius = 12
-            $0.addTarget(self, action: #selector(appleButtonTapped), for: .touchUpInside)
-        }
-        view.addSubview(appleButton)
-        appleButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(634)
-            make.left.equalToSuperview().offset(24)
-            make.right.equalToSuperview().offset(-24)
-            make.height.equalTo(52)
-        }
-            
-        let appleStackView = UIStackView().then {
-            $0.axis = .horizontal
-            $0.spacing = 8
-        }
-        appleButton.addSubview(appleStackView)
-        appleStackView.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
-        }
-            
-        let appleImageView = UIImageView().then {
-            $0.image = UIImage(named: "apple")
-            $0.contentMode = .scaleAspectFit
-            $0.backgroundColor = .clear
-        }
-        appleStackView.addArrangedSubview(appleImageView)
-        appleImageView.snp.makeConstraints { make in
-            make.width.equalTo(16)
-            make.height.equalTo(19)
-        }
-            
-        let appleLabel = UILabel().then {
-            $0.text = "Apple로 계속하기"
-            $0.font = UIFont.body1Bold
-            $0.textColor = .white
-                
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineHeightMultiple = 1.05
-                
-            let attributedText = NSMutableAttributedString(string: "Apple로 계속하기", attributes: [
-                NSAttributedString.Key.kern: -0.4,
-                NSAttributedString.Key.paragraphStyle: paragraphStyle
-            ])
-            $0.attributedText = attributedText
-        }
-        appleStackView.addArrangedSubview(appleLabel)
-    }
-        
-    @objc private func kakaoButtonTapped() {
-        kakaoLogin()
-    }
-        
-    @objc private func appleButtonTapped() {
-        appleLogin()
-    }
-        
-    // MARK: - Login Actions
-    // 카카오 로그인
     private func kakaoLogin() {
-        UserApi.shared.loginWithKakaoAccount { oauthToken, error in
-            if let error = error {
-                print(error)
-            } else {
-                print("loginWithKakaoTalkAccount() success")
-                print("Kakao id token: \(oauthToken?.idToken ?? "id token 없음..")")
-                
-                AuthAPI.shared.kakaoLogin(idToken: oauthToken?.idToken ?? "") { isRegistered in
-                    if isRegistered {
-                        // 홈 탭으로 이동
-                        let nextVC = TabbarViewController()
-                        self.navigationController?.pushViewController(nextVC, animated: true)
-                            
-                        // 루트뷰를 홈 탭으로 바꾸기 (스택 초기화)
-                        let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
-                        sceneDelegate?.changeRootVC(TabbarViewController(), animated: false)
-                    } else {
-                        // 회원가입 탭으로 이동
-                        let nextVC = TermsOfUseViewController()
-                        self.navigationController?.pushViewController(nextVC, animated: true)
-                    }
-                }
-            }
-        }
-        /*
         if UserApi.isKakaoTalkLoginAvailable() {
-            print("kakao available")
+            print("kakao 앱 가능")
+            
             // 카카오톡 앱 로그인
             UserApi.shared.loginWithKakaoTalk { oauthToken, error in
                 if let error = error {
@@ -186,25 +76,12 @@ class LoginViewController: UIViewController {
                     print("loginWithKakaoTalk() success")
                     print("Kakao id token: \(oauthToken?.idToken ?? "id token 없음..")")
                     
-                    AuthAPI.shared.kakaoLogin(idToken: oauthToken?.idToken ?? "") { isRegistered in
-                        if isRegistered {
-                            // 홈 탭으로 이동
-                            let nextVC = TabbarViewController()
-                            self.navigationController?.pushViewController(nextVC, animated: true)
-                                
-                            // 루트뷰를 홈 탭으로 바꾸기 (스택 초기화)
-                            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
-                            sceneDelegate?.changeRootVC(TabbarViewController(), animated: false)
-                        } else {
-                            // 회원가입 탭으로 이동
-                            let nextVC = TermsOfUseViewController()
-                            self.navigationController?.pushViewController(nextVC, animated: true)
-                        }
-                    }
+                    self.postKakaoLogin(idToken: oauthToken?.idToken ?? "")
                 }
             }
         } else {
             print("kakao 앱 불가능")
+            
             // 카카오톡 웹 로그인
             UserApi.shared.loginWithKakaoAccount { oauthToken, error in
                 if let error = error {
@@ -213,25 +90,28 @@ class LoginViewController: UIViewController {
                     print("loginWithKakaoTalkAccount() success")
                     print("Kakao id token: \(oauthToken?.idToken ?? "id token 없음..")")
                     
-                    AuthAPI.shared.kakaoLogin(idToken: oauthToken?.idToken ?? "") { isRegistered in
-                        if isRegistered {
-                            // 홈 탭으로 이동
-                            let nextVC = TabbarViewController()
-                            self.navigationController?.pushViewController(nextVC, animated: true)
-                                
-                            // 루트뷰를 홈 탭으로 바꾸기 (스택 초기화)
-                            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
-                            sceneDelegate?.changeRootVC(TabbarViewController(), animated: false)
-                        } else {
-                            // 회원가입 탭으로 이동
-                            let nextVC = TermsOfUseViewController()
-                            self.navigationController?.pushViewController(nextVC, animated: true)
-                        }
-                    }
+                    self.postKakaoLogin(idToken: oauthToken?.idToken ?? "")
                 }
             }
         }
-         */
+    }
+    
+    private func postKakaoLogin(idToken: String) {
+        AuthAPI.shared.kakaoLogin(idToken: idToken) { isRegistered in
+            if isRegistered {
+                // 홈 탭으로 이동
+                let nextVC = TabbarViewController()
+                self.navigationController?.pushViewController(nextVC, animated: true)
+                    
+                // 루트뷰를 홈 탭으로 바꾸기 (스택 초기화)
+                let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+                sceneDelegate?.changeRootVC(TabbarViewController(), animated: false)
+            } else {
+                // 회원가입 탭으로 이동
+                let nextVC = TermsOfUseViewController()
+                self.navigationController?.pushViewController(nextVC, animated: true)
+            }
+        }
     }
         
     private func appleLogin() {
@@ -249,9 +129,9 @@ class LoginViewController: UIViewController {
     }
 }
 
-// addView & layoutConstraints
+// 임시 버튼
 extension LoginViewController {
-    private func tempButtonUI() {
+    private func tempButton() {
         let safeArea = view.safeAreaLayoutGuide
         
         view.addSubview(showSignUpButton)
@@ -265,35 +145,24 @@ extension LoginViewController {
             make.centerX.equalTo(safeArea.snp.centerX)
             make.bottom.equalTo(safeArea.snp.bottom).offset(-10)
         }
+        
+        showSignUpButton.addTarget(self, action: #selector(showSignUp(_:)), for: .touchUpInside)
+        showMainButton.addTarget(self, action: #selector(showMain(_:)), for: .touchUpInside)
     }
     
-    private func addView() {
-        view.addSubview(kakaoLoginButtonReal)
-        view.addSubview(sloganLabel)
-        view.addSubview(logoImageView)
+    @objc func showSignUp(_ sender: UIView) {
+        let nextVC = TermsOfUseViewController()
+        navigationController?.pushViewController(nextVC, animated: true)
     }
     
-    private func layoutConstraints() {
-        kakaoLoginButtonReal.snp.makeConstraints { make in
-            make.height.equalTo(52)
-            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
-            make.top.equalTo(view.snp.top).offset(100)
-        }
+    @objc func showMain(_ sender: UIView) {
+        let nextVC = TabbarViewController()
+        navigationController?.pushViewController(nextVC, animated: true)
         
-        sloganLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(200)
-            make.centerX.equalToSuperview()
-        }
-        
-        logoImageView.snp.makeConstraints { make in
-            make.height.equalTo(200)
-            make.top.equalTo(sloganLabel.snp.bottom).offset(30)
-            make.centerX.equalToSuperview()
-        }
+        let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+        sceneDelegate?.changeRootVC(TabbarViewController(), animated: false)
     }
 }
-
-let keychain = KeychainSwift()
 
 // apple login
 extension LoginViewController: ASAuthorizationControllerDelegate {
@@ -337,18 +206,44 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
     }
 }
 
+// apple login
 extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return view.window!
     }
 }
-    
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
 
-struct LoginViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        LoginViewController().showPreview(.iPhone14Pro)
+// addView & layoutConstraints
+extension LoginViewController {
+    private func addView() {
+        view.addSubview(sloganLabel)
+        view.addSubview(logoImageView)
+        view.addSubview(kakaoLoginButtonReal)
+        view.addSubview(appleLoginButton)
+    }
+    
+    private func layoutConstraints() {
+        sloganLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(200)
+            make.centerX.equalToSuperview()
+        }
+        
+        logoImageView.snp.makeConstraints { make in
+            make.height.equalTo(200)
+            make.top.equalTo(sloganLabel.snp.bottom).offset(30)
+            make.centerX.equalToSuperview()
+        }
+        
+        kakaoLoginButtonReal.snp.makeConstraints { make in
+            make.height.equalTo(52)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
+            make.bottom.equalTo(appleLoginButton.snp.top).offset(-8)
+        }
+        
+        appleLoginButton.snp.makeConstraints { make in
+            make.height.equalTo(52)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
+            make.bottom.equalTo(view.snp.bottom).inset(120)
+        }
     }
 }
-#endif

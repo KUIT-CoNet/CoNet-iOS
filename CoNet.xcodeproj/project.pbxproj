@@ -101,6 +101,7 @@
 		51DA64962A532CB300BBA4C0 /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 51DA64952A532CB300BBA4C0 /* KakaoSDK */; };
 		51DA64992A532CF800BBA4C0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 51DA64982A532CF800BBA4C0 /* SnapKit */; };
 		51E8242B2B62AEEA00A56F3A /* KakaoLoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E8242A2B62AEEA00A56F3A /* KakaoLoginButton.swift */; };
+		51E8242D2B62B70700A56F3A /* AppleLoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E8242C2B62B70700A56F3A /* AppleLoginButton.swift */; };
 		51F2A4682A54804100D134CC /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2A4672A54804100D134CC /* ColorExtension.swift */; };
 		51F2A46A2A548A1000D134CC /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2A4692A548A1000D134CC /* FontExtension.swift */; };
 		51F2A46D2A54960200D134CC /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 51F2A46C2A54960200D134CC /* KeychainSwift */; };
@@ -204,6 +205,7 @@
 		51B526CB2A6C3988009DBFB4 /* DecidedPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecidedPlanCell.swift; sourceTree = "<group>"; };
 		51C29AF22B31DD7600B1A1BA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		51E8242A2B62AEEA00A56F3A /* KakaoLoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginButton.swift; sourceTree = "<group>"; };
+		51E8242C2B62B70700A56F3A /* AppleLoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginButton.swift; sourceTree = "<group>"; };
 		51F2A4672A54804100D134CC /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		51F2A4692A548A1000D134CC /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
 		51F2A4702A5497A500D134CC /* AuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthAPI.swift; sourceTree = "<group>"; };
@@ -566,6 +568,7 @@
 			children = (
 				1AE23DBA2A59837F000D498F /* LoginViewController.swift */,
 				51E8242A2B62AEEA00A56F3A /* KakaoLoginButton.swift */,
+				51E8242C2B62B70700A56F3A /* AppleLoginButton.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -735,6 +738,7 @@
 				1AA197BB2A73C54B001064F8 /* PlanMemberBottonSheetViewController.swift in Sources */,
 				1ABF8C882A694B3800023A8D /* MeetingInfoEditViewController.swift in Sources */,
 				513D6B892A4BFCCC00E9ACDA /* AppDelegate.swift in Sources */,
+				51E8242D2B62B70700A56F3A /* AppleLoginButton.swift in Sources */,
 				1A3AD0132A6958B400975427 /* InvitationCodeViewController.swift in Sources */,
 				515E53BF2A77D16D00536C6D /* Meeting.swift in Sources */,
 				512675912A83D71600AFC46C /* EditMemberCollectionViewCell.swift in Sources */,
