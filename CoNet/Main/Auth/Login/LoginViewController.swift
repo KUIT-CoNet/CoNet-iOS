@@ -5,8 +5,6 @@
 //  Created by 정아현 on 2023/07/08.
 //
 
-import AuthenticationServices
-
 import KakaoSDKAuth
 import KakaoSDKCommon
 import KakaoSDKUser
@@ -60,7 +58,7 @@ class LoginViewController: UIViewController {
     }
     
     private func buttonActions() {
-        appleLoginButton.buttonAction = { self.appleLogin() }
+//        appleLoginButton.buttonAction = { self.appleLogin() }
         kakaoLoginButtonReal.buttonAction = { self.kakaoLogin() }
     }
         
@@ -113,20 +111,6 @@ class LoginViewController: UIViewController {
             }
         }
     }
-        
-    private func appleLogin() {
-        // request 생성
-        let request = ASAuthorizationAppleIDProvider().createRequest()
-        request.requestedScopes = [.fullName, .email]
-            
-        // request를 보내줄 controller 생성
-        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-        authorizationController.delegate = self as ASAuthorizationControllerDelegate
-        authorizationController.presentationContextProvider = self as ASAuthorizationControllerPresentationContextProviding
-            
-        // 요청 보내기
-        authorizationController.performRequests()
-    }
 }
 
 // 임시 버튼
@@ -164,62 +148,16 @@ extension LoginViewController {
     }
 }
 
-// apple login
-extension LoginViewController: ASAuthorizationControllerDelegate {
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            let idToken = credential.identityToken!
-            let tokenStr = String(data: idToken, encoding: .utf8)
-            print("idToken: ", tokenStr ?? "")
-                
-            guard let code = credential.authorizationCode else { return }
-            let codeStr = String(data: code, encoding: .utf8)
-            print(codeStr ?? "")
-                
-            let user = credential.user
-            print(user)
-                
-            // idToken 저장
-            keychain.set(tokenStr ?? "", forKey: "idToken")
-                
-            // apple login api 호출
-            AuthAPI.shared.appleLogin { isRegistered in
-                if isRegistered {
-                    // 홈 탭으로 이동
-                    let nextVC = TabbarViewController()
-                    self.navigationController?.pushViewController(nextVC, animated: true)
-                        
-                    // 루트뷰를 홈 탭으로 바꾸기 (스택 초기화)
-                    let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
-                    sceneDelegate?.changeRootVC(TabbarViewController(), animated: false)
-                } else {
-                    // 회원가입 탭으로 이동
-                    let nextVC = TermsOfUseViewController()
-                    self.navigationController?.pushViewController(nextVC, animated: true)
-                }
-            }
-        }
-    }
-        
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        print("Apple login error: \(error)")
-    }
-}
-
-// apple login
-extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
-    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return view.window!
-    }
-}
-
 // addView & layoutConstraints
 extension LoginViewController {
     private func addView() {
         view.addSubview(sloganLabel)
         view.addSubview(logoImageView)
         view.addSubview(kakaoLoginButtonReal)
-        view.addSubview(appleLoginButton)
+        
+        addChild(appleLoginButton)
+        view.addSubview(appleLoginButton.view)
+        appleLoginButton.didMove(toParent: self)
     }
     
     private func layoutConstraints() {
@@ -237,13 +175,23 @@ extension LoginViewController {
         kakaoLoginButtonReal.snp.makeConstraints { make in
             make.height.equalTo(52)
             make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
-            make.bottom.equalTo(appleLoginButton.snp.top).offset(-8)
+            make.bottom.equalTo(appleLoginButton.view.snp.top).offset(-8)
         }
         
-        appleLoginButton.snp.makeConstraints { make in
+        appleLoginButton.view.snp.makeConstraints { make in
             make.height.equalTo(52)
             make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
             make.bottom.equalTo(view.snp.bottom).inset(120)
         }
     }
 }
+    
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct LoginViewControllerPreview: PreviewProvider {
+    static var previews: some View {
+        LoginViewController().showPreview(.iPhone14Pro)
+    }
+}
+#endif
