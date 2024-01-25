@@ -5,18 +5,11 @@
 //  Created by 정아현 on 2023/07/08.
 //
 
-import KakaoSDKAuth
-import KakaoSDKCommon
-import KakaoSDKUser
-
-import KeychainSwift
 import SnapKit
 import Then
 import UIKit
 
 class LoginViewController: UIViewController {
-    let keychain = KeychainSwift()
-    
     // 임시 버튼
     let showSignUpButton = UIButton().then {
         $0.setTitle("회원가입(이용약관) 페이지로", for: .normal)
@@ -41,7 +34,7 @@ class LoginViewController: UIViewController {
         $0.backgroundColor = .clear
     }
     
-    var kakaoLoginButtonReal = KakaoLoginButton()
+    let kakaoLoginButton = KakaoLoginButton()
     let appleLoginButton = AppleLoginButton()
     
     override func viewDidLoad() {
@@ -52,64 +45,8 @@ class LoginViewController: UIViewController {
         
         addView()
         layoutConstraints()
-        buttonActions()
         
         tempButton()
-    }
-    
-    private func buttonActions() {
-//        appleLoginButton.buttonAction = { self.appleLogin() }
-        kakaoLoginButtonReal.buttonAction = { self.kakaoLogin() }
-    }
-        
-    private func kakaoLogin() {
-        if UserApi.isKakaoTalkLoginAvailable() {
-            print("kakao 앱 가능")
-            
-            // 카카오톡 앱 로그인
-            UserApi.shared.loginWithKakaoTalk { oauthToken, error in
-                if let error = error {
-                    print("DEBUG(kakao login): \(error)")
-                } else {
-                    print("loginWithKakaoTalk() success")
-                    print("Kakao id token: \(oauthToken?.idToken ?? "id token 없음..")")
-                    
-                    self.postKakaoLogin(idToken: oauthToken?.idToken ?? "")
-                }
-            }
-        } else {
-            print("kakao 앱 불가능")
-            
-            // 카카오톡 웹 로그인
-            UserApi.shared.loginWithKakaoAccount { oauthToken, error in
-                if let error = error {
-                    print(error)
-                } else {
-                    print("loginWithKakaoTalkAccount() success")
-                    print("Kakao id token: \(oauthToken?.idToken ?? "id token 없음..")")
-                    
-                    self.postKakaoLogin(idToken: oauthToken?.idToken ?? "")
-                }
-            }
-        }
-    }
-    
-    private func postKakaoLogin(idToken: String) {
-        AuthAPI.shared.kakaoLogin(idToken: idToken) { isRegistered in
-            if isRegistered {
-                // 홈 탭으로 이동
-                let nextVC = TabbarViewController()
-                self.navigationController?.pushViewController(nextVC, animated: true)
-                    
-                // 루트뷰를 홈 탭으로 바꾸기 (스택 초기화)
-                let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
-                sceneDelegate?.changeRootVC(TabbarViewController(), animated: false)
-            } else {
-                // 회원가입 탭으로 이동
-                let nextVC = TermsOfUseViewController()
-                self.navigationController?.pushViewController(nextVC, animated: true)
-            }
-        }
     }
 }
 
@@ -153,7 +90,10 @@ extension LoginViewController {
     private func addView() {
         view.addSubview(sloganLabel)
         view.addSubview(logoImageView)
-        view.addSubview(kakaoLoginButtonReal)
+        
+        addChild(kakaoLoginButton)
+        view.addSubview(kakaoLoginButton.view)
+        kakaoLoginButton.didMove(toParent: self)
         
         addChild(appleLoginButton)
         view.addSubview(appleLoginButton.view)
@@ -172,7 +112,7 @@ extension LoginViewController {
             make.centerX.equalToSuperview()
         }
         
-        kakaoLoginButtonReal.snp.makeConstraints { make in
+        kakaoLoginButton.view.snp.makeConstraints { make in
             make.height.equalTo(52)
             make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
             make.bottom.equalTo(appleLoginButton.view.snp.top).offset(-8)
@@ -185,13 +125,3 @@ extension LoginViewController {
         }
     }
 }
-    
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct LoginViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        LoginViewController().showPreview(.iPhone14Pro)
-    }
-}
-#endif

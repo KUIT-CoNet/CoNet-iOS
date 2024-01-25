@@ -5,11 +5,15 @@
 //  Created by 이안진 on 1/25/24.
 //
 
+import KakaoSDKAuth
+import KakaoSDKCommon
+import KakaoSDKUser
+import KeychainSwift
 import SnapKit
 import Then
 import UIKit
 
-class KakaoLoginButton: UIButton {
+class KakaoLoginButton: UIViewController {
     let button = UIButton().then {
         $0.backgroundColor = UIColor(red: 0.976, green: 0.922, blue: 0, alpha: 1)
         $0.layer.cornerRadius = 12
@@ -29,17 +33,11 @@ class KakaoLoginButton: UIButton {
         $0.textColor = UIColor.black
     }
     
-    // Custom View 초기화
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        addView()
-        layoutConstraints()
-        buttonActions()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        // 배경색 .white로 지정
+        view.backgroundColor = .white
         
         addView()
         layoutConstraints()
@@ -50,15 +48,61 @@ class KakaoLoginButton: UIButton {
         button.addTarget(self, action: #selector(kakaoLogin), for: .touchUpInside)
     }
     
-    var buttonAction: () -> Void = {}
     @objc private func kakaoLogin() {
-        buttonAction()
+        if UserApi.isKakaoTalkLoginAvailable() {
+            print("kakao 앱 가능")
+            
+            // 카카오톡 앱 로그인
+            UserApi.shared.loginWithKakaoTalk { oauthToken, error in
+                if let error = error {
+                    print("DEBUG(kakao login): \(error)")
+                } else {
+                    print("loginWithKakaoTalk() success")
+                    print("Kakao id token: \(oauthToken?.idToken ?? "id token 없음..")")
+                    
+                    self.postKakaoLogin(idToken: oauthToken?.idToken ?? "")
+                }
+            }
+        } else {
+            print("kakao 앱 불가능")
+            
+            // 카카오톡 웹 로그인
+            UserApi.shared.loginWithKakaoAccount { oauthToken, error in
+                if let error = error {
+                    print(error)
+                } else {
+                    print("loginWithKakaoTalkAccount() success")
+                    print("Kakao id token: \(oauthToken?.idToken ?? "id token 없음..")")
+                    
+                    self.postKakaoLogin(idToken: oauthToken?.idToken ?? "")
+                }
+            }
+        }
+    }
+    
+    private func postKakaoLogin(idToken: String) {
+        AuthAPI.shared.kakaoLogin(idToken: idToken) { isRegistered in
+            if isRegistered {
+                // 홈 탭으로 이동
+                let nextVC = TabbarViewController()
+                self.navigationController?.pushViewController(nextVC, animated: true)
+                    
+                // 루트뷰를 홈 탭으로 바꾸기 (스택 초기화)
+                let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+                sceneDelegate?.changeRootVC(TabbarViewController(), animated: false)
+            } else {
+                // 회원가입 탭으로 이동
+                let nextVC = TermsOfUseViewController()
+                self.navigationController?.pushViewController(nextVC, animated: true)
+            }
+        }
     }
 }
 
+// addView & layoutConstraints
 extension KakaoLoginButton {
     private func addView() {
-        addSubview(button)
+        view.addSubview(button)
         button.addSubview(labelView)
         labelView.addSubview(image)
         labelView.addSubview(label)
