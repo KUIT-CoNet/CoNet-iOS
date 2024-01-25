@@ -33,19 +33,30 @@ class KakaoLoginButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        // layout
         addView()
         layoutConstraints()
+        buttonActions()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
-        // layout
         addView()
         layoutConstraints()
+        buttonActions()
     }
     
+    private func buttonActions() {
+        button.addTarget(self, action: #selector(kakaoLogin), for: .touchUpInside)
+    }
+    
+    var buttonAction: () -> Void = {}
+    @objc private func kakaoLogin() {
+        buttonAction()
+    }
+}
+
+extension KakaoLoginButton {
     private func addView() {
         addSubview(button)
         button.addSubview(labelView)
