@@ -24,11 +24,21 @@ class LoginViewController: UIViewController {
         $0.setTitleColor(UIColor.purpleMain, for: .normal)
     }
     
+    let kakaoLoginButtonReal = KakaoLoginButton()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupUI()
+        // 배경색 .white로 지정
+        view.backgroundColor = .white
+        
         tempButtonUI()
+        
+        addView()
+        layoutConstraints()
+        buttonActions()
+        
+        setupUI()
         
         showSignUpButton.addTarget(self, action: #selector(showSignUp(_:)), for: .touchUpInside)
         showMainButton.addTarget(self, action: #selector(showMain(_:)), for: .touchUpInside)
@@ -44,6 +54,10 @@ class LoginViewController: UIViewController {
         }
     }
     
+    private func buttonActions() {
+        kakaoLoginButtonReal.addTarget(self, action: #selector(kakaoButtonTapped), for: .touchUpInside)
+    }
+    
     @objc func showSignUp(_ sender: UIView) {
         let nextVC = TermsOfUseViewController()
         navigationController?.pushViewController(nextVC, animated: true)
@@ -57,29 +71,13 @@ class LoginViewController: UIViewController {
         sceneDelegate?.changeRootVC(TabbarViewController(), animated: false)
     }
     
-    func tempButtonUI() {
-        let safeArea = view.safeAreaLayoutGuide
-        
-        view.addSubview(showSignUpButton)
-        showSignUpButton.snp.makeConstraints { make in
-            make.centerX.equalTo(safeArea.snp.centerX)
-            make.bottom.equalTo(safeArea.snp.bottom).offset(-60)
-        }
-        
-        view.addSubview(showMainButton)
-        showMainButton.snp.makeConstraints { make in
-            make.centerX.equalTo(safeArea.snp.centerX)
-            make.bottom.equalTo(safeArea.snp.bottom).offset(-30)
-        }
-    }
+    
     
     // MARK: - UI Setup
     
     private func setupUI() {
-        view.backgroundColor = .white
         setupTitleLabel()
         setupLogoImageView()
-        setupKakaoButton()
         setupAppleButton()
     }
     
@@ -120,58 +118,6 @@ class LoginViewController: UIViewController {
             make.right.equalToSuperview().offset(-130)
             make.height.equalTo(198.64)
         }
-    }
-
-    private func setupKakaoButton() {
-        let kakaoButton = UIButton().then {
-            $0.backgroundColor = UIColor(red: 0.976, green: 0.922, blue: 0, alpha: 1)
-            $0.layer.cornerRadius = 12
-            $0.addTarget(self, action: #selector(kakaoButtonTapped), for: .touchUpInside)
-        }
-        view.addSubview(kakaoButton)
-        kakaoButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(574)
-            make.left.equalToSuperview().offset(24)
-            make.right.equalToSuperview().offset(-24)
-            make.height.equalTo(52)
-        }
-        
-        let kakaoStackView = UIStackView().then {
-            $0.axis = .horizontal
-            $0.spacing = 8
-        }
-        kakaoButton.addSubview(kakaoStackView)
-        kakaoStackView.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
-        }
-        
-        let kakaoImageView = UIImageView().then {
-            $0.image = UIImage(named: "kakao")
-            $0.contentMode = .scaleAspectFit
-            $0.backgroundColor = .clear
-            $0.transform = CGAffineTransform(scaleX: 1, y: 1.02)
-        }
-        kakaoStackView.addArrangedSubview(kakaoImageView)
-        kakaoImageView.snp.makeConstraints { make in
-            make.width.equalTo(21)
-            make.height.equalTo(19)
-        }
-        
-        let kakaoLabel = UILabel().then {
-            $0.text = "카카오톡으로 3초만에 시작하기"
-            $0.font = UIFont.body1Bold
-            $0.textColor = .black
-            
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineHeightMultiple = 1.05
-            
-            let attributedText = NSMutableAttributedString(string: "카카오톡으로 3초만에 시작하기", attributes: [
-                NSAttributedString.Key.kern: -0.4,
-                NSAttributedString.Key.paragraphStyle: paragraphStyle
-            ])
-            $0.attributedText = attributedText
-        }
-        kakaoStackView.addArrangedSubview(kakaoLabel)
     }
         
     private func setupAppleButton() {
@@ -334,9 +280,38 @@ class LoginViewController: UIViewController {
     }
 }
 
-let keychain = KeychainSwift()
+// addView & layoutConstraints
+extension LoginViewController {
+    private func tempButtonUI() {
+        let safeArea = view.safeAreaLayoutGuide
+        
+        view.addSubview(showSignUpButton)
+        showSignUpButton.snp.makeConstraints { make in
+            make.centerX.equalTo(safeArea.snp.centerX)
+            make.bottom.equalTo(safeArea.snp.bottom).offset(-40)
+        }
+        
+        view.addSubview(showMainButton)
+        showMainButton.snp.makeConstraints { make in
+            make.centerX.equalTo(safeArea.snp.centerX)
+            make.bottom.equalTo(safeArea.snp.bottom).offset(-10)
+        }
+    }
+    
+    private func addView() {
+        view.addSubview(kakaoLoginButtonReal)
+    }
+    
+    private func layoutConstraints() {
+        kakaoLoginButtonReal.snp.makeConstraints { make in
+            make.height.equalTo(52)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
+            make.top.equalTo(view.snp.top).offset(100)
+        }
+    }
+}
 
-// MARK: - ASAuthorizationControllerDelegate
+let keychain = KeychainSwift()
 
 // apple login
 extension LoginViewController: ASAuthorizationControllerDelegate {
@@ -380,17 +355,18 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
     }
 }
 
-// MARK: - ASAuthorizationControllerPresentationContextProviding
-
 extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return view.window!
     }
 }
     
-private func createButton(color: UIColor) -> UIButton {
-    return UIButton().then {
-        $0.backgroundColor = color
-        $0.layer.cornerRadius = 12
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct LoginViewControllerPreview: PreviewProvider {
+    static var previews: some View {
+        LoginViewController().showPreview(.iPhone14Pro)
     }
 }
+#endif
