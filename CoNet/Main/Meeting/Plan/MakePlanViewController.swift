@@ -38,7 +38,7 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         $0.becomeFirstResponder()
     }
 
-    let xnameButton = UIButton().then {
+    let xNameButton = UIButton().then {
         $0.setImage(UIImage(named: "clearBtn"), for: .normal)
         $0.isHidden = true
     }
@@ -107,10 +107,8 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         buttonActions()
         updateMakeButtonState()
         
-        planNameTextField.delegate = self
-        planStartDateField.delegate = self
-        // 데이터 받기
-        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByBottomSheet(notification:)), name: NSNotification.Name("SendDateToMakePlanVC"), object: nil)
+        setupPlanField()
+        dataExchange()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -118,13 +116,8 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         navigationController?.navigationBar.isHidden = false
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.navigationBar.isHidden = true
-    }
-    
     func buttonActions() {
-        xnameButton.addTarget(self, action: #selector(xnameButtonTapped), for: .touchUpInside)
+        xNameButton.addTarget(self, action: #selector(xNameButtonTapped), for: .touchUpInside)
         calendarButton.addTarget(self, action: #selector(calendarButtonTapped), for: .touchUpInside)
         planNameTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
         planStartDateField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
@@ -150,6 +143,10 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         updateMakeButtonState()
     }
     
+    func dataExchange() {
+        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByBottomSheet(notification:)), name: NSNotification.Name("SendDateToMakePlanVC"), object: nil)
+    }
+    
     // 텍스트 수정시
     @objc private func textFieldEditingChanged(_ textField: UITextField) {
         if textField == planNameTextField {
@@ -161,7 +158,7 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
                     newText = String(text[..<index])
                 }
                 textCountLabel.text = "\(newText.count)/20"
-                xnameButton.isHidden = newText.isEmpty
+                xNameButton.isHidden = newText.isEmpty
                 textField.text = newText
             }
         }
@@ -172,7 +169,7 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == planNameTextField {
             grayLine1.backgroundColor = UIColor.purpleMain
-            xnameButton.isHidden = false
+            xNameButton.isHidden = false
         }
     }
     
@@ -180,11 +177,11 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == planNameTextField {
             grayLine1.backgroundColor = UIColor.iconDisabled
-            xnameButton.isHidden = true
+            xNameButton.isHidden = true
         }
     }
     
-    @objc private func xnameButtonTapped() {
+    @objc private func xNameButtonTapped() {
         planNameTextField.text = ""
         planNameTextField.sendActions(for: .editingChanged)
     }
@@ -200,6 +197,11 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
     
     // 이전 ViewController로 데이터를 전달하는 delegate
     weak var delegate: MeetingMainViewControllerDelegate?
+    
+    private func setupPlanField() {
+        planNameTextField.delegate = self
+        planStartDateField.delegate = self
+    }
     
     // 만들기 버튼 활성화
     private func updateMakeButtonState() {
@@ -258,7 +260,7 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
 extension MakePlanViewController {
     func addView() {
         view.addSubview(planNameLabel)
-        view.addSubview(xnameButton)
+        view.addSubview(xNameButton)
         view.addSubview(planNameTextField)
         view.addSubview(textCountLabel)
         view.addSubview(grayLine1)
@@ -288,15 +290,15 @@ extension MakePlanViewController {
             make.leading.equalTo(safeArea.snp.leading).offset(24)
             make.trailing.equalTo(safeArea.snp.trailing).offset(-40)
         }
-        xnameButton.snp.makeConstraints { make in
+        xNameButton.snp.makeConstraints { make in
             make.width.height.equalTo(16)
-            make.top.equalTo(planNameLabel.snp.bottom).offset(12)
+            make.centerY.equalTo(planNameTextField.snp.centerY)
             make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
         }
         grayLine1.snp.makeConstraints { make in
-            make.width.equalTo(345)
             make.height.equalTo(1)
-            make.top.equalTo(planNameLabel.snp.bottom).offset(40)
+            make.top.equalTo(planNameTextField.snp.bottom).offset(8)
+            make.horizontalEdges.equalTo(safeArea.snp.horizontalEdges).inset(24)
             make.centerX.equalTo(safeArea.snp.centerX)
         }
         textCountLabel.snp.makeConstraints { make in
@@ -318,13 +320,13 @@ extension MakePlanViewController {
         }
         calendarButton.snp.makeConstraints { make in
             make.width.height.equalTo(16)
-            make.top.equalTo(planStartDateLabel.snp.bottom).offset(12)
+            make.centerY.equalTo(planStartDateField.snp.centerY)
             make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
         }
         grayLine2.snp.makeConstraints { make in
-            make.width.equalTo(345)
             make.height.equalTo(1)
-            make.top.equalTo(planStartDateLabel.snp.bottom).offset(40)
+            make.top.equalTo(planStartDateField.snp.bottom).offset(8)
+            make.horizontalEdges.equalTo(safeArea.snp.horizontalEdges).inset(24)
             make.centerX.equalTo(safeArea.snp.centerX)
         }
         cautionImage.snp.makeConstraints { make in
@@ -334,7 +336,7 @@ extension MakePlanViewController {
         }
         cautionLabel.snp.makeConstraints { make in
             make.height.equalTo(16)
-            make.top.equalTo(grayLine2.snp.bottom).offset(6)
+            make.centerY.equalTo(cautionImage.snp.centerY)
             make.leading.equalTo(safeArea.snp.leading).offset(41)
         }
     }
