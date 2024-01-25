@@ -11,6 +11,7 @@ import KeychainSwift
 
 class PlanTimeAPI {
     let baseUrl = "http://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
+    let keychain = KeychainSwift()
     
     // 구성원의 가능한 시간 조회
     func getMemberPossibleTime(planId: Int, completion: @escaping (_ teamId: Int, _ planId: Int, _ planName: String, _ planStartPeriod: String, _ planEndPeriod: String, _ sectionMemberCounts: [SectionMemberCounts], _ possibleMemberDateTime: [PossibleMemberDateTime]) -> Void) {

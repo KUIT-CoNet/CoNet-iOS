@@ -12,6 +12,7 @@ import KeychainSwift
 class HomeAPI {
     let baseUrl = "http://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
     static let shared = HomeAPI()
+    let keychain = KeychainSwift()
     
     // 특정 달 약속 조회
     func getMonthPlan(date: String, completion: @escaping (_ count: Int, _ dates: [Int]) -> Void) {
