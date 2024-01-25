@@ -24,6 +24,12 @@ class LoginViewController: UIViewController {
         $0.setTitleColor(UIColor.purpleMain, for: .normal)
     }
     
+    let sloganLabel = UILabel().then {
+        $0.text = "맞춰가는 시간, 만들어가는 추억"
+        $0.font = UIFont.headline3Regular
+        $0.textColor = .black
+    }
+    
     let kakaoLoginButtonReal = KakaoLoginButton()
     
     override func viewDidLoad() {
@@ -71,38 +77,11 @@ class LoginViewController: UIViewController {
         sceneDelegate?.changeRootVC(TabbarViewController(), animated: false)
     }
     
-    
-    
     // MARK: - UI Setup
     
     private func setupUI() {
-        setupTitleLabel()
         setupLogoImageView()
         setupAppleButton()
-    }
-    
-    private func setupTitleLabel() {
-        let titleLabel = UILabel().then {
-            $0.text = "맞춰가는 시간, 만들어가는 추억"
-            $0.font = UIFont.headline3Regular
-            $0.textColor = .black
-            
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineHeightMultiple = 1.02
-            
-            let attributedText = NSMutableAttributedString(string: "맞춰가는 시간, 만들어가는 추억", attributes: [
-                NSAttributedString.Key.kern: -0.45,
-                NSAttributedString.Key.paragraphStyle: paragraphStyle
-            ])
-            $0.attributedText = attributedText
-        }
-        view.addSubview(titleLabel)
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(214)
-            make.centerX.equalToSuperview().offset(0.5)
-            make.width.equalTo(220)
-            make.height.equalTo(22)
-        }
     }
 
     private func setupLogoImageView() {
@@ -300,6 +279,7 @@ extension LoginViewController {
     
     private func addView() {
         view.addSubview(kakaoLoginButtonReal)
+        view.addSubview(sloganLabel)
     }
     
     private func layoutConstraints() {
@@ -307,6 +287,11 @@ extension LoginViewController {
             make.height.equalTo(52)
             make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(24)
             make.top.equalTo(view.snp.top).offset(100)
+        }
+        
+        sloganLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(200)
+            make.centerX.equalToSuperview()
         }
     }
 }
