@@ -30,6 +30,12 @@ class LoginViewController: UIViewController {
         $0.textColor = .black
     }
     
+    let logoImageView = UIImageView().then {
+        $0.image = UIImage(named: "LaunchScreenImage")
+        $0.contentMode = .scaleAspectFit
+        $0.backgroundColor = .clear
+    }
+    
     let kakaoLoginButtonReal = KakaoLoginButton()
     
     override func viewDidLoad() {
@@ -80,23 +86,7 @@ class LoginViewController: UIViewController {
     // MARK: - UI Setup
     
     private func setupUI() {
-        setupLogoImageView()
         setupAppleButton()
-    }
-
-    private func setupLogoImageView() {
-        let logoImageView = UIImageView().then {
-            $0.image = UIImage(named: "LaunchScreenImage")
-            $0.contentMode = .scaleAspectFit
-            $0.backgroundColor = .clear
-        }
-        view.addSubview(logoImageView)
-        logoImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(266)
-            make.left.equalToSuperview().offset(130)
-            make.right.equalToSuperview().offset(-130)
-            make.height.equalTo(198.64)
-        }
     }
         
     private func setupAppleButton() {
@@ -280,6 +270,7 @@ extension LoginViewController {
     private func addView() {
         view.addSubview(kakaoLoginButtonReal)
         view.addSubview(sloganLabel)
+        view.addSubview(logoImageView)
     }
     
     private func layoutConstraints() {
@@ -291,6 +282,12 @@ extension LoginViewController {
         
         sloganLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(200)
+            make.centerX.equalToSuperview()
+        }
+        
+        logoImageView.snp.makeConstraints { make in
+            make.height.equalTo(200)
+            make.top.equalTo(sloganLabel.snp.bottom).offset(30)
             make.centerX.equalToSuperview()
         }
     }
