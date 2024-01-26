@@ -88,12 +88,23 @@ class TermsOfUseViewController: UIViewController {
         $0.layer.masksToBounds = true
     }
     
+    let termRow = TermRow().then {
+        $0.setTitle("동의 내용")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         
         addView()
         layoutConstraints()
+        
+        view.addSubview(termRow)
+        termRow.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(200)
+            make.height.equalTo(20)
+            make.horizontalEdges.equalToSuperview().inset(24)
+        }
         
         xButton.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
         button1.addTarget(self, action: #selector(button1Tapped), for: .touchUpInside)
@@ -325,3 +336,13 @@ extension TermsOfUseViewController {
         }
     }
 }
+
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct TermsOfUseViewControllerPreview: PreviewProvider {
+    static var previews: some View {
+        TermsOfUseViewController().showPreview(.iPhone14Pro)
+    }
+}
+#endif

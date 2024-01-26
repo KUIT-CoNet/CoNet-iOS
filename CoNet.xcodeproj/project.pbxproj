@@ -100,6 +100,7 @@
 		51B526CC2A6C3988009DBFB4 /* DecidedPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B526CB2A6C3988009DBFB4 /* DecidedPlanCell.swift */; };
 		51DA64962A532CB300BBA4C0 /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 51DA64952A532CB300BBA4C0 /* KakaoSDK */; };
 		51DA64992A532CF800BBA4C0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 51DA64982A532CF800BBA4C0 /* SnapKit */; };
+		51E8242F2B63B61200A56F3A /* TermRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E8242E2B63B61200A56F3A /* TermRow.swift */; };
 		51F2A4682A54804100D134CC /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2A4672A54804100D134CC /* ColorExtension.swift */; };
 		51F2A46A2A548A1000D134CC /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2A4692A548A1000D134CC /* FontExtension.swift */; };
 		51F2A46D2A54960200D134CC /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 51F2A46C2A54960200D134CC /* KeychainSwift */; };
@@ -202,6 +203,7 @@
 		51B526C92A6C3901009DBFB4 /* DecidedPlanListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecidedPlanListViewController.swift; sourceTree = "<group>"; };
 		51B526CB2A6C3988009DBFB4 /* DecidedPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecidedPlanCell.swift; sourceTree = "<group>"; };
 		51C29AF22B31DD7600B1A1BA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		51E8242E2B63B61200A56F3A /* TermRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermRow.swift; sourceTree = "<group>"; };
 		51F2A4672A54804100D134CC /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		51F2A4692A548A1000D134CC /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
 		51F2A4702A5497A500D134CC /* AuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthAPI.swift; sourceTree = "<group>"; };
@@ -261,6 +263,7 @@
 			children = (
 				1ADA548C2A5A74D700609041 /* TermsOfUseViewController.swift */,
 				23FE4ECB2A55B0E300BBF17E /* EnterNameViewController.swift */,
+				51E8242E2B63B61200A56F3A /* TermRow.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -748,6 +751,7 @@
 				512856392A81678200C1FBA7 /* FixPlanPopUpView.swift in Sources */,
 				51046AAB2A62F60200AD543D /* PreviewExtension.swift in Sources */,
 				23DE37C12A7287BD00F1DFE0 /* TimeShareViewController.swift in Sources */,
+				51E8242F2B63B61200A56F3A /* TermRow.swift in Sources */,
 				231E97D12A6BD3F8000BB2AD /* MonthCollectionViewCell.swift in Sources */,
 				5126758A2A82100300AFC46C /* DecidedPlanInfoViewController.swift in Sources */,
 				1AE5C7892A6F683D001B88D1 /* PlanInfoEditViewController.swift in Sources */,
