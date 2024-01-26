@@ -199,7 +199,7 @@ extension PlanMemberBottomSheetViewController {
             make.width.equalToSuperview().offset(-48)
             make.height.equalTo(44)
             make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.bottom.equalTo(view.snp.bottom).offset(-40)
+            make.bottom.equalTo(view.snp.bottom).offset(-45)
         }
     }
 }
