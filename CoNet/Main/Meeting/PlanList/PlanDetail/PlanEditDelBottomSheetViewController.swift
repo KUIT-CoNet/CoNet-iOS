@@ -27,7 +27,9 @@ class PlanEditDelBottomSheetViewController: UIViewController {
         $0.layer.cornerRadius = 1.5
     }
     
-    let editButton = UIButton().then { $0.backgroundColor = .clear }
+    let editButton = UIButton().then {
+        $0.backgroundColor = .clear
+    }
     
     let editView = UIImageView().then {
         $0.image = UIImage(named: "edit")
@@ -39,7 +41,9 @@ class PlanEditDelBottomSheetViewController: UIViewController {
         $0.textColor = UIColor.black
     }
     
-    let deleteButton = UIButton().then { $0.backgroundColor = .clear }
+    let deleteButton = UIButton().then {
+        $0.backgroundColor = .clear
+    }
     
     let delView = UIImageView().then {
         $0.image = UIImage(named: "deleteRed")
@@ -54,15 +58,12 @@ class PlanEditDelBottomSheetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubview(background)
-        view.addSubview(bottomSheet)
-        bottomSheet.addSubview(grayRectangle)
-        editButton.addSubview(editView)
-        editButton.addSubview(editLabel)
-        deleteButton.addSubview(delView)
-        deleteButton.addSubview(delLabel)
+        addView()
         layoutConstraints()
-        
+        buttonActions()
+    }
+    
+    func buttonActions() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopUp))
         background.addGestureRecognizer(tapGesture)
         
@@ -89,6 +90,25 @@ class PlanEditDelBottomSheetViewController: UIViewController {
             self.delegate?.sendDataBack(data: "삭제")
         }
     }
+}
+
+protocol PlanInfoViewControllerDelegate: AnyObject {
+    func sendDataBack(data: String)
+}
+
+// addView, layout
+extension PlanEditDelBottomSheetViewController {
+    func addView() {
+        view.addSubview(background)
+        view.addSubview(bottomSheet)
+        bottomSheet.addSubview(grayRectangle)
+        bottomSheet.addSubview(editButton)
+        bottomSheet.addSubview(deleteButton)
+        editButton.addSubview(editView)
+        editButton.addSubview(editLabel)
+        deleteButton.addSubview(delView)
+        deleteButton.addSubview(delLabel)
+    }
     
     func layoutConstraints() {
         backgroundConstraints()
@@ -113,8 +133,6 @@ class PlanEditDelBottomSheetViewController: UIViewController {
             make.centerX.equalTo(bottomSheet.snp.centerX)
             make.top.equalTo(bottomSheet.snp.top).offset(10)
         }
-        
-        bottomSheet.addSubview(editButton)
         editButton.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalTo(50)
@@ -130,8 +148,6 @@ class PlanEditDelBottomSheetViewController: UIViewController {
             make.centerY.equalTo(editView)
             make.leading.equalTo(editView.snp.trailing).offset(6)
         }
-        
-        bottomSheet.addSubview(deleteButton)
         deleteButton.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalTo(50)
@@ -148,8 +164,4 @@ class PlanEditDelBottomSheetViewController: UIViewController {
             make.leading.equalTo(editView.snp.trailing).offset(6)
         }
     }
-}
-
-protocol PlanInfoViewControllerDelegate: AnyObject {
-    func sendDataBack(data: String)
 }
