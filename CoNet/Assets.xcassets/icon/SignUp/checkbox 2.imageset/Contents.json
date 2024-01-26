@@ -1,15 +1,16 @@
 {
   "images" : [
     {
-      "filename" : "checkbox 2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "checkbox.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "checkbox3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
