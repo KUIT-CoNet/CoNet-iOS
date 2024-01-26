@@ -26,7 +26,7 @@ class TermRow: UIView {
         $0.font = UIFont.body1Medium
     }
     
-    let showLinkButton = UIButton().then {
+    let linkButton = UIButton().then {
         let button22Title = NSMutableAttributedString(string: "보기")
         button22Title.addAttribute(NSAttributedString.Key.underlineStyle,
                                    value: NSUnderlineStyle.single.rawValue,
@@ -56,8 +56,19 @@ class TermRow: UIView {
         checkButton.addTarget(self, action: #selector(toggleStatus), for: .touchUpInside)
     }
     
-    @objc private func toggleStatus(_ sender: UIButton) {
+    var checkButtonAction: () -> Void = { }
+    @objc func toggleStatus(_ sender: UIButton) {
         status.toggle()
+        changeCheckButtonImage()
+        checkButtonAction()
+    }
+    
+    func getStatus() -> Bool {
+        return status
+    }
+    
+    func setStatus(_ status: Bool) {
+        self.status = status
         changeCheckButtonImage()
     }
     
@@ -69,8 +80,12 @@ class TermRow: UIView {
         label.text = title
     }
     
-    func getStatus() -> Bool {
-        return status
+    func showLinkButton() {
+        background.addSubview(linkButton)
+        linkButton.snp.makeConstraints { make in
+            make.leading.equalTo(label.snp.trailing).offset(10)
+            make.centerY.equalToSuperview()
+        }
     }
 }
 
@@ -79,7 +94,6 @@ extension TermRow {
         addSubview(background)
         background.addSubview(checkButton)
         background.addSubview(label)
-        background.addSubview(showLinkButton)
     }
     
     private func layoutConstraints() {
@@ -96,11 +110,6 @@ extension TermRow {
         
         label.snp.makeConstraints { make in
             make.leading.equalTo(checkButton.snp.trailing).offset(10)
-            make.centerY.equalToSuperview()
-        }
-        
-        showLinkButton.snp.makeConstraints { make in
-            make.leading.equalTo(label.snp.trailing).offset(10)
             make.centerY.equalToSuperview()
         }
     }

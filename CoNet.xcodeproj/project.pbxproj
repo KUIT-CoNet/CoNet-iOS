@@ -261,9 +261,9 @@
 		23FE4ECA2A55B03600BBF17E /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
+				51E8242E2B63B61200A56F3A /* TermRow.swift */,
 				1ADA548C2A5A74D700609041 /* TermsOfUseViewController.swift */,
 				23FE4ECB2A55B0E300BBF17E /* EnterNameViewController.swift */,
-				51E8242E2B63B61200A56F3A /* TermRow.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";

@@ -88,8 +88,18 @@ class TermsOfUseViewController: UIViewController {
         $0.layer.masksToBounds = true
     }
     
-    let termRow = TermRow().then {
-        $0.setTitle("동의 내용")
+    let allTermRow = TermRow().then {
+        $0.setTitle("모두 동의")
+    }
+    
+    let serviceTermRow = TermRow().then {
+        $0.setTitle("[필수] 서비스 이용약관")
+        $0.showLinkButton()
+    }
+    
+    let personalTermRow = TermRow().then {
+        $0.setTitle("[필수] 개인정보 처리방침")
+        $0.showLinkButton()
     }
     
     override func viewDidLoad() {
@@ -98,14 +108,47 @@ class TermsOfUseViewController: UIViewController {
         
         addView()
         layoutConstraints()
+        buttonActions()
         
-        view.addSubview(termRow)
-        termRow.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(200)
+        view.addSubview(allTermRow)
+        view.addSubview(serviceTermRow)
+        view.addSubview(personalTermRow)
+        
+        allTermRow.snp.makeConstraints { make in
+            make.bottom.equalTo(serviceTermRow.snp.top).offset(-16)
             make.height.equalTo(20)
             make.horizontalEdges.equalToSuperview().inset(24)
         }
         
+        serviceTermRow.snp.makeConstraints { make in
+            make.bottom.equalTo(personalTermRow.snp.top).offset(-16)
+            make.height.equalTo(20)
+            make.horizontalEdges.equalToSuperview().inset(24)
+        }
+        
+        personalTermRow.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(400)
+            make.height.equalTo(20)
+            make.horizontalEdges.equalToSuperview().inset(24)
+        }
+        
+        allTermRow.checkButtonAction = {
+            let allTermStatus = self.allTermRow.getStatus()
+            self.serviceTermRow.setStatus(allTermStatus)
+            self.personalTermRow.setStatus(allTermStatus)
+            self.updateNextButtonState()
+        }
+        
+        serviceTermRow.checkButtonAction = {
+            self.updateNextButtonState()
+        }
+        
+        personalTermRow.checkButtonAction = {
+            self.updateNextButtonState()
+        }
+    }
+    
+    private func buttonActions() {
         xButton.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
         button1.addTarget(self, action: #selector(button1Tapped), for: .touchUpInside)
         button2.addTarget(self, action: #selector(button2Tapped), for: .touchUpInside)
@@ -125,6 +168,12 @@ class TermsOfUseViewController: UIViewController {
     
     @objc private func updateNextButtonState() {
         if (buttonSelectedStates[1] && buttonSelectedStates[2]) || buttonSelectedStates[0] {
+            nextButton.backgroundColor = UIColor.purpleMain
+        } else {
+            nextButton.backgroundColor = UIColor.gray200
+        }
+        
+        if serviceTermRow.getStatus() && personalTermRow.getStatus() {
             nextButton.backgroundColor = UIColor.purpleMain
         } else {
             nextButton.backgroundColor = UIColor.gray200
