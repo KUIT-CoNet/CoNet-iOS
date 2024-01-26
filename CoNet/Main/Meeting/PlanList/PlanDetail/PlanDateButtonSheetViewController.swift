@@ -38,15 +38,11 @@ class PlanDateButtonSheetViewController: UIViewController {
         
         addView()
         layoutConstraints()
-        
         buttonActions()
         
         // PlanDateButtonSheetViewController의 인스턴스를 CalendarViewController의 프로퍼티에 할당
         calendarVC.makePlanDateSheetVC = self
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarVC(notification:)), name: NSNotification.Name("ToPlanDateSheetVC"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarVC(notification:)), name: NSNotification.Name("ToMakePlanVC"), object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarV(notification:)), name: NSNotification.Name("ToPlanInfoEditVC"), object: nil)
+        dataExchange()
     }
     
     func buttonActions() {
@@ -74,6 +70,12 @@ class PlanDateButtonSheetViewController: UIViewController {
             self.date = data
             
         }
+    }
+    
+    func dataExchange() {
+        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarVC(notification:)), name: NSNotification.Name("ToPlanDateSheetVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarVC(notification:)), name: NSNotification.Name("ToMakePlanVC"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarV(notification:)), name: NSNotification.Name("ToPlanInfoEditVC"), object: nil)
     }
 }
 
@@ -112,8 +114,7 @@ extension PlanDateButtonSheetViewController {
             make.width.equalTo(345)
             make.height.equalTo(44)
             make.top.equalTo(calendarVC.view.snp.bottom).offset(22)
-            make.leading.equalTo(bottomSheetView.snp.leading).offset(24)
-            make.trailing.equalTo(bottomSheetView.snp.trailing).offset(-24)
+            make.centerX.equalTo(bottomSheetView.snp.centerX)
             make.bottom.equalTo(view.snp.bottom).offset(-45)
         }
     }
