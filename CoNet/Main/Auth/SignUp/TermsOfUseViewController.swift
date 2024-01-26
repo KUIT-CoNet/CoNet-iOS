@@ -171,13 +171,3 @@ extension TermsOfUseViewController {
         }
     }
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct TermsOfUseViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        TermsOfUseViewController().showPreview(.iPhone14Pro)
-    }
-}
-#endif
