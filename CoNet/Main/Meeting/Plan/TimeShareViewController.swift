@@ -17,13 +17,6 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         $0.setImage(UIImage(named: "closeBtn"), for: .normal)
     }
     
-    // 약속 이름
-    let planTitle = UILabel().then {
-        $0.text = "약속 이름"
-        $0.font = UIFont.headline3Bold
-        $0.textColor = UIColor.textHigh
-    }
-    
     // 점 3개 버튼 (약속 수정/삭제 bottom sheet 나오는 버튼)
     let dots = UIButton().then {
         $0.setImage(UIImage(named: "sidebar"), for: .normal)
@@ -144,6 +137,8 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         view.backgroundColor = .white
         view.layoutIfNeeded()
         
+        navigationSetting()
+        
         addView()
         layoutConstraints()
         timeTableSetting()
@@ -162,6 +157,12 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         getMemberPossibleTimeAPI()
     }
     
+    // 현재 화면 pop 시 이전 화면의 navigationBar를 안보이게 하기 위해 필요
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.isHidden = true
+    }
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         getMemberPossibleTimeAPI()
@@ -169,10 +170,20 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         memberCountUpdate()
     }
     
+    private func navigationSetting() {
+        navigationController?.navigationBar.isHidden = false
+        
+        let rightBarButtonItem = UIBarButtonItem(customView: dots)
+        navigationItem.rightBarButtonItem = rightBarButtonItem
+        
+        let leftbarButtonItem = UIBarButtonItem(customView: xButton)
+        navigationItem.leftBarButtonItem = leftbarButtonItem
+    }
+    
     // 구성원 시간 조회
     func getMemberPossibleTimeAPI() {
         PlanTimeAPI().getMemberPossibleTime(planId: planId) { _, _, planName, planStartPeriod, planEndPeriod, sectionMemberCounts, possibleMemberDateTime in
-            self.planTitle.text = planName
+            self.navigationItem.title = planName
             self.possibleMemberDateTime = possibleMemberDateTime
             self.apiCheck = true
             
@@ -330,7 +341,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     func setupEditPlanPage(_ viewController: MakePlanViewController) {
         viewController.titleLabel.text = "약속 수정하기"
         
-        viewController.planNameTextField.text = planTitle.text
+//        viewController.planNameTextField.text = planTitle.text
         viewController.planStartDateField.text = sendDate[0].replacingOccurrences(of: "-", with: ". ")
         viewController.planStartDateField.textColor = UIColor.textDisabled
         viewController.calendarButton.isEnabled = false
@@ -424,9 +435,6 @@ extension TimeShareViewController: UICollectionViewDataSource, UICollectionViewD
 // layout
 extension TimeShareViewController {
     func addView() {
-        view.addSubview(xButton)
-        view.addSubview(planTitle)
-        view.addSubview(dots)
         view.addSubview(prevBtn)
         view.addSubview(date1)
         view.addSubview(date2)
@@ -446,42 +454,19 @@ extension TimeShareViewController {
     }
     
     func layoutConstraints() {
-        headerConstraintS()
         timetableConstraints()
         colorExample() // 타임테이블 옆 색 예시
-    }
-
-    // 헤더 - x버튼, 약속 이름 등
-    func headerConstraintS() {
-        let safeArea = view.safeAreaLayoutGuide
-        
-        // x 버튼
-        xButton.snp.makeConstraints { make in
-            make.height.width.equalTo(24)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.top.equalTo(safeArea.snp.top).offset(30)
-        }
-        
-        // 약속 이름
-        planTitle.snp.makeConstraints { make in
-            make.centerY.equalTo(xButton)
-            make.centerX.equalTo(view.snp.centerX)
-        }
-        
-        // dots 버튼
-        dots.snp.makeConstraints { make in
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
-            make.centerY.equalTo(xButton)
-        }
     }
     
     // time table
     func timetableConstraints() {
+        let safeArea = view.safeAreaLayoutGuide
+        
         // 이전 날짜로 이동 버튼
         prevBtn.snp.makeConstraints { make in
             make.height.width.equalTo(16)
-            make.leading.equalTo(view.snp.leading).offset(44)
-            make.top.equalTo(xButton.snp.bottom).offset(29)
+            make.leading.equalTo(safeArea.snp.leading).offset(44)
+            make.top.equalTo(safeArea.snp.top).offset(29)
         }
         
         // 날짜 3개
@@ -507,7 +492,7 @@ extension TimeShareViewController {
         nextBtn.snp.makeConstraints { make in
             make.height.width.equalTo(16)
             make.leading.equalTo(date3.snp.trailing).offset(9)
-            make.top.equalTo(dots.snp.bottom).offset(29)
+            make.top.equalTo(safeArea.snp.bottom).offset(29)
         }
         
         // 내 시간 입력하기 버튼
