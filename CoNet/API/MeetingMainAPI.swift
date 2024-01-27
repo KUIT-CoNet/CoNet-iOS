@@ -11,6 +11,7 @@ import KeychainSwift
 
 class MeetingMainAPI {
     let baseUrl = "http://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
+    let keychain = KeychainSwift()
 
     // 팀 내 특정 달 약속 조회
     func getMeetingMonthPlan(teamId: Int, searchDate: String, completion: @escaping (_ count: Int, _ dates: [Int]) -> Void) {
