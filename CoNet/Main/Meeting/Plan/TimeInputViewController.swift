@@ -124,6 +124,11 @@ class TimeInputViewController: UIViewController {
         changeSaveButtonColor()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.isHidden = false
+    }
+    
     func getMyPossibleTimeAPI() {
         // 내가 입력한 시간 조회 api
         PlanTimeAPI().getMyPossibleTime(planId: planId) { _, _, hasRegisteredTime, hasPossibleTime, possibleTime in
