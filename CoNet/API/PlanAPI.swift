@@ -199,9 +199,9 @@ class PlanAPI {
             "planId": planId,
             "planName": planName,
             "time": time,
-            "date": date,
-            "members": members,
-            "historyDescription": historyDescription,
+            "date": date ?? "",
+            "members": members ?? [],
+            "historyDescription": historyDescription ?? "",
             "isRegisteredToHistory": isRegisteredToHistory
         ]
         var requestBodyJson: String = ""
