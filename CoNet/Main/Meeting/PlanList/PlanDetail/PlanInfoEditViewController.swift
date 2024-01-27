@@ -164,7 +164,7 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
             data = data.replacingOccurrences(of: "-", with: ". ")
             planDateTextField.text = data
         }
-        if var data = notification.userInfo?["time"] as? String {
+        if let data = notification.userInfo?["time"] as? String {
             time = data
             planTimeTextField.text = data
         }
@@ -189,7 +189,7 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc private func updatePlan() {
-        guard let name = planNameTextField.text else { return }
+//        guard let name = planNameTextField.text else { return }
         
 //        PlanAPI().updatePlan(planId: planId, planName: name, date: date, time: time, members: userIds, isRegisteredToHistory: true, historyDescription: "메롱", image: selectedImage) { isSuccess in
 //            if isSuccess {

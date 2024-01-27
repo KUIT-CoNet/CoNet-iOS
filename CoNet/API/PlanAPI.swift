@@ -178,12 +178,12 @@ class PlanAPI {
             .responseDecodable(of: BaseResponse<PlanDetail>.self) { response in
                 switch response.result {
                 case .success(let response):
-                guard let serverPlans = response.result else { return }
-                print(serverPlans)
-                completion(serverPlans)
+                    guard let serverPlans = response.result else { return }
+                    print(serverPlans)
+                    completion(serverPlans)
                 case .failure(let error):
-                print("DEBUG(약속 상세 정보 조회 api) error: \(error)")
-            }
+                    print("DEBUG(약속 상세 정보 조회 api) error: \(error)")
+                }
         }
     }
     
@@ -354,7 +354,7 @@ class PlanAPI {
                     
                 case .failure(let error):
                     print("구성원 가능 여부 조회 \(error)")
-            }
+                }
         }
     }
 }
