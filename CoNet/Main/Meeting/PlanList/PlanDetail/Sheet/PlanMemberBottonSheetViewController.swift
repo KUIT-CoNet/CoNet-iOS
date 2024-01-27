@@ -11,17 +11,8 @@ import UIKit
 
 class PlanMemberBottomSheetViewController: UIViewController {
     var planId: Int = 17
-    var members: [PlanDetailMember] = [PlanDetailMember(id: 0, name: "wow", image: ""),
-                                       PlanDetailMember(id: 0, name: "wow", image: ""),
-                                       PlanDetailMember(id: 0, name: "wow", image: ""),
-                                       PlanDetailMember(id: 0, name: "wow", image: ""),
-                                       PlanDetailMember(id: 0, name: "wow", image: "")]
-    
-    var allMembers: [EditPlanMember] = [EditPlanMember(id: 0, name: "wow", image: "", isAvailable: true),
-                                        EditPlanMember(id: 0, name: "wow", image: "", isAvailable: true),
-                                        EditPlanMember(id: 0, name: "wow", image: "", isAvailable: true),
-                                        EditPlanMember(id: 0, name: "wow", image: "", isAvailable: false),
-                                        EditPlanMember(id: 0, name: "wow", image: "", isAvailable: false)]
+    var members: [PlanDetailMember] = []
+    var allMembers: [EditPlanMember] = []
     
     let background = UIView().then {
         $0.backgroundColor = UIColor.black.withAlphaComponent(0.5)
@@ -57,13 +48,10 @@ class PlanMemberBottomSheetViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .clear
         
+        addView()
         layoutConstraints()
         setupCollectionView()
-        
-        addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopUp))
-        background.addGestureRecognizer(tapGesture)
+        buttonActions()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -71,7 +59,6 @@ class PlanMemberBottomSheetViewController: UIViewController {
         PlanAPI().getPlanMemberIsAvailable(planId: planId) { members in
             self.allMembers = members
             self.memberCollectionView.reloadData()
-            
             self.layoutConstraints()
         }
     }
@@ -86,12 +73,20 @@ class PlanMemberBottomSheetViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    // 추가하기 버튼 활성화
     func updateAddButtonBackgroundColor() {
 //        if isMember1Checked || isMember2Checked || isMember3Checked {
 //            addButton.backgroundColor = .purple
 //        } else {
 //            addButton.backgroundColor = UIColor.iconDisabled
 //        }
+    }
+    
+    func buttonActions() {
+        addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopUp))
+        background.addGestureRecognizer(tapGesture)
     }
 
     @objc func addButtonTapped() {
@@ -103,65 +98,8 @@ class PlanMemberBottomSheetViewController: UIViewController {
                 newMembers.append(member)
             }
         }
-        
         // 멤버를 선택된 멤버로 변경
         self.members = newMembers
-    }
-    
-    private func layoutConstraints() {
-        applyConstraintsToBackground()
-        applyConstraintsToComponents()
-    }
-    
-    private func applyConstraintsToBackground() {
-        let safeArea = view.safeAreaLayoutGuide
-        view.addSubview(background)
-        background.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        view.addSubview(bottomSheet)
-        bottomSheet.snp.makeConstraints { make in
-            let memberRow = ceil(Double(allMembers.count) / 2.0)
-            let height = (memberRow * 42) + ((memberRow - 1) * 10) + 240
-            make.height.equalTo(height)
-            
-            make.top.equalTo(safeArea.snp.top).offset(471)
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(view.snp.bottom)
-        }
-    }
-    
-    private func applyConstraintsToComponents() {
-        let safeArea = view.safeAreaLayoutGuide
-        
-        bottomSheet.addSubview(grayLine)
-        grayLine.snp.makeConstraints { make in
-            make.width.equalTo(36)
-            make.height.equalTo(3)
-            make.top.equalTo(bottomSheet.snp.top).offset(10)
-            make.centerX.equalToSuperview()
-        }
-        
-        bottomSheet.addSubview(memberCollectionView)
-        memberCollectionView.snp.makeConstraints { make in
-            make.width.equalToSuperview().offset(-48)
-            
-            let memberRow = ceil(Double(allMembers.count) / 2.0)
-            let height = (memberRow * 42) + ((memberRow - 1) * 10)
-            make.height.equalTo(height)
-            
-            make.top.equalTo(grayLine.snp.bottom).offset(44)
-            make.leading.trailing.equalToSuperview().inset(24)
-        }
-        
-        bottomSheet.addSubview(addButton)
-        addButton.snp.makeConstraints { make in
-            make.width.equalToSuperview().offset(-48)
-            make.height.equalTo(44)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.bottom.equalTo(view.snp.bottom).offset(-40)
-        }
     }
 }
 
@@ -201,5 +139,67 @@ extension PlanMemberBottomSheetViewController: UICollectionViewDelegate, UIColle
     // 셀 사이의 위아래 간격
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 10
+    }
+}
+
+// addView, layout
+extension PlanMemberBottomSheetViewController {
+    private func addView() {
+        view.addSubview(background)
+        view.addSubview(bottomSheet)
+        bottomSheet.addSubview(grayLine)
+        bottomSheet.addSubview(memberCollectionView)
+        bottomSheet.addSubview(addButton)
+    }
+    
+    private func layoutConstraints() {
+        applyConstraintsToBackground()
+        applyConstraintsToComponents()
+    }
+    
+    private func applyConstraintsToBackground() {
+        let safeArea = view.safeAreaLayoutGuide
+        background.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        bottomSheet.snp.makeConstraints { make in
+            let memberRow = ceil(Double(allMembers.count) / 2.0)
+            let height = (memberRow * 42) + ((memberRow - 1) * 10) + 240
+            make.height.equalTo(height)
+            
+            make.top.equalTo(safeArea.snp.top).offset(471)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(view.snp.bottom)
+        }
+    }
+    
+    private func applyConstraintsToComponents() {
+        let safeArea = view.safeAreaLayoutGuide
+        
+        grayLine.snp.makeConstraints { make in
+            make.width.equalTo(36)
+            make.height.equalTo(3)
+            make.top.equalTo(bottomSheet.snp.top).offset(10)
+            make.centerX.equalToSuperview()
+        }
+        
+        memberCollectionView.snp.makeConstraints { make in
+            make.width.equalToSuperview().offset(-48)
+            
+            let memberRow = ceil(Double(allMembers.count) / 2.0)
+            let height = (memberRow * 42) + ((memberRow - 1) * 10)
+            make.height.equalTo(height)
+            
+            make.top.equalTo(grayLine.snp.bottom).offset(44)
+            make.leading.trailing.equalToSuperview().inset(24)
+        }
+        
+        addButton.snp.makeConstraints { make in
+            make.height.equalTo(44)
+            make.centerX.equalTo(bottomSheet.snp.centerX)
+            make.horizontalEdges.equalTo(bottomSheet.snp.horizontalEdges).inset(24)
+            make.bottom.equalTo(view.snp.bottom).offset(-45)
+        }
     }
 }
