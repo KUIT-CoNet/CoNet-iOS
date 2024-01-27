@@ -196,9 +196,9 @@ extension PlanMemberBottomSheetViewController {
         }
         
         addButton.snp.makeConstraints { make in
-            make.width.equalToSuperview().offset(-48)
             make.height.equalTo(44)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
+            make.centerX.equalTo(bottomSheet.snp.centerX)
+            make.horizontalEdges.equalTo(bottomSheet.snp.horizontalEdges).inset(24)
             make.bottom.equalTo(view.snp.bottom).offset(-45)
         }
     }

@@ -1,7 +1,11 @@
 import Then
+import SnapKit
 import UIKit
 
 class PlanDateButtonSheetViewController: UIViewController {
+    var date: String = ""
+    var onDismiss: (() -> Void)?
+    
     let background = UIView().then {
         $0.backgroundColor = UIColor.black.withAlphaComponent(0.5)
     }
@@ -21,7 +25,6 @@ class PlanDateButtonSheetViewController: UIViewController {
     let calendarVC = CalendarViewController()
     
     let applyButton = UIButton().then {
-        $0.frame = CGRect(x: 0, y: 0, width: 345, height: 44)
         $0.backgroundColor = UIColor.gray200
         $0.setTitleColor(.white, for: .normal)
         $0.setTitle("적용하기", for: .normal)
@@ -29,9 +32,6 @@ class PlanDateButtonSheetViewController: UIViewController {
         $0.layer.cornerRadius = 12
         $0.layer.masksToBounds = true
     }
-    
-    var date: String = ""
-    var onDismiss: (() -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,10 +111,10 @@ extension PlanDateButtonSheetViewController {
             make.horizontalEdges.equalTo(bottomSheetView.snp.horizontalEdges)
         }
         applyButton.snp.makeConstraints { make in
-            make.width.equalTo(345)
             make.height.equalTo(44)
             make.top.equalTo(calendarVC.view.snp.bottom).offset(22)
             make.centerX.equalTo(bottomSheetView.snp.centerX)
+            make.horizontalEdges.equalTo(bottomSheetView.snp.horizontalEdges).inset(24)
             make.bottom.equalTo(view.snp.bottom).offset(-45)
         }
     }

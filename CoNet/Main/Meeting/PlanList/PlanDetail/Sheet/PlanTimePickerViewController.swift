@@ -124,9 +124,9 @@ extension PlanTimePickerViewController {
             make.centerX.equalTo(bottomSheet.snp.centerX)
         }
         applyButton.snp.makeConstraints { make in
-            make.width.equalTo(345)
             make.height.equalTo(44)
             make.centerX.equalTo(bottomSheet.snp.centerX)
+            make.horizontalEdges.equalTo(bottomSheet.snp.horizontalEdges).inset(24)
             make.bottom.equalTo(view.snp.bottom).offset(-45)
         }
     }
