@@ -200,7 +200,6 @@ extension MeetingCodeViewController {
     }
     
     func applyConstraintsToComponents() {
-        let safeArea = view.safeAreaLayoutGuide
         let screenWidth = UIScreen.main.bounds.size.width
         let screenHeight = UIScreen.main.bounds.size.height
         
