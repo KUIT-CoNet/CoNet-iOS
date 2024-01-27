@@ -81,11 +81,20 @@ class EnterNameViewController: UIViewController, UITextFieldDelegate {
         // background color를 white로 설정 (default: black)
         view.backgroundColor = .white
         
-        // show UI
+        addView()
         layoutConstraints()
-        
-        // 클릭 이벤트
-        clickEvents()
+        buttonActions()
+    }
+    
+    private func buttonActions() {
+        // .editingChanged: editing이 될 때마다 didChangeNameTextField 함수가 호출됩니다.
+        self.nameTextField.addTarget(self, action: #selector(self.didChangeNameTextField), for: .editingChanged)
+        // 텍스트필드 클리어버튼
+        self.clearButton.addTarget(self, action: #selector(didClickClearButton), for: .touchUpInside)
+        // 완료 버튼
+        self.nextBtn.addTarget(self, action: #selector(signUp), for: .touchUpInside)
+        // x 버튼
+        self.xMarkView.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
     }
     
     // 상단 X 버튼 로그인 화면으로 이동
@@ -123,134 +132,6 @@ class EnterNameViewController: UIViewController, UITextFieldDelegate {
         
         let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
         sceneDelegate?.changeRootVC(TabbarViewController(), animated: false)
-    }
-
-    func clickEvents() {
-        // .editingChanged: editing이 될 때마다 didChangeNameTextField 함수가 호출됩니다.
-        self.nameTextField.addTarget(self, action: #selector(self.didChangeNameTextField), for: .editingChanged)
-        // 텍스트필드 클리어버튼
-        self.clearButton.addTarget(self, action: #selector(didClickClearButton), for: .touchUpInside)
-        // 완료 버튼
-        self.nextBtn.addTarget(self, action: #selector(signUp), for: .touchUpInside)
-        // x 버튼
-        self.xMarkView.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
-    }
-    
-    // show UI
-    func layoutConstraints() {
-        
-        // 안전 영역
-        let safeArea = view.safeAreaLayoutGuide
-        
-        // Component: xmark image (창 끄기)
-        view.addSubview(xMarkView)
-        
-        xMarkView.snp.makeConstraints { make in
-            make.height.equalTo(24)
-            make.width.equalTo(24)
-            make.leading.equalTo(safeArea.snp.leading).offset(21)
-            make.top.equalTo(safeArea.snp.top).offset(21)
-        }
-        
-        // Component: top purple bar
-        view.addSubview(topBar)
-        
-        topBar.snp.makeConstraints { make in
-            make.height.equalTo(4)
-            make.leading.equalTo(safeArea.snp.leading).offset(0)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(0)
-            make.top.equalTo(xMarkView.snp.bottom).offset(14)
-        }
-        
-        // Component: main label
-        view.addSubview(enterNameLabel)
-        
-        enterNameLabel.snp.makeConstraints { make in
-            make.height.equalTo(36)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.top.equalTo(topBar.snp.bottom).offset(40)
-        }
-        
-        // Component: nametextfield
-        view.addSubview(nameTextField)
-        
-        nameTextField.snp.makeConstraints { make in
-            make.height.equalTo(20)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
-            make.top.equalTo(enterNameLabel.snp.bottom).offset(42)
-        }
-        
-        // textfield underline
-        view.addSubview(underlineView)
-        
-        underlineView.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
-            make.top.equalTo(nameTextField.snp.bottom).offset(10)
-        }
-        
-        // textfield clear button
-        view.addSubview(clearButton)
-        
-        clearButton.snp.makeConstraints { make in
-            make.width.equalTo(16)
-            make.height.equalTo(16)
-            make.trailing.equalTo(nameTextField.snp.trailing).offset(0)
-            make.top.equalTo(nameTextField.snp.top).offset(2)
-            make.bottom.equalTo(nameTextField.snp.bottom).offset(-2)
-        }
-        
-        // Component: 느낌표 마크 1
-        view.addSubview(eMarkView1)
-        
-        eMarkView1.snp.makeConstraints { make in
-            make.height.equalTo(12)
-            make.width.equalTo(12)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.top.equalTo(underlineView.snp.bottom).offset(12)
-        }
-        
-        // Component: 이름 입력 조건 label 1
-        view.addSubview(nameCondition1)
-        
-        nameCondition1.snp.makeConstraints { make in
-            make.height.equalTo(16)
-            make.leading.equalTo(eMarkView1.snp.trailing).offset(5)
-            make.top.equalTo(underlineView.snp.bottom).offset(10)
-        }
-        
-        // Component: 느낌표 마크 2
-        view.addSubview(eMarkView2)
-        
-        eMarkView2.snp.makeConstraints { make in
-            make.height.equalTo(12)
-            make.width.equalTo(12)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.top.equalTo(eMarkView1.snp.bottom).offset(8)
-        }
-        
-        // Component: 이름 입력 조건 label 2
-        view.addSubview(nameCondition2)
-        
-        nameCondition2.snp.makeConstraints { make in
-            make.height.equalTo(16)
-            make.leading.equalTo(eMarkView2.snp.trailing).offset(5)
-            make.top.equalTo(nameCondition1.snp.bottom).offset(4)
-        }
-        
-        // Component: 완료 버튼
-        view.addSubview(nextBtn)
-        
-        nextBtn.snp.makeConstraints { make in
-            make.height.equalTo(52)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
-//            make.bottom.equalTo(safeArea.snp.bottom).offset(-46)
-            make.bottom.equalTo(safeArea.snp.bottom)
-        }
-        
     }
     
     // 이름 입력 텍스트필드에 값이 입력될 경우 입력한 값이 이름 조건에 맞는지 확인합니다.
@@ -303,5 +184,106 @@ class EnterNameViewController: UIViewController, UITextFieldDelegate {
     // 텍스트필드 외의 공간 클릭시 키보드가 내려갑니다.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+    }
+}
+
+// addView & layoutConstraints
+extension EnterNameViewController {
+    private func addView() {
+        view.addSubview(xMarkView)
+        view.addSubview(topBar)
+        view.addSubview(enterNameLabel)
+        
+        view.addSubview(nameTextField)
+        view.addSubview(underlineView)
+        view.addSubview(clearButton)
+        
+        view.addSubview(eMarkView1)
+        view.addSubview(nameCondition1)
+        view.addSubview(eMarkView1)
+        view.addSubview(nameCondition2)
+        
+        view.addSubview(nextBtn)
+    }
+    
+    private func layoutConstraints() {
+        let safeArea = view.safeAreaLayoutGuide
+        
+        xMarkView.snp.makeConstraints { make in
+            make.height.equalTo(24)
+            make.width.equalTo(24)
+            make.leading.equalTo(safeArea.snp.leading).offset(21)
+            make.top.equalTo(safeArea.snp.top).offset(21)
+        }
+        
+        topBar.snp.makeConstraints { make in
+            make.height.equalTo(4)
+            make.leading.equalTo(safeArea.snp.leading).offset(0)
+            make.trailing.equalTo(safeArea.snp.trailing).offset(0)
+            make.top.equalTo(xMarkView.snp.bottom).offset(14)
+        }
+        
+        enterNameLabel.snp.makeConstraints { make in
+            make.height.equalTo(36)
+            make.leading.equalTo(safeArea.snp.leading).offset(24)
+            make.top.equalTo(topBar.snp.bottom).offset(40)
+        }
+        
+        nameTextField.snp.makeConstraints { make in
+            make.height.equalTo(20)
+            make.leading.equalTo(safeArea.snp.leading).offset(24)
+            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
+            make.top.equalTo(enterNameLabel.snp.bottom).offset(42)
+        }
+        
+        underlineView.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.leading.equalTo(safeArea.snp.leading).offset(24)
+            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
+            make.top.equalTo(nameTextField.snp.bottom).offset(10)
+        }
+        
+        clearButton.snp.makeConstraints { make in
+            make.width.equalTo(16)
+            make.height.equalTo(16)
+            make.trailing.equalTo(nameTextField.snp.trailing).offset(0)
+            make.top.equalTo(nameTextField.snp.top).offset(2)
+            make.bottom.equalTo(nameTextField.snp.bottom).offset(-2)
+        }
+        
+        eMarkView1.snp.makeConstraints { make in
+            make.height.equalTo(12)
+            make.width.equalTo(12)
+            make.leading.equalTo(safeArea.snp.leading).offset(24)
+            make.top.equalTo(underlineView.snp.bottom).offset(12)
+        }
+        
+        nameCondition1.snp.makeConstraints { make in
+            make.height.equalTo(16)
+            make.leading.equalTo(eMarkView1.snp.trailing).offset(5)
+            make.top.equalTo(underlineView.snp.bottom).offset(10)
+        }
+        
+        eMarkView2.snp.makeConstraints { make in
+            make.height.equalTo(12)
+            make.width.equalTo(12)
+            make.leading.equalTo(safeArea.snp.leading).offset(24)
+            make.top.equalTo(eMarkView1.snp.bottom).offset(8)
+        }
+        
+        nameCondition2.snp.makeConstraints { make in
+            make.height.equalTo(16)
+            make.leading.equalTo(eMarkView2.snp.trailing).offset(5)
+            make.top.equalTo(nameCondition1.snp.bottom).offset(4)
+        }
+        
+        nextBtn.snp.makeConstraints { make in
+            make.height.equalTo(52)
+            make.leading.equalTo(safeArea.snp.leading).offset(24)
+            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
+//            make.bottom.equalTo(safeArea.snp.bottom).offset(-46)
+            make.bottom.equalTo(safeArea.snp.bottom)
+        }
+        
     }
 }
