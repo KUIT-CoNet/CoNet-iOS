@@ -341,7 +341,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     func setupEditPlanPage(_ viewController: MakePlanViewController) {
         viewController.titleLabel.text = "약속 수정하기"
         
-//        viewController.planNameTextField.text = planTitle.text
+        viewController.planNameTextField.text = navigationItem.title
         viewController.planStartDateField.text = sendDate[0].replacingOccurrences(of: "-", with: ". ")
         viewController.planStartDateField.textColor = UIColor.textDisabled
         viewController.calendarButton.isEnabled = false
@@ -492,7 +492,7 @@ extension TimeShareViewController {
         nextBtn.snp.makeConstraints { make in
             make.height.width.equalTo(16)
             make.leading.equalTo(date3.snp.trailing).offset(9)
-            make.top.equalTo(safeArea.snp.bottom).offset(29)
+            make.top.equalTo(safeArea.snp.top).offset(29)
         }
         
         // 내 시간 입력하기 버튼
