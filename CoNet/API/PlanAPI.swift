@@ -195,7 +195,7 @@ class PlanAPI {
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
         
-        var requestBody: [String: Any] = [
+        let requestBody: [String: Any] = [
             "planId": planId,
             "planName": planName,
             "time": time,
