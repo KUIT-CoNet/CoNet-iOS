@@ -33,7 +33,13 @@ class TimeTableView: UIViewController {
         
         addView()
         layoutConstraints()
+        timeTableSetting()
         hourSetting()
+    }
+    
+    func timeTableSetting() {
+        timeTableCollectionView.dataSource = self
+        timeTableCollectionView.delegate = self
     }
     
     // 시각 stackView setting
@@ -47,6 +53,74 @@ class TimeTableView: UIViewController {
             
             hourStackView.addArrangedSubview(numLabel)
         }
+    }
+    
+}
+
+extension TimeTableView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    // 셀 클릭 시 이벤트 처리
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Selected cell at indexPath: \(indexPath)")
+        print(indexPath.section, indexPath.row)
+        
+        let format = DateFormatter()
+        format.dateFormat = "yyyy-MM-dd"
+        
+        // 해당 시간에 가능한 멤버
+//        let memberList = possibleMemberDateTime[page*3 + indexPath.section].possibleMember[indexPath.row]
+//        
+//        // 셀 색이 흰 색이 아닌 경우 약속 확정 팝업 띄우기
+//        if collectionView.cellForItem(at: indexPath)?.contentView.backgroundColor != UIColor.grayWhite {
+//            let nextVC = FixPlanPopUpViewController()
+//            nextVC.timeShareVC = self
+//            nextVC.planId = planId
+//            nextVC.time = indexPath.row
+//            nextVC.date = sendDate[page*3 + indexPath.section]
+//            nextVC.memberList = memberList.memberNames.joined(separator: ", ")
+//            nextVC.userIds = memberList.memberIds
+//            nextVC.modalPresentationStyle = .overCurrentContext
+//            nextVC.modalTransitionStyle = .crossDissolve
+//            present(nextVC, animated: true, completion: nil)
+//        }
+    }
+    
+    // 셀 수
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        24
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+//        if page == 2 {
+//            return 1
+//        }
+        return 3
+    }
+    
+    // 셀 사이즈 설정
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let screenWidth = UIScreen.main.bounds.size.width
+        return CGSize(width: 80, height: 24)
+    }
+    
+    // 위 아래 space zero로 설정
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return -1
+    }
+    
+    // 양옆 space zero로 설정
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return -1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimeTableViewCell.identifier, for: indexPath) as? TimeTableViewCell else { return UICollectionViewCell() }
+        
+//        if !apiCheck { return cell }
+//        
+//        let section = possibleMemberDateTime[page*3 + indexPath.section].possibleMember[indexPath.row].section
+//        cell.showCellColor(section: section)
+        
+        return cell
     }
 }
 
