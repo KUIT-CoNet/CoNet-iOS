@@ -9,7 +9,7 @@ import SnapKit
 import Then
 import UIKit
 
-class TimeTableView: UIView {
+class TimeTableView: UIViewController {
     // 시각 표시
     let hourStackView = UIStackView().then {
         $0.axis = .vertical
@@ -24,18 +24,16 @@ class TimeTableView: UIView {
         $0.isScrollEnabled = false
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
         if let layout = timeTableCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .horizontal
         }
+        
+        addView()
         layoutConstraints()
         hourSetting()
-    }
-    
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     // 시각 stackView setting
@@ -50,18 +48,23 @@ class TimeTableView: UIView {
             hourStackView.addArrangedSubview(numLabel)
         }
     }
+}
+
+extension TimeTableView {
+    func addView() {
+        view.addSubview(hourStackView)
+        view.addSubview(timeTableCollectionView)
+    }
     
     func layoutConstraints() {
         // 시각
-        addSubview(hourStackView)
         hourStackView.snp.makeConstraints { make in
             make.width.equalTo(30)
             make.top.equalToSuperview()
-            make.leading.equalTo(self.snp.leading).offset(20)
+            make.leading.equalTo(view.snp.leading).offset(20)
         }
         
         // 타임테이블
-        addSubview(timeTableCollectionView)
         timeTableCollectionView.snp.makeConstraints { make in
             make.leading.equalTo(hourStackView.snp.trailing).offset(10)
             make.top.equalTo(hourStackView.snp.top).offset(6)

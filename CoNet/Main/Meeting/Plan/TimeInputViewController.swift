@@ -329,7 +329,8 @@ class TimeInputViewController: UIViewController {
             make.centerY.equalTo(prevDayBtn.snp.centerY)
         }
         
-        view.addSubview(timeTable)
+        addChild(timeTable)
+        view.addSubview(timeTable.view)
         view.addSubview(saveButton)
         
         // 저장 버튼
@@ -340,9 +341,10 @@ class TimeInputViewController: UIViewController {
         }
         
         // 타임테이블
-        timeTable.snp.makeConstraints { make in
+        timeTable.didMove(toParent: self)
+        timeTable.view.snp.makeConstraints { make in
             make.leading.equalTo(view.snp.leading).offset(0)
-            make.trailing.equalTo(timeTable.snp.leading).offset(300)
+            make.trailing.equalTo(timeTable.view.snp.leading).offset(300)
             make.top.equalTo(prevDayBtn.snp.bottom).offset(7)
             make.bottom.equalTo(saveButton.snp.top).offset(-10)
         }

@@ -440,7 +440,8 @@ extension TimeShareViewController {
         view.addSubview(date2)
         view.addSubview(date3)
         view.addSubview(nextBtn)
-        view.addSubview(timeTable)
+        addChild(timeTable)
+        view.addSubview(timeTable.view)
         view.addSubview(inputTimeButton)
         
         view.addSubview(purpleEx1)
@@ -503,9 +504,10 @@ extension TimeShareViewController {
         }
         
         // 타임테이블
-        timeTable.snp.makeConstraints { make in
+        timeTable.didMove(toParent: self)
+        timeTable.view.snp.makeConstraints { make in
             make.leading.equalTo(view.snp.leading).offset(0)
-            make.trailing.equalTo(timeTable.snp.leading).offset(300)
+            make.trailing.equalTo(timeTable.view.snp.leading).offset(300)
             make.top.equalTo(prevBtn.snp.bottom).offset(7)
             make.bottom.equalTo(inputTimeButton.snp.top).offset(-10)
         }
@@ -517,28 +519,28 @@ extension TimeShareViewController {
         purpleEx1.snp.makeConstraints { make in
             make.width.equalTo(24)
             make.height.equalTo(33)
-            make.leading.equalTo(timeTable.snp.trailing).offset(10)
+            make.leading.equalTo(timeTable.view.snp.trailing).offset(10)
             make.top.equalTo(nextBtn.snp.bottom).offset(13)
         }
         
         purpleEx2.snp.makeConstraints { make in
             make.width.equalTo(24)
             make.height.equalTo(33)
-            make.leading.equalTo(timeTable.snp.trailing).offset(10)
+            make.leading.equalTo(timeTable.view.snp.trailing).offset(10)
             make.top.equalTo(purpleEx1.snp.bottom).offset(-1)
         }
         
         purpleEx3.snp.makeConstraints { make in
             make.width.equalTo(24)
             make.height.equalTo(33)
-            make.leading.equalTo(timeTable.snp.trailing).offset(10)
+            make.leading.equalTo(timeTable.view.snp.trailing).offset(10)
             make.top.equalTo(purpleEx2.snp.bottom).offset(-1)
         }
         
         purpleEx4.snp.makeConstraints { make in
             make.width.equalTo(24)
             make.height.equalTo(33)
-            make.leading.equalTo(timeTable.snp.trailing).offset(10)
+            make.leading.equalTo(timeTable.view.snp.trailing).offset(10)
             make.top.equalTo(purpleEx3.snp.bottom).offset(-1)
         }
         
