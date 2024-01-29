@@ -173,7 +173,7 @@ class TimeTableView: UIViewController {
     }
     
     func getMemberPossibleTimeAPI() {
-        PlanTimeAPI().getMemberPossibleTime(planId: planId) { _, _, planName, planStartPeriod, planEndPeriod, sectionMemberCounts, possibleMemberDateTime in
+        PlanTimeAPI().getMemberPossibleTime(planId: planId) { _, _, _, planStartPeriod, planEndPeriod, sectionMemberCounts, possibleMemberDateTime in
             self.possibleMemberDateTime = possibleMemberDateTime
 //            self.apiCheck = true
             
@@ -319,6 +319,7 @@ extension TimeTableView {
         // 타임테이블
         timeTableCollectionView.snp.makeConstraints { make in
             make.leading.equalTo(hourStackView.snp.trailing).offset(10)
+            make.width.equalTo(300)
             make.top.equalTo(hourStackView.snp.top).offset(6)
             make.bottom.trailing.equalToSuperview()
         }
