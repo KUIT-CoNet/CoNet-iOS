@@ -278,9 +278,10 @@ class MeetingMainViewController: UIViewController {
 
 // 사이드바 화면 전환
 extension MeetingMainViewController: MeetingMainViewControllerDelegate {
-    func sendIntDataBack(data: Int) {
+    func sendIntDataBack(data: Int, planName: String) {
         let nextVC = TimeShareViewController()
         nextVC.planId = data
+        nextVC.planName = planName
         pushViewController(nextVC)
     }
     

@@ -234,7 +234,7 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
                     PlanAPI().createPlan(teamId: meetingId, planName: newName, planStartPeriod: date) { planId, isSuccess in
                         if isSuccess {
                             self.navigationController?.popViewController(animated: true)
-                            self.delegate?.sendIntDataBack(data: planId)
+                            self.delegate?.sendIntDataBack(data: planId, planName: self.planNameTextField.text ?? "")
                         }
                     }
                 }

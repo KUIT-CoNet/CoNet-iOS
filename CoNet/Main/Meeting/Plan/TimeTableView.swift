@@ -174,7 +174,6 @@ class TimeTableView: UIViewController {
     
     func getMemberPossibleTimeAPI() {
         PlanTimeAPI().getMemberPossibleTime(planId: planId) { _, _, planName, planStartPeriod, planEndPeriod, sectionMemberCounts, possibleMemberDateTime in
-            self.navigationItem.title = planName
             self.possibleMemberDateTime = possibleMemberDateTime
 //            self.apiCheck = true
             

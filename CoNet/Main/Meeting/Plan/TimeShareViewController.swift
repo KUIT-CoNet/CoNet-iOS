@@ -11,6 +11,7 @@ import UIKit
 
 class TimeShareViewController: UIViewController, TimeShareProtocol {
     var planId: Int = 0
+    var planName: String = ""
     
     // x 버튼
     let xButton = UIButton().then {
@@ -141,6 +142,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     
     private func navigationSetting() {
         navigationController?.navigationBar.isHidden = false
+        navigationItem.title = planName
         
         let rightBarButtonItem = UIBarButtonItem(customView: dots)
         navigationItem.rightBarButtonItem = rightBarButtonItem
