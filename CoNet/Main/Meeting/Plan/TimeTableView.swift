@@ -64,6 +64,7 @@ class TimeTableView: UIViewController {
     var sendDate: [String] = ["07.03", "07.04", "07.05", "07.06", "07.07", "07.08", "07.09"]
     let weekDay = ["일", "월", "화", "수", "목", "금", "토"]
     var possibleMemberDateTime: [PossibleMemberDateTime] = []
+    var apiCheck = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -175,7 +176,7 @@ class TimeTableView: UIViewController {
     func getMemberPossibleTimeAPI() {
         PlanTimeAPI().getMemberPossibleTime(planId: planId) { _, _, _, planStartPeriod, planEndPeriod, sectionMemberCounts, possibleMemberDateTime in
             self.possibleMemberDateTime = possibleMemberDateTime
-//            self.apiCheck = true
+            self.apiCheck = true
             
             // 날짜 배열 update
             self.updateDateArray(planStartPeriod: planStartPeriod, planEndPeriod: planEndPeriod, memberTime: possibleMemberDateTime)
@@ -252,11 +253,10 @@ extension TimeTableView: UICollectionViewDataSource, UICollectionViewDelegate, U
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimeTableViewCell.identifier, for: indexPath) as? TimeTableViewCell else { return UICollectionViewCell() }
         
-//        if !apiCheck { return cell }
-//        
+        if !apiCheck { return cell }
         
-//        let section = possibleMemberDateTime[page*3 + indexPath.section].possibleMember[indexPath.row].section
-        cell.showCellColor(section: 0)
+        let section = possibleMemberDateTime[page*3 + indexPath.section].possibleMember[indexPath.row].section
+        cell.showCellColor(section: section)
         
         return cell
     }
