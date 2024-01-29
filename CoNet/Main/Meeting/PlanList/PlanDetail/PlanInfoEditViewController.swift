@@ -263,7 +263,7 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func didTapclockButton(_ sender: Any) {
-        planTimeTextField.resignFirstResponder()
+        planNameTextField.resignFirstResponder()
         grayLine3.backgroundColor = UIColor.purpleMain
         
         let addVC = PlanTimePickerViewController()
