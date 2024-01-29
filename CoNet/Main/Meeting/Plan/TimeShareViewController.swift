@@ -22,38 +22,38 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         $0.setImage(UIImage(named: "sidebar"), for: .normal)
     }
     
-    // 이전 날짜로 이동 버튼
-    let prevBtn = UIButton().then {
-        $0.setImage(UIImage(named: "planPrevBtn"), for: .normal)
-        $0.isHidden = true
-    }
-    
-    // 날짜 3개
-    let date1 = UILabel().then {
-        $0.text = "07. 03 월"
-        $0.font = UIFont.body2Bold
-        $0.textColor = UIColor.textHigh
-        $0.textAlignment = .center
-    }
-
-    let date2 = UILabel().then {
-        $0.text = "07. 04 화"
-        $0.font = UIFont.body2Bold
-        $0.textColor = UIColor.textHigh
-        $0.textAlignment = .center
-    }
-
-    let date3 = UILabel().then {
-        $0.text = "07. 05 수"
-        $0.font = UIFont.body2Bold
-        $0.textColor = UIColor.textHigh
-        $0.textAlignment = .center
-    }
-    
-    // 다음 날짜로 이동 버튼
-    let nextBtn = UIButton().then {
-        $0.setImage(UIImage(named: "planNextBtn"), for: .normal)
-    }
+//    // 이전 날짜로 이동 버튼
+//    let prevBtn = UIButton().then {
+//        $0.setImage(UIImage(named: "planPrevBtn"), for: .normal)
+//        $0.isHidden = true
+//    }
+//    
+//    // 날짜 3개
+//    let date1 = UILabel().then {
+//        $0.text = "07. 03 월"
+//        $0.font = UIFont.body2Bold
+//        $0.textColor = UIColor.textHigh
+//        $0.textAlignment = .center
+//    }
+//
+//    let date2 = UILabel().then {
+//        $0.text = "07. 04 화"
+//        $0.font = UIFont.body2Bold
+//        $0.textColor = UIColor.textHigh
+//        $0.textAlignment = .center
+//    }
+//
+//    let date3 = UILabel().then {
+//        $0.text = "07. 05 수"
+//        $0.font = UIFont.body2Bold
+//        $0.textColor = UIColor.textHigh
+//        $0.textAlignment = .center
+//    }
+//    
+//    // 다음 날짜로 이동 버튼
+//    let nextBtn = UIButton().then {
+//        $0.setImage(UIImage(named: "planNextBtn"), for: .normal)
+//    }
     
     // 타임테이블
     let timeTable = TimeTableView()
@@ -167,7 +167,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         getMemberPossibleTimeAPI()
-        updateTimeTable()
+//        updateTimeTable()
         memberCountUpdate()
     }
     
@@ -231,35 +231,35 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         }
     }
     
-    // 이전, 다음 버튼 ishidden 속성
-    func btnVisible() {
-        if page == 0 {
-            prevBtn.isHidden = true
-            nextBtn.isHidden = false
-        } else if page == 1 {
-            prevBtn.isHidden = false
-            nextBtn.isHidden = false
-        } else if page == 2 {
-            prevBtn.isHidden = false
-            nextBtn.isHidden = true
-        }
-        timeTable.timeTableCollectionView.reloadData()
-        updateTimeTable()
-    }
-    
-    func updateTimeTable() {
-        // 날짜
-        date1.text = date[page*3]
-        if page == 2 {
-            date2.isHidden = true
-            date3.isHidden = true
-        } else {
-            date2.isHidden = false
-            date3.isHidden = false
-            date2.text = date[page*3 + 1]
-            date3.text = date[page*3 + 2]
-        }
-    }
+//    // 이전, 다음 버튼 ishidden 속성
+//    func btnVisible() {
+//        if page == 0 {
+//            prevBtn.isHidden = true
+//            nextBtn.isHidden = false
+//        } else if page == 1 {
+//            prevBtn.isHidden = false
+//            nextBtn.isHidden = false
+//        } else if page == 2 {
+//            prevBtn.isHidden = false
+//            nextBtn.isHidden = true
+//        }
+//        timeTable.timeTableCollectionView.reloadData()
+//        updateTimeTable()
+//    }
+//    
+//    func updateTimeTable() {
+//        // 날짜
+//        date1.text = date[page*3]
+//        if page == 2 {
+//            date2.isHidden = true
+//            date3.isHidden = true
+//        } else {
+//            date2.isHidden = false
+//            date3.isHidden = false
+//            date2.text = date[page*3 + 1]
+//            date3.text = date[page*3 + 2]
+//        }
+//    }
     
     // 셀 색 예시 - 멤버 수 update
     func memberCountUpdate() {
@@ -272,8 +272,8 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     func buttonActions() {
         xButton.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
         inputTimeButton.addTarget(self, action: #selector(didClickInputTimeButton), for: .touchUpInside)
-        prevBtn.addTarget(self, action: #selector(didClickPrevButton), for: .touchUpInside)
-        nextBtn.addTarget(self, action: #selector(didClickNextButton), for: .touchUpInside)
+//        prevBtn.addTarget(self, action: #selector(didClickPrevButton), for: .touchUpInside)
+//        nextBtn.addTarget(self, action: #selector(didClickNextButton), for: .touchUpInside)
         dots.addTarget(self, action: #selector(didClickDots), for: .touchUpInside)
     }
     
@@ -291,15 +291,15 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
-    @objc func didClickPrevButton() {
-        page -= 1
-        btnVisible()
-    }
-    
-    @objc func didClickNextButton() {
-        page += 1
-        btnVisible()
-    }
+//    @objc func didClickPrevButton() {
+//        page -= 1
+//        btnVisible()
+//    }
+//    
+//    @objc func didClickNextButton() {
+//        page += 1
+//        btnVisible()
+//    }
     
     @objc func didClickDots() {
         let bottomSheetViewController = TimeShareBottomSheetViewController()
@@ -436,11 +436,11 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
 // layout
 extension TimeShareViewController {
     func addView() {
-        view.addSubview(prevBtn)
-        view.addSubview(date1)
-        view.addSubview(date2)
-        view.addSubview(date3)
-        view.addSubview(nextBtn)
+//        view.addSubview(prevBtn)
+//        view.addSubview(date1)
+//        view.addSubview(date2)
+//        view.addSubview(date3)
+//        view.addSubview(nextBtn)
         addChild(timeTable)
         view.addSubview(timeTable.view)
         view.addSubview(inputTimeButton)
@@ -464,38 +464,38 @@ extension TimeShareViewController {
     func timetableConstraints() {
         let safeArea = view.safeAreaLayoutGuide
         
-        // 이전 날짜로 이동 버튼
-        prevBtn.snp.makeConstraints { make in
-            make.height.width.equalTo(16)
-            make.leading.equalTo(safeArea.snp.leading).offset(44)
-            make.top.equalTo(safeArea.snp.top).offset(29)
-        }
-        
-        // 날짜 3개
-        date1.snp.makeConstraints { make in
-            make.width.equalTo(59)
-            make.leading.equalTo(prevBtn.snp.trailing).offset(10)
-            make.centerY.equalTo(prevBtn.snp.centerY)
-        }
-        
-        date2.snp.makeConstraints { make in
-            make.width.equalTo(59)
-            make.leading.equalTo(date1.snp.trailing).offset(20)
-            make.centerY.equalTo(prevBtn.snp.centerY)
-        }
-        
-        date3.snp.makeConstraints { make in
-            make.width.equalTo(59)
-            make.leading.equalTo(date2.snp.trailing).offset(20)
-            make.centerY.equalTo(prevBtn.snp.centerY)
-        }
-        
-        // 다음 날짜로 이동 버튼
-        nextBtn.snp.makeConstraints { make in
-            make.height.width.equalTo(16)
-            make.leading.equalTo(date3.snp.trailing).offset(9)
-            make.top.equalTo(safeArea.snp.top).offset(29)
-        }
+//        // 이전 날짜로 이동 버튼
+//        prevBtn.snp.makeConstraints { make in
+//            make.height.width.equalTo(16)
+//            make.leading.equalTo(safeArea.snp.leading).offset(44)
+//            make.top.equalTo(safeArea.snp.top).offset(29)
+//        }
+//        
+//        // 날짜 3개
+//        date1.snp.makeConstraints { make in
+//            make.width.equalTo(59)
+//            make.leading.equalTo(prevBtn.snp.trailing).offset(10)
+//            make.centerY.equalTo(prevBtn.snp.centerY)
+//        }
+//        
+//        date2.snp.makeConstraints { make in
+//            make.width.equalTo(59)
+//            make.leading.equalTo(date1.snp.trailing).offset(20)
+//            make.centerY.equalTo(prevBtn.snp.centerY)
+//        }
+//        
+//        date3.snp.makeConstraints { make in
+//            make.width.equalTo(59)
+//            make.leading.equalTo(date2.snp.trailing).offset(20)
+//            make.centerY.equalTo(prevBtn.snp.centerY)
+//        }
+//        
+//        // 다음 날짜로 이동 버튼
+//        nextBtn.snp.makeConstraints { make in
+//            make.height.width.equalTo(16)
+//            make.leading.equalTo(date3.snp.trailing).offset(9)
+//            make.top.equalTo(safeArea.snp.top).offset(29)
+//        }
         
         // 내 시간 입력하기 버튼
         inputTimeButton.snp.makeConstraints { make in
@@ -507,9 +507,9 @@ extension TimeShareViewController {
         // 타임테이블
         timeTable.didMove(toParent: self)
         timeTable.view.snp.makeConstraints { make in
-            make.leading.equalTo(view.snp.leading).offset(0)
+            make.leading.equalTo(safeArea.snp.leading).offset(0)
             make.trailing.equalTo(timeTable.view.snp.leading).offset(300)
-            make.top.equalTo(prevBtn.snp.bottom).offset(7)
+            make.top.equalTo(safeArea.snp.top)
             make.bottom.equalTo(inputTimeButton.snp.top).offset(-10)
         }
     }
@@ -521,7 +521,7 @@ extension TimeShareViewController {
             make.width.equalTo(24)
             make.height.equalTo(33)
             make.leading.equalTo(timeTable.view.snp.trailing).offset(10)
-            make.top.equalTo(nextBtn.snp.bottom).offset(13)
+            make.top.equalTo(timeTable.view.snp.top).offset(13)
         }
         
         purpleEx2.snp.makeConstraints { make in
