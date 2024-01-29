@@ -148,6 +148,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = false
         getMemberPossibleTimeAPI()
     }
     
