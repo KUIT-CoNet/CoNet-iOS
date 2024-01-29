@@ -22,39 +22,6 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         $0.setImage(UIImage(named: "sidebar"), for: .normal)
     }
     
-//    // 이전 날짜로 이동 버튼
-//    let prevBtn = UIButton().then {
-//        $0.setImage(UIImage(named: "planPrevBtn"), for: .normal)
-//        $0.isHidden = true
-//    }
-//    
-//    // 날짜 3개
-//    let date1 = UILabel().then {
-//        $0.text = "07. 03 월"
-//        $0.font = UIFont.body2Bold
-//        $0.textColor = UIColor.textHigh
-//        $0.textAlignment = .center
-//    }
-//
-//    let date2 = UILabel().then {
-//        $0.text = "07. 04 화"
-//        $0.font = UIFont.body2Bold
-//        $0.textColor = UIColor.textHigh
-//        $0.textAlignment = .center
-//    }
-//
-//    let date3 = UILabel().then {
-//        $0.text = "07. 05 수"
-//        $0.font = UIFont.body2Bold
-//        $0.textColor = UIColor.textHigh
-//        $0.textAlignment = .center
-//    }
-//    
-//    // 다음 날짜로 이동 버튼
-//    let nextBtn = UIButton().then {
-//        $0.setImage(UIImage(named: "planNextBtn"), for: .normal)
-//    }
-    
     // 타임테이블
     let timeTable = TimeTableView()
     
@@ -436,11 +403,6 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
 // layout
 extension TimeShareViewController {
     func addView() {
-//        view.addSubview(prevBtn)
-//        view.addSubview(date1)
-//        view.addSubview(date2)
-//        view.addSubview(date3)
-//        view.addSubview(nextBtn)
         addChild(timeTable)
         view.addSubview(timeTable.view)
         view.addSubview(inputTimeButton)
@@ -463,39 +425,6 @@ extension TimeShareViewController {
     // time table
     func timetableConstraints() {
         let safeArea = view.safeAreaLayoutGuide
-        
-//        // 이전 날짜로 이동 버튼
-//        prevBtn.snp.makeConstraints { make in
-//            make.height.width.equalTo(16)
-//            make.leading.equalTo(safeArea.snp.leading).offset(44)
-//            make.top.equalTo(safeArea.snp.top).offset(29)
-//        }
-//        
-//        // 날짜 3개
-//        date1.snp.makeConstraints { make in
-//            make.width.equalTo(59)
-//            make.leading.equalTo(prevBtn.snp.trailing).offset(10)
-//            make.centerY.equalTo(prevBtn.snp.centerY)
-//        }
-//        
-//        date2.snp.makeConstraints { make in
-//            make.width.equalTo(59)
-//            make.leading.equalTo(date1.snp.trailing).offset(20)
-//            make.centerY.equalTo(prevBtn.snp.centerY)
-//        }
-//        
-//        date3.snp.makeConstraints { make in
-//            make.width.equalTo(59)
-//            make.leading.equalTo(date2.snp.trailing).offset(20)
-//            make.centerY.equalTo(prevBtn.snp.centerY)
-//        }
-//        
-//        // 다음 날짜로 이동 버튼
-//        nextBtn.snp.makeConstraints { make in
-//            make.height.width.equalTo(16)
-//            make.leading.equalTo(date3.snp.trailing).offset(9)
-//            make.top.equalTo(safeArea.snp.top).offset(29)
-//        }
         
         // 내 시간 입력하기 버튼
         inputTimeButton.snp.makeConstraints { make in
