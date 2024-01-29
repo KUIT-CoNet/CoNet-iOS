@@ -10,6 +10,8 @@ import Then
 import UIKit
 
 class TimeTableView: UIViewController {
+    var planId: Int = 0
+    var page: Int = 0
     
     // 이전 날짜로 이동 버튼
     let prevBtn = UIButton().then {
@@ -58,9 +60,10 @@ class TimeTableView: UIViewController {
         $0.isScrollEnabled = false
     }
     
-    var page: Int = 0
-    
     var date: [String] = ["07.03", "07.04", "07.05", "07.06", "07.07", "07.08", "07.09"]
+    var sendDate: [String] = ["07.03", "07.04", "07.05", "07.06", "07.07", "07.08", "07.09"]
+    let weekDay = ["일", "월", "화", "수", "목", "금", "토"]
+    var possibleMemberDateTime: [PossibleMemberDateTime] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,6 +78,8 @@ class TimeTableView: UIViewController {
         timeTableSetting()
         buttonActions()
         hourSetting()
+        
+        getMemberPossibleTimeAPI()
     }
     
     func timeTableSetting() {
@@ -83,8 +88,8 @@ class TimeTableView: UIViewController {
     }
     
     func buttonActions() {
-//        prevBtn.addTarget(self, action: #selector(didClickPrevButton), for: .touchUpInside)
-//        nextBtn.addTarget(self, action: #selector(didClickNextButton), for: .touchUpInside)
+        prevBtn.addTarget(self, action: #selector(didClickPrevButton), for: .touchUpInside)
+        nextBtn.addTarget(self, action: #selector(didClickNextButton), for: .touchUpInside)
     }
     
     // 시각 stackView setting
@@ -100,46 +105,94 @@ class TimeTableView: UIViewController {
         }
     }
     
-//    @objc func didClickPrevButton() {
-//        page -= 1
-//        btnVisible()
-//    }
-//    
-//    @objc func didClickNextButton() {
-//        page += 1
-//        btnVisible()
-//    }
-//    
-//    // 이전, 다음 버튼 ishidden 속성
-//    func btnVisible() {
-//        if page == 0 {
-//            prevBtn.isHidden = true
-//            nextBtn.isHidden = false
-//        } else if page == 1 {
-//            prevBtn.isHidden = false
-//            nextBtn.isHidden = false
-//        } else if page == 2 {
-//            prevBtn.isHidden = false
-//            nextBtn.isHidden = true
-//        }
-//        timeTableCollectionView.reloadData()
-//        updateTimeTable()
-//    }
-//    
-//    func updateTimeTable() {
-//        // 날짜
-//        date1.text = date[page*3]
-//        if page == 2 {
-//            date2.isHidden = true
-//            date3.isHidden = true
-//        } else {
-//            date2.isHidden = false
-//            date3.isHidden = false
-//            date2.text = date[page*3 + 1]
-//            date3.text = date[page*3 + 2]
-//        }
-//    }
+    @objc func didClickPrevButton() {
+        page -= 1
+        btnVisible()
+    }
     
+    @objc func didClickNextButton() {
+        page += 1
+        btnVisible()
+    }
+    
+    // 이전, 다음 버튼 ishidden 속성
+    func btnVisible() {
+        if page == 0 {
+            prevBtn.isHidden = true
+            nextBtn.isHidden = false
+        } else if page == 1 {
+            prevBtn.isHidden = false
+            nextBtn.isHidden = false
+        } else if page == 2 {
+            prevBtn.isHidden = false
+            nextBtn.isHidden = true
+        }
+        timeTableCollectionView.reloadData()
+        updateTimeTable()
+    }
+    
+    func updateTimeTable() {
+        // 날짜
+        date1.text = date[page*3]
+        if page == 2 {
+            date2.isHidden = true
+            date3.isHidden = true
+        } else {
+            date2.isHidden = false
+            date3.isHidden = false
+            date2.text = date[page*3 + 1]
+            date3.text = date[page*3 + 2]
+        }
+    }
+    
+    // 날짜 배열 update
+    func updateDateArray(planStartPeriod: String, planEndPeriod: String, memberTime: [PossibleMemberDateTime]) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let startDate = dateFormatter.date(from: planStartPeriod)!
+        let endDate = dateFormatter.date(from: planEndPeriod)!
+        
+        let currentCalendar = Calendar.current
+        var currentDate = startDate
+        var index = 0
+        
+        let format = DateFormatter()
+        format.dateFormat = "MM.dd "
+        
+        while currentDate <= endDate {
+            sendDate[index] = dateFormatter.string(from: currentDate)
+            var stringDate = format.string(from: currentDate)
+            stringDate += weekDay[currentCalendar.component(.weekday, from: currentDate) - 1]
+            
+            // 날짜 배열에 저장
+            date[index] = stringDate
+            index += 1
+            
+            currentDate = currentCalendar.date(byAdding: .day, value: 1, to: currentDate)!
+        }
+    }
+    
+    func getMemberPossibleTimeAPI() {
+        PlanTimeAPI().getMemberPossibleTime(planId: planId) { _, _, planName, planStartPeriod, planEndPeriod, sectionMemberCounts, possibleMemberDateTime in
+            self.navigationItem.title = planName
+            self.possibleMemberDateTime = possibleMemberDateTime
+//            self.apiCheck = true
+            
+            // 날짜 배열 update
+            self.updateDateArray(planStartPeriod: planStartPeriod, planEndPeriod: planEndPeriod, memberTime: possibleMemberDateTime)
+            self.timeTableCollectionView.reloadData()
+            
+            // 인원 수 별 셀 색 예시 인원
+//            for index in 0 ..< sectionMemberCounts.count {
+//                let sectionIndex = sectionMemberCounts[index].section
+//                if sectionMemberCounts[index].memberCount.count == 1 {
+//                    self.sectionMemberCount[sectionIndex] = String(sectionMemberCounts[index].memberCount[0])
+//                } else {
+//                    self.sectionMemberCount[sectionIndex] = String(sectionMemberCounts[index].memberCount[0]) + "-" + String(sectionMemberCounts[index].memberCount.last!)
+//                }
+//            }
+        }
+    }
 }
 
 extension TimeTableView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -175,9 +228,9 @@ extension TimeTableView: UICollectionViewDataSource, UICollectionViewDelegate, U
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        if page == 2 {
-//            return 1
-//        }
+        if page == 2 {
+            return 1
+        }
         return 3
     }
     
@@ -202,8 +255,9 @@ extension TimeTableView: UICollectionViewDataSource, UICollectionViewDelegate, U
         
 //        if !apiCheck { return cell }
 //        
+        
 //        let section = possibleMemberDateTime[page*3 + indexPath.section].possibleMember[indexPath.row].section
-//        cell.showCellColor(section: section)
+        cell.showCellColor(section: 0)
         
         return cell
     }
@@ -253,13 +307,13 @@ extension TimeTableView {
         nextBtn.snp.makeConstraints { make in
             make.height.width.equalTo(16)
             make.leading.equalTo(date3.snp.trailing).offset(9)
-            make.top.equalTo(view.snp.top).offset(29)
+            make.centerY.equalTo(prevBtn.snp.centerY)
         }
         
         // 시각
         hourStackView.snp.makeConstraints { make in
             make.width.equalTo(30)
-            make.top.equalTo(prevBtn.snp.bottom).offset(5)
+            make.top.equalTo(prevBtn.snp.bottom).offset(10)
             make.leading.equalTo(view.snp.leading).offset(20)
         }
         

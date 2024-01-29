@@ -88,7 +88,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     var date: [String] = ["07.03", "07.04", "07.05", "07.06", "07.07", "07.08", "07.09"]
     var sendDate: [String] = ["07.03", "07.04", "07.05", "07.06", "07.07", "07.08", "07.09"]
     
-    let weekDay = ["일", "월", "화", "수", "목", "금", "토"]
+//    let weekDay = ["일", "월", "화", "수", "목", "금", "토"]
     
     var sectionMemberCount: [String] = ["0", "", "", ""]
     
@@ -103,6 +103,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         
         view.backgroundColor = .white
         view.layoutIfNeeded()
+        timeTable.planId = planId
         
         navigationSetting()
         
@@ -116,13 +117,13 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
-        getMemberPossibleTimeAPI()
+//        getMemberPossibleTimeAPI()
     }
     
     // 시간 입력 후 돌아왔을 때 업데이트
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        getMemberPossibleTimeAPI()
+//        getMemberPossibleTimeAPI()
     }
     
     // 현재 화면 pop 시 이전 화면의 navigationBar를 안보이게 하기 위해 필요
@@ -133,7 +134,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        getMemberPossibleTimeAPI()
+//        getMemberPossibleTimeAPI()
 //        updateTimeTable()
         memberCountUpdate()
     }
@@ -149,54 +150,54 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     }
     
     // 구성원 시간 조회
-    func getMemberPossibleTimeAPI() {
-        PlanTimeAPI().getMemberPossibleTime(planId: planId) { _, _, planName, planStartPeriod, planEndPeriod, sectionMemberCounts, possibleMemberDateTime in
-            self.navigationItem.title = planName
-            self.possibleMemberDateTime = possibleMemberDateTime
-            self.apiCheck = true
-            
-            // 날짜 배열 update
-            self.updateDateArray(planStartPeriod: planStartPeriod, planEndPeriod: planEndPeriod, memberTime: possibleMemberDateTime)
-            self.timeTable.timeTableCollectionView.reloadData()
-            
-            // 인원 수 별 셀 색 예시 인원
-            for index in 0 ..< sectionMemberCounts.count {
-                let sectionIndex = sectionMemberCounts[index].section
-                if sectionMemberCounts[index].memberCount.count == 1 {
-                    self.sectionMemberCount[sectionIndex] = String(sectionMemberCounts[index].memberCount[0])
-                } else {
-                    self.sectionMemberCount[sectionIndex] = String(sectionMemberCounts[index].memberCount[0]) + "-" + String(sectionMemberCounts[index].memberCount.last!)
-                }
-            }
-        }
-    }
+//    func getMemberPossibleTimeAPI() {
+//        PlanTimeAPI().getMemberPossibleTime(planId: planId) { _, _, planName, planStartPeriod, planEndPeriod, sectionMemberCounts, possibleMemberDateTime in
+//            self.navigationItem.title = planName
+//            self.possibleMemberDateTime = possibleMemberDateTime
+//            self.apiCheck = true
+//            
+//            // 날짜 배열 update
+//            self.updateDateArray(planStartPeriod: planStartPeriod, planEndPeriod: planEndPeriod, memberTime: possibleMemberDateTime)
+//            self.timeTable.timeTableCollectionView.reloadData()
+//            
+//            // 인원 수 별 셀 색 예시 인원
+//            for index in 0 ..< sectionMemberCounts.count {
+//                let sectionIndex = sectionMemberCounts[index].section
+//                if sectionMemberCounts[index].memberCount.count == 1 {
+//                    self.sectionMemberCount[sectionIndex] = String(sectionMemberCounts[index].memberCount[0])
+//                } else {
+//                    self.sectionMemberCount[sectionIndex] = String(sectionMemberCounts[index].memberCount[0]) + "-" + String(sectionMemberCounts[index].memberCount.last!)
+//                }
+//            }
+//        }
+//    }
     
-    // 날짜 배열 update
-    func updateDateArray(planStartPeriod: String, planEndPeriod: String, memberTime: [PossibleMemberDateTime]) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let startDate = dateFormatter.date(from: planStartPeriod)!
-        let endDate = dateFormatter.date(from: planEndPeriod)!
-        
-        let currentCalendar = Calendar.current
-        var currentDate = startDate
-        var index = 0
-        
-        let format = DateFormatter()
-        format.dateFormat = "MM.dd "
-        
-        while currentDate <= endDate {
-            sendDate[index] = dateFormatter.string(from: currentDate)
-            var stringDate = format.string(from: currentDate)
-            stringDate += weekDay[currentCalendar.component(.weekday, from: currentDate) - 1]
-            
-            // 날짜 배열에 저장
-            date[index] = stringDate
-            index += 1
-            
-            currentDate = currentCalendar.date(byAdding: .day, value: 1, to: currentDate)!
-        }
-    }
+//    // 날짜 배열 update
+//    func updateDateArray(planStartPeriod: String, planEndPeriod: String, memberTime: [PossibleMemberDateTime]) {
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "yyyy-MM-dd"
+//        let startDate = dateFormatter.date(from: planStartPeriod)!
+//        let endDate = dateFormatter.date(from: planEndPeriod)!
+//        
+//        let currentCalendar = Calendar.current
+//        var currentDate = startDate
+//        var index = 0
+//        
+//        let format = DateFormatter()
+//        format.dateFormat = "MM.dd "
+//        
+//        while currentDate <= endDate {
+//            sendDate[index] = dateFormatter.string(from: currentDate)
+//            var stringDate = format.string(from: currentDate)
+//            stringDate += weekDay[currentCalendar.component(.weekday, from: currentDate) - 1]
+//            
+//            // 날짜 배열에 저장
+//            date[index] = stringDate
+//            index += 1
+//            
+//            currentDate = currentCalendar.date(byAdding: .day, value: 1, to: currentDate)!
+//        }
+//    }
     
 //    // 이전, 다음 버튼 ishidden 속성
 //    func btnVisible() {
@@ -419,7 +420,7 @@ extension TimeShareViewController {
     
     func layoutConstraints() {
         timetableConstraints()
-        colorExample() // 타임테이블 옆 색 예시
+//        colorExample() // 타임테이블 옆 색 예시
     }
     
     // time table
