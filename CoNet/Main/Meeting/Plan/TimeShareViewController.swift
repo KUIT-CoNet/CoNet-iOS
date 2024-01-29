@@ -84,18 +84,10 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         $0.font = UIFont.overline
     }
     
-    var page: Int = 0
-    
     var date: [String] = ["07.03", "07.04", "07.05", "07.06", "07.07", "07.08", "07.09"]
     var sendDate: [String] = ["07.03", "07.04", "07.05", "07.06", "07.07", "07.08", "07.09"]
     
-//    let weekDay = ["일", "월", "화", "수", "목", "금", "토"]
-    
     var sectionMemberCount: [String] = ["0", "", "", ""]
-    
-    var possibleMemberDateTime: [PossibleMemberDateTime] = []
-    
-    var apiCheck = false
     
     var fixPlanInfoVC: DecidedPlanInfoViewController?
     
@@ -110,7 +102,6 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         
         addView()
         layoutConstraints()
-//        timeTableSetting()
         
         buttonActions()
     }
@@ -136,7 +127,6 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
 //        getMemberPossibleTimeAPI()
-//        updateTimeTable()
         memberCountUpdate()
     }
     
@@ -151,86 +141,6 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         navigationItem.leftBarButtonItem = leftbarButtonItem
     }
     
-    // 구성원 시간 조회
-//    func getMemberPossibleTimeAPI() {
-//        PlanTimeAPI().getMemberPossibleTime(planId: planId) { _, _, planName, planStartPeriod, planEndPeriod, sectionMemberCounts, possibleMemberDateTime in
-//            self.navigationItem.title = planName
-//            self.possibleMemberDateTime = possibleMemberDateTime
-//            self.apiCheck = true
-//            
-//            // 날짜 배열 update
-//            self.updateDateArray(planStartPeriod: planStartPeriod, planEndPeriod: planEndPeriod, memberTime: possibleMemberDateTime)
-//            self.timeTable.timeTableCollectionView.reloadData()
-//            
-//            // 인원 수 별 셀 색 예시 인원
-//            for index in 0 ..< sectionMemberCounts.count {
-//                let sectionIndex = sectionMemberCounts[index].section
-//                if sectionMemberCounts[index].memberCount.count == 1 {
-//                    self.sectionMemberCount[sectionIndex] = String(sectionMemberCounts[index].memberCount[0])
-//                } else {
-//                    self.sectionMemberCount[sectionIndex] = String(sectionMemberCounts[index].memberCount[0]) + "-" + String(sectionMemberCounts[index].memberCount.last!)
-//                }
-//            }
-//        }
-//    }
-    
-//    // 날짜 배열 update
-//    func updateDateArray(planStartPeriod: String, planEndPeriod: String, memberTime: [PossibleMemberDateTime]) {
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "yyyy-MM-dd"
-//        let startDate = dateFormatter.date(from: planStartPeriod)!
-//        let endDate = dateFormatter.date(from: planEndPeriod)!
-//        
-//        let currentCalendar = Calendar.current
-//        var currentDate = startDate
-//        var index = 0
-//        
-//        let format = DateFormatter()
-//        format.dateFormat = "MM.dd "
-//        
-//        while currentDate <= endDate {
-//            sendDate[index] = dateFormatter.string(from: currentDate)
-//            var stringDate = format.string(from: currentDate)
-//            stringDate += weekDay[currentCalendar.component(.weekday, from: currentDate) - 1]
-//            
-//            // 날짜 배열에 저장
-//            date[index] = stringDate
-//            index += 1
-//            
-//            currentDate = currentCalendar.date(byAdding: .day, value: 1, to: currentDate)!
-//        }
-//    }
-    
-//    // 이전, 다음 버튼 ishidden 속성
-//    func btnVisible() {
-//        if page == 0 {
-//            prevBtn.isHidden = true
-//            nextBtn.isHidden = false
-//        } else if page == 1 {
-//            prevBtn.isHidden = false
-//            nextBtn.isHidden = false
-//        } else if page == 2 {
-//            prevBtn.isHidden = false
-//            nextBtn.isHidden = true
-//        }
-//        timeTable.timeTableCollectionView.reloadData()
-//        updateTimeTable()
-//    }
-//    
-//    func updateTimeTable() {
-//        // 날짜
-//        date1.text = date[page*3]
-//        if page == 2 {
-//            date2.isHidden = true
-//            date3.isHidden = true
-//        } else {
-//            date2.isHidden = false
-//            date3.isHidden = false
-//            date2.text = date[page*3 + 1]
-//            date3.text = date[page*3 + 2]
-//        }
-//    }
-    
     // 셀 색 예시 - 멤버 수 update
     func memberCountUpdate() {
         peopleNum1.text = sectionMemberCount[0]
@@ -242,8 +152,6 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     func buttonActions() {
         xButton.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
         inputTimeButton.addTarget(self, action: #selector(didClickInputTimeButton), for: .touchUpInside)
-//        prevBtn.addTarget(self, action: #selector(didClickPrevButton), for: .touchUpInside)
-//        nextBtn.addTarget(self, action: #selector(didClickNextButton), for: .touchUpInside)
         dots.addTarget(self, action: #selector(didClickDots), for: .touchUpInside)
     }
     
@@ -261,16 +169,6 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
-//    @objc func didClickPrevButton() {
-//        page -= 1
-//        btnVisible()
-//    }
-//    
-//    @objc func didClickNextButton() {
-//        page += 1
-//        btnVisible()
-//    }
-    
     @objc func didClickDots() {
         let bottomSheetViewController = TimeShareBottomSheetViewController()
         bottomSheetViewController.planId = planId
@@ -279,11 +177,6 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
         present(bottomSheetViewController, animated: true, completion: nil)
     }
-    
-//    func timeTableSetting() {
-//        timeTable.timeTableCollectionView.dataSource = self
-//        timeTable.timeTableCollectionView.delegate = self
-//    }
     
     // 약속 확정 버튼 클릭 시
     func pushFixPlanInfo(planId: Int) {
@@ -336,72 +229,6 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         present(popUpVC, animated: true, completion: nil)
     }
 }
-
-//extension TimeShareViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-//    // 셀 클릭 시 이벤트 처리
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        print("Selected cell at indexPath: \(indexPath)")
-//        print(indexPath.section, indexPath.row)
-//        
-//        let format = DateFormatter()
-//        format.dateFormat = "yyyy-MM-dd"
-//        
-//        // 해당 시간에 가능한 멤버
-//        let memberList = possibleMemberDateTime[page*3 + indexPath.section].possibleMember[indexPath.row]
-//        
-//        // 셀 색이 흰 색이 아닌 경우 약속 확정 팝업 띄우기
-//        if collectionView.cellForItem(at: indexPath)?.contentView.backgroundColor != UIColor.grayWhite {
-//            let nextVC = FixPlanPopUpViewController()
-//            nextVC.timeShareVC = self
-//            nextVC.planId = planId
-//            nextVC.time = indexPath.row
-//            nextVC.date = sendDate[page*3 + indexPath.section]
-//            nextVC.memberList = memberList.memberNames.joined(separator: ", ")
-//            nextVC.userIds = memberList.memberIds
-//            nextVC.modalPresentationStyle = .overCurrentContext
-//            nextVC.modalTransitionStyle = .crossDissolve
-//            present(nextVC, animated: true, completion: nil)
-//        }
-//    }
-//    
-//    // 셀 수
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        24
-//    }
-//    
-//    func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        if page == 2 {
-//            return 1
-//        }
-//        return 3
-//    }
-//    
-//    // 셀 사이즈 설정
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: 80, height: 24)
-//    }
-//    
-//    // 위 아래 space zero로 설정
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-//        return -1
-//    }
-//    
-//    // 양옆 space zero로 설정
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-//        return -1
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimeTableViewCell.identifier, for: indexPath) as? TimeTableViewCell else { return UICollectionViewCell() }
-//        
-//        if !apiCheck { return cell }
-//        
-//        let section = possibleMemberDateTime[page*3 + indexPath.section].possibleMember[indexPath.row].section
-//        cell.showCellColor(section: section)
-//        
-//        return cell
-//    }
-//}
 
 // layout
 extension TimeShareViewController {
