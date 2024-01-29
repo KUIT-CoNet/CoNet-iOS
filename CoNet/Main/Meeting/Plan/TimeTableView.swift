@@ -16,29 +16,7 @@ class TimeTableView: UIViewController {
     // 이전 날짜로 이동 버튼
     let prevBtn = UIButton().then {
         $0.setImage(UIImage(named: "planPrevBtn"), for: .normal)
-        $0.isHidden = true
-    }
-    
-    // 날짜 3개
-    let date1 = UILabel().then {
-        $0.text = "07.03 월"
-        $0.font = UIFont.body2Bold
-        $0.textColor = UIColor.textHigh
-        $0.textAlignment = .center
-    }
-
-    let date2 = UILabel().then {
-        $0.text = "07.04 화"
-        $0.font = UIFont.body2Bold
-        $0.textColor = UIColor.textHigh
-        $0.textAlignment = .center
-    }
-
-    let date3 = UILabel().then {
-        $0.text = "07.05 수"
-        $0.font = UIFont.body2Bold
-        $0.textColor = UIColor.textHigh
-        $0.textAlignment = .center
+//        $0.isHidden = true
     }
     
     // 다음 날짜로 이동 버튼
@@ -112,6 +90,7 @@ class TimeTableView: UIViewController {
     }
     
     @objc func didClickNextButton() {
+        print("click", page)
         page += 1
         btnVisible()
     }
@@ -129,21 +108,6 @@ class TimeTableView: UIViewController {
             nextBtn.isHidden = true
         }
         timeTableCollectionView.reloadData()
-        updateTimeTable()
-    }
-    
-    func updateTimeTable() {
-        // 날짜
-        date1.text = date[page*3]
-        if page == 2 {
-            date2.isHidden = true
-            date3.isHidden = true
-        } else {
-            date2.isHidden = false
-            date3.isHidden = false
-            date2.text = date[page*3 + 1]
-            date3.text = date[page*3 + 2]
-        }
     }
     
     // 날짜 배열 update
@@ -224,7 +188,7 @@ extension TimeTableView: UICollectionViewDataSource, UICollectionViewDelegate, U
     
     // 셀 수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        24
+        25
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -236,7 +200,9 @@ extension TimeTableView: UICollectionViewDataSource, UICollectionViewDelegate, U
     
     // 셀 사이즈 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let screenWidth = UIScreen.main.bounds.size.width
+        if indexPath.row == 0 {
+            return CGSize(width: 80, height: 35)
+        }
         return CGSize(width: 80, height: 24)
     }
     
@@ -255,8 +221,14 @@ extension TimeTableView: UICollectionViewDataSource, UICollectionViewDelegate, U
         
         if !apiCheck { return cell }
         
-        let section = possibleMemberDateTime[page*3 + indexPath.section].possibleMember[indexPath.row].section
-        cell.showCellColor(section: section)
+        // 날짜 보여주기
+        if indexPath.row == 0 {
+            cell.show7Days(text: date[page*3+indexPath.section])
+        } else {
+            cell.hide7Days()
+            let section = possibleMemberDateTime[page*3 + indexPath.section].possibleMember[indexPath.row-1].section
+            cell.showCellColor(section: section)
+        }
         
         return cell
     }
@@ -264,64 +236,40 @@ extension TimeTableView: UICollectionViewDataSource, UICollectionViewDelegate, U
 
 extension TimeTableView {
     func addView() {
-        view.addSubview(prevBtn)
-        view.addSubview(date1)
-        view.addSubview(date2)
-        view.addSubview(date3)
-        view.addSubview(nextBtn)
-        
         view.addSubview(hourStackView)
         view.addSubview(timeTableCollectionView)
+        view.addSubview(prevBtn)
+        view.addSubview(nextBtn)
     }
     
     func layoutConstraints() {
-        
-        // 이전 날짜로 이동 버튼
-        prevBtn.snp.makeConstraints { make in
-            make.height.width.equalTo(16)
-            make.leading.equalTo(view.snp.leading).offset(44)
-            make.top.equalTo(view.snp.top).offset(29)
-        }
-        
-        // 날짜 3개
-        date1.snp.makeConstraints { make in
-            make.width.equalTo(59)
-            make.leading.equalTo(prevBtn.snp.trailing).offset(10)
-            make.centerY.equalTo(prevBtn.snp.centerY)
-        }
-        
-        date2.snp.makeConstraints { make in
-            make.width.equalTo(59)
-            make.leading.equalTo(date1.snp.trailing).offset(20)
-            make.centerY.equalTo(prevBtn.snp.centerY)
-        }
-        
-        date3.snp.makeConstraints { make in
-            make.width.equalTo(59)
-            make.leading.equalTo(date2.snp.trailing).offset(20)
-            make.centerY.equalTo(prevBtn.snp.centerY)
-        }
-        
-        // 다음 날짜로 이동 버튼
-        nextBtn.snp.makeConstraints { make in
-            make.height.width.equalTo(16)
-            make.leading.equalTo(date3.snp.trailing).offset(9)
-            make.centerY.equalTo(prevBtn.snp.centerY)
-        }
-        
         // 시각
         hourStackView.snp.makeConstraints { make in
             make.width.equalTo(30)
-            make.top.equalTo(prevBtn.snp.bottom).offset(10)
+            make.top.equalTo(view.snp.top).offset(45)
             make.leading.equalTo(view.snp.leading).offset(20)
         }
         
         // 타임테이블
         timeTableCollectionView.snp.makeConstraints { make in
             make.leading.equalTo(hourStackView.snp.trailing).offset(10)
-            make.width.equalTo(300)
-            make.top.equalTo(hourStackView.snp.top).offset(6)
+            make.width.equalTo(240)
+            make.top.equalTo(hourStackView.snp.top).offset(-29)
             make.bottom.trailing.equalToSuperview()
+        }
+        
+        // 이전 날짜로 이동 버튼
+        prevBtn.snp.makeConstraints { make in
+            make.height.width.equalTo(16)
+            make.trailing.equalTo(timeTableCollectionView.snp.leading).offset(-5)
+            make.top.equalTo(timeTableCollectionView.snp.top).offset(10)
+        }
+        
+        // 다음 날짜로 이동 버튼
+        nextBtn.snp.makeConstraints { make in
+            make.height.width.equalTo(16)
+            make.leading.equalTo(timeTableCollectionView.snp.trailing).offset(5)
+            make.centerY.equalTo(prevBtn.snp.centerY)
         }
     }
 }

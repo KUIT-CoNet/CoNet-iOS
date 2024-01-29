@@ -5,10 +5,14 @@
 //  Created by 가은 on 2023/07/27.
 //
 
+import SnapKit
+import Then
 import UIKit
 
 class TimeTableViewCell: UICollectionViewCell {
     static let identifier = "\(TimeTableViewCell.self)"
+    
+    let dateText = UILabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,4 +50,24 @@ class TimeTableViewCell: UICollectionViewCell {
         }
     }
     
+    // 날짜 보여주기
+    func show7Days(text: String) {
+        contentView.layer.borderWidth = 0
+        
+        addSubview(dateText)
+        
+        dateText.text = text
+        dateText.font = UIFont.body2Bold
+        dateText.textColor = UIColor.textHigh
+        
+        dateText.snp.makeConstraints { make in
+            make.center.equalTo(self.snp.center)
+        }
+    }
+    
+    // 날짜 숨기기
+    func hide7Days() {
+        dateText.text = ""
+        contentView.layer.borderWidth = 1
+    }
 }
