@@ -87,6 +87,7 @@ class TimeInputViewController: UIViewController {
 
         view.backgroundColor = .white
         
+        addView()
         layoutConstraints()
         timeTableSetting()
         
@@ -230,84 +231,7 @@ class TimeInputViewController: UIViewController {
         timeTable.timeTableCollectionView.delegate = self
     }
     
-    func layoutConstraints() {
-        headerConstraintS()
-        timetableConstraints()
-    }
     
-    // 헤더 - x버튼, 약속 이름 등
-    func headerConstraintS() {
-        let safeArea = view.safeAreaLayoutGuide
-        
-        // x 버튼
-        view.addSubview(prevButton)
-        prevButton.snp.makeConstraints { make in
-            make.height.width.equalTo(24)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.top.equalTo(safeArea.snp.top).offset(30)
-        }
-        
-        // 약속 이름
-        view.addSubview(inputTimeLabel)
-        inputTimeLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(prevButton)
-            make.centerX.equalTo(view.snp.centerX)
-        }
-    }
-    
-    // time table
-    func timetableConstraints() {
-        // 이전 날짜로 이동 버튼
-        view.addSubview(prevDayBtn)
-        prevDayBtn.snp.makeConstraints { make in
-            make.height.width.equalTo(16)
-            make.leading.equalTo(view.snp.leading).offset(44)
-            make.top.equalTo(prevButton.snp.bottom).offset(29)
-        }
-        
-        // 다음 날짜로 이동 버튼
-        view.addSubview(nextDayBtn)
-//        nextDayBtn.snp.makeConstraints { make in
-//            make.height.width.equalTo(16)
-//            make.leading.equalTo(date3.snp.trailing).offset(9)
-//            make.centerY.equalTo(prevDayBtn.snp.centerY)
-//        }
-        
-        addChild(timeTable)
-        view.addSubview(timeTable.view)
-        view.addSubview(saveButton)
-        
-        // 저장 버튼
-        saveButton.snp.makeConstraints { make in
-            make.height.equalTo(52)
-            make.leading.trailing.equalToSuperview().inset(24)
-            make.bottom.equalTo(view.snp.bottom).offset(-35)
-        }
-        
-        // 타임테이블
-        timeTable.didMove(toParent: self)
-        timeTable.view.snp.makeConstraints { make in
-            make.leading.equalTo(view.snp.leading).offset(0)
-            make.trailing.equalTo(timeTable.view.snp.leading).offset(300)
-            make.top.equalTo(prevDayBtn.snp.bottom).offset(7)
-            make.bottom.equalTo(saveButton.snp.top).offset(-10)
-        }
-        
-        // 가능한 시간 없음 버튼
-        view.addSubview(timeImpossibleButton)
-        timeImpossibleButton.snp.makeConstraints { make in
-            make.trailing.equalTo(view.snp.trailing).offset(-33)
-            make.top.equalTo(nextDayBtn.snp.bottom).offset(507)
-        }
-        
-        // 가능한 시간 없음 label
-        view.addSubview(timeImpossibleLabel)
-        timeImpossibleLabel.snp.makeConstraints { make in
-            make.height.equalTo(12)
-            make.trailing.equalTo(view.snp.trailing).offset(-22)
-            make.top.equalTo(timeImpossibleButton.snp.bottom).offset(5)
-        }
-    }
 }
 
 extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -377,5 +301,92 @@ extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewD
         }
         
         return cell
+    }
+}
+
+extension TimeInputViewController {
+    func addView() {
+        view.addSubview(prevButton)
+        view.addSubview(inputTimeLabel)
+        
+        view.addSubview(prevDayBtn)
+        view.addSubview(nextDayBtn)
+        addChild(timeTable)
+        view.addSubview(timeTable.view)
+        view.addSubview(saveButton)
+        view.addSubview(timeImpossibleButton)
+        view.addSubview(timeImpossibleLabel)
+    }
+    
+    func layoutConstraints() {
+        headerConstraintS()
+        timetableConstraints()
+    }
+    
+    // 헤더 - x버튼, 약속 이름 등
+    func headerConstraintS() {
+        let safeArea = view.safeAreaLayoutGuide
+        
+        // x 버튼
+        prevButton.snp.makeConstraints { make in
+            make.height.width.equalTo(24)
+            make.leading.equalTo(safeArea.snp.leading).offset(24)
+            make.top.equalTo(safeArea.snp.top).offset(30)
+        }
+        
+        // 약속 이름
+        inputTimeLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(prevButton)
+            make.centerX.equalTo(view.snp.centerX)
+        }
+    }
+    
+    // time table
+    func timetableConstraints() {
+        // 이전 날짜로 이동 버튼
+        prevDayBtn.snp.makeConstraints { make in
+            make.height.width.equalTo(16)
+            make.leading.equalTo(view.snp.leading).offset(44)
+            make.top.equalTo(prevButton.snp.bottom).offset(29)
+        }
+        
+        // 다음 날짜로 이동 버튼
+        
+//        nextDayBtn.snp.makeConstraints { make in
+//            make.height.width.equalTo(16)
+//            make.leading.equalTo(date3.snp.trailing).offset(9)
+//            make.centerY.equalTo(prevDayBtn.snp.centerY)
+//        }
+        
+        
+        
+        // 저장 버튼
+        saveButton.snp.makeConstraints { make in
+            make.height.equalTo(52)
+            make.leading.trailing.equalToSuperview().inset(24)
+            make.bottom.equalTo(view.snp.bottom).offset(-35)
+        }
+        
+        // 타임테이블
+        timeTable.didMove(toParent: self)
+        timeTable.view.snp.makeConstraints { make in
+            make.leading.equalTo(view.snp.leading).offset(0)
+            make.trailing.equalTo(timeTable.view.snp.leading).offset(300)
+            make.top.equalTo(prevDayBtn.snp.bottom).offset(7)
+            make.bottom.equalTo(saveButton.snp.top).offset(-10)
+        }
+        
+        // 가능한 시간 없음 버튼
+        timeImpossibleButton.snp.makeConstraints { make in
+            make.trailing.equalTo(view.snp.trailing).offset(-33)
+            make.top.equalTo(nextDayBtn.snp.bottom).offset(507)
+        }
+        
+        // 가능한 시간 없음 label
+        timeImpossibleLabel.snp.makeConstraints { make in
+            make.height.equalTo(12)
+            make.trailing.equalTo(view.snp.trailing).offset(-22)
+            make.top.equalTo(timeImpossibleButton.snp.bottom).offset(5)
+        }
     }
 }
