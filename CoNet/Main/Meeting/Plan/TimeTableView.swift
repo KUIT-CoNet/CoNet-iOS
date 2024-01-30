@@ -16,7 +16,7 @@ class TimeTableView: UIViewController {
     // 이전 날짜로 이동 버튼
     let prevBtn = UIButton().then {
         $0.setImage(UIImage(named: "planPrevBtn"), for: .normal)
-//        $0.isHidden = true
+        $0.isHidden = true
     }
     
     // 다음 날짜로 이동 버튼
@@ -255,7 +255,7 @@ extension TimeTableView {
             make.leading.equalTo(hourStackView.snp.trailing).offset(10)
             make.width.equalTo(240)
             make.top.equalTo(hourStackView.snp.top).offset(-29)
-            make.bottom.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
         
         // 이전 날짜로 이동 버튼
