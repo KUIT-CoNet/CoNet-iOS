@@ -5,6 +5,8 @@
 //  Created by 가은 on 2023/07/28.
 //
 
+import SnapKit
+import Then
 import UIKit
 
 class TimeInputViewController: UIViewController {
@@ -26,28 +28,6 @@ class TimeInputViewController: UIViewController {
     let prevDayBtn = UIButton().then {
         $0.setImage(UIImage(named: "planPrevBtn"), for: .normal)
         $0.isHidden = true
-    }
-    
-    // 날짜 3개
-    let date1 = UILabel().then {
-        $0.text = "07. 03 월"
-        $0.font = UIFont.body2Bold
-        $0.textColor = UIColor.textHigh
-        $0.textAlignment = .center
-    }
-
-    let date2 = UILabel().then {
-        $0.text = "07. 04 화"
-        $0.font = UIFont.body2Bold
-        $0.textColor = UIColor.textHigh
-        $0.textAlignment = .center
-    }
-
-    let date3 = UILabel().then {
-        $0.text = "07. 05 수"
-        $0.font = UIFont.body2Bold
-        $0.textColor = UIColor.textHigh
-        $0.textAlignment = .center
     }
     
     // 다음 날짜로 이동 버튼
@@ -120,7 +100,6 @@ class TimeInputViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         getMyPossibleTimeAPI()
-        updateTimeTable()
         changeSaveButtonColor()
     }
     
@@ -165,21 +144,6 @@ class TimeInputViewController: UIViewController {
             nextDayBtn.isHidden = true
         }
         timeTable.timeTableCollectionView.reloadData()
-        updateTimeTable()
-    }
-    
-    func updateTimeTable() {
-        // 날짜
-        date1.text = date[page*3]
-        if page == 2 {
-            date2.isHidden = true
-            date3.isHidden = true
-        } else {
-            date2.isHidden = false
-            date3.isHidden = false
-            date2.text = date[page*3 + 1]
-            date3.text = date[page*3 + 2]
-        }
     }
     
     func changeSaveButtonColor() {
@@ -301,33 +265,13 @@ class TimeInputViewController: UIViewController {
             make.top.equalTo(prevButton.snp.bottom).offset(29)
         }
         
-        // 날짜 3개
-        view.addSubview(date1)
-        date1.snp.makeConstraints { make in
-            make.width.equalTo(59)
-            make.leading.equalTo(prevDayBtn.snp.trailing).offset(10)
-            make.centerY.equalTo(prevDayBtn.snp.centerY)
-        }
-        view.addSubview(date2)
-        date2.snp.makeConstraints { make in
-            make.width.equalTo(59)
-            make.leading.equalTo(date1.snp.trailing).offset(20)
-            make.centerY.equalTo(prevDayBtn.snp.centerY)
-        }
-        view.addSubview(date3)
-        date3.snp.makeConstraints { make in
-            make.width.equalTo(59)
-            make.leading.equalTo(date2.snp.trailing).offset(20)
-            make.centerY.equalTo(prevDayBtn.snp.centerY)
-        }
-        
         // 다음 날짜로 이동 버튼
         view.addSubview(nextDayBtn)
-        nextDayBtn.snp.makeConstraints { make in
-            make.height.width.equalTo(16)
-            make.leading.equalTo(date3.snp.trailing).offset(9)
-            make.centerY.equalTo(prevDayBtn.snp.centerY)
-        }
+//        nextDayBtn.snp.makeConstraints { make in
+//            make.height.width.equalTo(16)
+//            make.leading.equalTo(date3.snp.trailing).offset(9)
+//            make.centerY.equalTo(prevDayBtn.snp.centerY)
+//        }
         
         addChild(timeTable)
         view.addSubview(timeTable.view)
@@ -375,7 +319,7 @@ extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewD
         if timeStateCheck != 1 {
             // change cell background color
             let cell = collectionView.cellForItem(at: indexPath) as! TimeTableViewCell
-            print(cell.contentView.backgroundColor)
+            
             let num = cell.changeCellColor()
             // 클릭 시 possibleTime 배열에 추가/삭제
             if num == 1 {
