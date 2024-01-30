@@ -17,24 +17,6 @@ class TimeInputViewController: UIViewController {
         $0.setImage(UIImage(named: "prevBtn"), for: .normal)
     }
     
-    // 내 시간 입력하기 label
-    let inputTimeLabel = UILabel().then {
-        $0.text = "내 시간 입력하기"
-        $0.font = UIFont.headline3Bold
-        $0.textColor = UIColor.textHigh
-    }
-    
-    // 이전 날짜로 이동 버튼
-    let prevDayBtn = UIButton().then {
-        $0.setImage(UIImage(named: "planPrevBtn"), for: .normal)
-        $0.isHidden = true
-    }
-    
-    // 다음 날짜로 이동 버튼
-    let nextDayBtn = UIButton().then {
-        $0.setImage(UIImage(named: "planNextBtn"), for: .normal)
-    }
-    
     // 타임테이블
     let timeTable = TimeTableView()
     
@@ -87,11 +69,11 @@ class TimeInputViewController: UIViewController {
 
         view.backgroundColor = .white
         
+        navigationSetting()
         addView()
         layoutConstraints()
-        timeTableSetting()
         
-        btnClickEvents()
+        buttonActions()
         
         for index in 0 ..< 7 {
             possibleTime[index].date = sendDate[index]
@@ -100,6 +82,7 @@ class TimeInputViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = false
         getMyPossibleTimeAPI()
         changeSaveButtonColor()
     }
@@ -107,6 +90,14 @@ class TimeInputViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.navigationBar.isHidden = false
+    }
+    
+    private func navigationSetting() {
+        navigationController?.navigationBar.isHidden = false
+        navigationItem.title = "내 시간 입력하기"
+        
+        let leftbarButtonItem = UIBarButtonItem(customView: prevButton)
+        navigationItem.leftBarButtonItem = leftbarButtonItem
     }
     
     func getMyPossibleTimeAPI() {
@@ -132,21 +123,6 @@ class TimeInputViewController: UIViewController {
         }
     }
     
-    // 이전, 다음 버튼 ishidden 속성
-    func btnVisible() {
-        if page == 0 {
-            prevDayBtn.isHidden = true
-            nextDayBtn.isHidden = false
-        } else if page == 1 {
-            prevDayBtn.isHidden = false
-            nextDayBtn.isHidden = false
-        } else if page == 2 {
-            prevDayBtn.isHidden = false
-            nextDayBtn.isHidden = true
-        }
-        timeTable.timeTableCollectionView.reloadData()
-    }
-    
     func changeSaveButtonColor() {
         // 저장 버튼 색
         if timeStateCheck == 0 || timeStateCheck == -1 {
@@ -168,11 +144,9 @@ class TimeInputViewController: UIViewController {
     }
     
     // 버튼 클릭 이벤트
-    func btnClickEvents() {
+    func buttonActions() {
         prevButton.addTarget(self, action: #selector(didClickPrevButton), for: .touchUpInside)
         timeImpossibleButton.addTarget(self, action: #selector(didClickTimeImpossibleButton), for: .touchUpInside)
-        prevDayBtn.addTarget(self, action: #selector(didClickPrevDayButton), for: .touchUpInside)
-        nextDayBtn.addTarget(self, action: #selector(didClickNextDayButton), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(didClickSaveButton), for: .touchUpInside)
     }
     
@@ -198,18 +172,6 @@ class TimeInputViewController: UIViewController {
         changeSaveButtonColor()
     }
     
-    // 날짜 이전 버튼 클릭
-    @objc func didClickPrevDayButton() {
-        page -= 1
-        btnVisible()
-    }
-    
-    // 날짜 다음 버튼 클릭
-    @objc func didClickNextDayButton() {
-        page += 1
-        btnVisible()
-    }
-    
     @objc func didClickSaveButton() {
         // save button 활성화 시에만
         if saveButton.backgroundColor == UIColor.purpleMain {
@@ -226,91 +188,12 @@ class TimeInputViewController: UIViewController {
         }
     }
     
-    func timeTableSetting() {
-        timeTable.timeTableCollectionView.dataSource = self
-        timeTable.timeTableCollectionView.delegate = self
-    }
-    
-    
-}
-
-extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    // 셀 클릭 시 이벤트 처리
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Selected cell at indexPath: \(indexPath)")
-        
-        // 가능한 시간 없은 버튼 체크하지 않은 경우만
-        if timeStateCheck != 1 {
-            // change cell background color
-            let cell = collectionView.cellForItem(at: indexPath) as! TimeTableViewCell
-            
-            let num = cell.changeCellColor()
-            // 클릭 시 possibleTime 배열에 추가/삭제
-            if num == 1 {
-                possibleTime[page*3 + indexPath.section].time.append(indexPath.row)
-                timeStateCheck = 2
-            } else if num == 0 {
-                possibleTime[page*3 + indexPath.section].time.removeAll { $0 == indexPath.row }
-                timePossibleCountCheck()
-            }
-            changeSaveButtonColor()
-        }
-    }
-    
-    // 셀 수
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        24
-    }
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if page == 2 {
-            return 1
-        }
-        return 3
-    }
-    
-    // 셀 사이즈 설정
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 80, height: 24)
-    }
-    
-    // 위 아래 space zero로 설정
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return -1
-    }
-    
-    // 양옆 space zero로 설정
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return -1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimeTableViewCell.identifier, for: indexPath) as? TimeTableViewCell else { return UICollectionViewCell() }
-        
-        // 가능한 시간 없음 버튼 클릭 여부 체크
-        if timeStateCheck == 1 {
-            cell.contentView.backgroundColor = UIColor.gray50
-        } else if timeStateCheck == 2 {
-            if possibleTime[page*3 + indexPath.section].time.contains(indexPath.row) {
-                cell.contentView.backgroundColor = UIColor.mainSub1?.withAlphaComponent(0.5)
-            } else {
-                cell.contentView.backgroundColor = UIColor.grayWhite
-            }
-        } else if timeStateCheck == 0 {
-            cell.contentView.backgroundColor = UIColor.grayWhite
-        }
-        
-        return cell
-    }
 }
 
 extension TimeInputViewController {
     func addView() {
         view.addSubview(prevButton)
-        view.addSubview(inputTimeLabel)
         
-        view.addSubview(prevDayBtn)
-        view.addSubview(nextDayBtn)
         addChild(timeTable)
         view.addSubview(timeTable.view)
         view.addSubview(saveButton)
@@ -318,47 +201,9 @@ extension TimeInputViewController {
         view.addSubview(timeImpossibleLabel)
     }
     
-    func layoutConstraints() {
-        headerConstraintS()
-        timetableConstraints()
-    }
-    
-    // 헤더 - x버튼, 약속 이름 등
-    func headerConstraintS() {
-        let safeArea = view.safeAreaLayoutGuide
-        
-        // x 버튼
-        prevButton.snp.makeConstraints { make in
-            make.height.width.equalTo(24)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.top.equalTo(safeArea.snp.top).offset(30)
-        }
-        
-        // 약속 이름
-        inputTimeLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(prevButton)
-            make.centerX.equalTo(view.snp.centerX)
-        }
-    }
-    
     // time table
-    func timetableConstraints() {
-        // 이전 날짜로 이동 버튼
-        prevDayBtn.snp.makeConstraints { make in
-            make.height.width.equalTo(16)
-            make.leading.equalTo(view.snp.leading).offset(44)
-            make.top.equalTo(prevButton.snp.bottom).offset(29)
-        }
-        
-        // 다음 날짜로 이동 버튼
-        
-//        nextDayBtn.snp.makeConstraints { make in
-//            make.height.width.equalTo(16)
-//            make.leading.equalTo(date3.snp.trailing).offset(9)
-//            make.centerY.equalTo(prevDayBtn.snp.centerY)
-//        }
-        
-        
+    func layoutConstraints() {
+        let safeArea = view.safeAreaLayoutGuide
         
         // 저장 버튼
         saveButton.snp.makeConstraints { make in
@@ -370,22 +215,22 @@ extension TimeInputViewController {
         // 타임테이블
         timeTable.didMove(toParent: self)
         timeTable.view.snp.makeConstraints { make in
-            make.leading.equalTo(view.snp.leading).offset(0)
+            make.leading.equalTo(safeArea.snp.leading)
             make.trailing.equalTo(timeTable.view.snp.leading).offset(300)
-            make.top.equalTo(prevDayBtn.snp.bottom).offset(7)
+            make.top.equalTo(safeArea.snp.top).offset(7)
             make.bottom.equalTo(saveButton.snp.top).offset(-10)
         }
         
         // 가능한 시간 없음 버튼
         timeImpossibleButton.snp.makeConstraints { make in
-            make.trailing.equalTo(view.snp.trailing).offset(-33)
-            make.top.equalTo(nextDayBtn.snp.bottom).offset(507)
+            make.trailing.equalTo(safeArea.snp.trailing).offset(-33)
+            make.top.equalTo(safeArea.snp.top).offset(507)
         }
         
         // 가능한 시간 없음 label
         timeImpossibleLabel.snp.makeConstraints { make in
             make.height.equalTo(12)
-            make.trailing.equalTo(view.snp.trailing).offset(-22)
+            make.trailing.equalTo(safeArea.snp.trailing).offset(-22)
             make.top.equalTo(timeImpossibleButton.snp.bottom).offset(5)
         }
     }

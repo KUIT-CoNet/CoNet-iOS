@@ -267,7 +267,7 @@ extension TimeShareViewController {
         timeTable.didMove(toParent: self)
         timeTable.view.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-60)
-            make.leading.equalTo(safeArea.snp.leading).offset(0)
+            make.leading.equalTo(safeArea.snp.leading)
             make.top.equalTo(safeArea.snp.top)
             make.bottom.equalTo(inputTimeButton.snp.top).offset(-10)
         }
