@@ -15,7 +15,9 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
     private var planDetail: [PlanDetail] = []
     var members: [PlanDetailMember] = []
     
-    let backButton = UIButton().then { $0.setImage(UIImage(named: "prevBtn"), for: .normal) }
+    let backButton = UIButton().then {
+        $0.setImage(UIImage(named: "prevBtn"), for: .normal)
+    }
     
     let planInfoLabel = UILabel().then {
         $0.text = "약속 수정하기"
@@ -37,20 +39,23 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
     }
     
     let planNameTextField = UITextField().then {
-        $0.placeholder = "모임모임"
         $0.font = UIFont.headline3Regular
         $0.tintColor = UIColor.black
         $0.becomeFirstResponder()
     }
     
-    let xnameButton = UIButton().then { $0.setImage(UIImage(named: "clearBtn"), for: .normal) }
+    let xNameButton = UIButton().then {
+        $0.setImage(UIImage(named: "clearBtn"), for: .normal)
+    }
     
     let textCountLabel = UILabel().then {
         $0.font = UIFont.caption
         $0.textColor = UIColor.textDisabled
     }
     
-    let grayLine1 = UIView().then { $0.backgroundColor = UIColor.iconDisabled }
+    let grayLine1 = UIView().then {
+        $0.backgroundColor = UIColor.iconDisabled
+    }
     
     let planDateLabel = UILabel().then {
         $0.text = "약속 날짜"
@@ -66,9 +71,13 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         $0.becomeFirstResponder()
     }
     
-    let calendarButton = UIButton().then { $0.setImage(UIImage(named: "calendar"), for: .normal) }
+    let calendarButton = UIButton().then {
+        $0.setImage(UIImage(named: "calendar"), for: .normal)
+    }
     
-    let grayLine2 = UIView().then { $0.backgroundColor = UIColor.iconDisabled }
+    let grayLine2 = UIView().then {
+        $0.backgroundColor = UIColor.iconDisabled
+    }
     
     let planTimeLabel = UILabel().then {
         $0.text = "약속 시간"
@@ -83,7 +92,9 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         $0.becomeFirstResponder()
     }
     
-    let clockButton = UIButton().then { $0.setImage(UIImage(named: "clock"), for: .normal) }
+    let clockButton = UIButton().then {
+        $0.setImage(UIImage(named: "clock"), for: .normal)
+    }
     
     let grayLine3 = UIView().then {
         $0.backgroundColor = UIColor.iconDisabled
@@ -120,31 +131,27 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
+        self.navigationController?.navigationBar.isHidden = false
+        navigationItem.title = "약속 수정하기"
         
+        addView()
         layoutConstraints()
         setupCollectionView()
+        setupNavigationBar()
+        buttonActions()
         
-        backButton.addTarget(self, action: #selector(dismissPopUp), for: .touchUpInside)
-        xnameButton.addTarget(self, action: #selector(xnameButtonTapped), for: .touchUpInside)
-        calendarButton.addTarget(self, action: #selector(didTapcalendarButton), for: .touchUpInside)
-        clockButton.addTarget(self, action: #selector(didTapclockButton), for: .touchUpInside)
-        memberAddButton.addTarget(self, action: #selector(didTapmemberAddButton), for: .touchUpInside)
-        completionButton.addTarget(self, action: #selector(updatePlan), for: .touchUpInside)
-        
-        planNameTextField.delegate = self
-        planDateTextField.delegate = self
-        planTimeTextField.delegate = self
-        planNameTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
-        planDateTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
-        planTimeTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
-        
-        // 데이터 받기 from calendarV & planTimePickerVC
-        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarVC(notification:)), name: NSNotification.Name("ToPlanInfoEditVC"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarVC(notification:)), name: NSNotification.Name("SendDateToMakePlanVC"), object: nil)
+        setupTextField()
+        dataExchange()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = false
+        setupNavigationBar()
+        getPlanDetailAPI()
+    }
+    
+    func getPlanDetailAPI() {
         PlanAPI().getPlanDetail(planId: planId) { plans in
             self.planNameTextField.text = plans.planName
             self.planDateTextField.text = plans.date
@@ -178,37 +185,56 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    func dataExchange() {
+        // 데이터 받기 from calendarVC & planTimePickerVC
+        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarVC(notification:)), name: NSNotification.Name("ToPlanInfoEditVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dataReceivedByCalendarVC(notification:)), name: NSNotification.Name("SendDateToMakePlanVC"), object: nil)
+    }
+    
     private func setupCollectionView() {
         memberCollectionView.delegate = self
         memberCollectionView.dataSource = self
         memberCollectionView.register(EditMemberCollectionViewCell.self, forCellWithReuseIdentifier: EditMemberCollectionViewCell.cellId)
     }
     
-    @objc func dismissPopUp() {
-        dismiss(animated: true, completion: nil)
+    private func setupTextField() {
+        planNameTextField.delegate = self
+        planDateTextField.delegate = self
+        planTimeTextField.delegate = self
+    }
+    
+    // 네비게이션바 설정
+    private func setupNavigationBar() {
+        // 사이드바 버튼 추가
+        let completionButtonItem = UIBarButtonItem(customView: completionButton)
+        navigationItem.rightBarButtonItem = completionButtonItem
+        
+        // 뒤로가기 버튼 추가
+        let leftbarButtonItem = UIBarButtonItem(customView: backButton)
+        navigationItem.leftBarButtonItem = leftbarButtonItem
+    }
+    
+    func buttonActions() {
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        completionButton.addTarget(self, action: #selector(updatePlan), for: .touchUpInside)
+        xNameButton.addTarget(self, action: #selector(xNameButtonTapped), for: .touchUpInside)
+        calendarButton.addTarget(self, action: #selector(didTapcalendarButton), for: .touchUpInside)
+        clockButton.addTarget(self, action: #selector(didTapclockButton), for: .touchUpInside)
+        memberAddButton.addTarget(self, action: #selector(didTapmemberAddButton), for: .touchUpInside)
+        planNameTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
+        planDateTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
+        planTimeTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
+    }
+    
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
     
     @objc private func updatePlan() {
-//        guard let name = planNameTextField.text else { return }
-        
-//        PlanAPI().updatePlan(planId: planId, planName: name, date: date, time: time, members: userIds, isRegisteredToHistory: true, historyDescription: "메롱", image: selectedImage) { isSuccess in
-//            if isSuccess {
-//                print("DEBUG (약속 수정 api): isSuccess true")
-//            }
-//        }
+        guard let name = planNameTextField.text else { return }
     }
     
-    @objc private func textFieldEditingChanged(_ textField: UITextField) {
-        if textField == planNameTextField {
-            guard let text = textField.text else { return }
-            let nameCount = text.count
-
-            textCountLabel.text = "\(nameCount)/20"
-            xnameButton.isHidden = text.isEmpty
-        }
-    }
-    
-    @objc private func xnameButtonTapped() {
+    @objc private func xNameButtonTapped() {
         planNameTextField.text = ""
         planNameTextField.sendActions(for: .editingChanged)
     }
@@ -223,16 +249,29 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func didTapcalendarButton(_ sender: Any) {
+        planNameTextField.resignFirstResponder()
+        // 캘린더 버튼을 눌렀을 때의 동작
+        grayLine2.backgroundColor = UIColor.purpleMain
+        
         let addVC = PlanDateButtonSheetViewController()
         addVC.modalPresentationStyle = .overFullScreen
         addVC.modalTransitionStyle = .crossDissolve
+        addVC.onDismiss = { [weak self] in
+            self?.grayLine2.backgroundColor = UIColor.iconDisabled
+        }
         present(addVC, animated: false, completion: nil)
     }
     
     @objc func didTapclockButton(_ sender: Any) {
+        planNameTextField.resignFirstResponder()
+        grayLine3.backgroundColor = UIColor.purpleMain
+        
         let addVC = PlanTimePickerViewController()
         addVC.modalPresentationStyle = .overFullScreen
         addVC.modalTransitionStyle = .crossDissolve
+        addVC.onDismiss = { [weak self] in
+            self?.grayLine3.backgroundColor = UIColor.iconDisabled
+        }
         present(addVC, animated: false, completion: nil)
     }
 }
@@ -275,100 +314,117 @@ extension PlanInfoEditViewController: UICollectionViewDelegate, UICollectionView
     }
 }
 
+// textfield 관련 설정
 extension PlanInfoEditViewController {
+    @objc private func textFieldEditingChanged(_ textField: UITextField) {
+        if textField == planNameTextField {
+            if let text = textField.text {
+                let maxLength = 20
+                var newText = text
+                if text.count > maxLength {
+                    let index = text.index(text.startIndex, offsetBy: maxLength)
+                    newText = String(text[..<index])
+                }
+                textCountLabel.text = "\(newText.count)/20"
+                xNameButton.isHidden = newText.isEmpty
+                textField.text = newText
+            }
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == planNameTextField {
             grayLine1.backgroundColor = UIColor.purpleMain
-        } else if textField == planDateTextField {
-            grayLine2.backgroundColor = UIColor.purpleMain
-        } else if textField == planTimeTextField {
-            grayLine3.backgroundColor = UIColor.purpleMain
         }
-        xnameButton.isHidden = false
+        xNameButton.isHidden = false
     }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == planNameTextField {
             grayLine1.backgroundColor = UIColor.iconDisabled
-        } else if textField == planDateTextField {
-            grayLine2.backgroundColor = UIColor.iconDisabled
-        } else if textField == planTimeTextField {
-            grayLine3.backgroundColor = UIColor.iconDisabled
         }
-        xnameButton.isHidden = true
+        xNameButton.isHidden = true
     }
 }
 
-// layout
+// addView, layout
 extension PlanInfoEditViewController {
-    func layoutConstraints() {
-        self.view.addSubview(backButton)
-        self.view.addSubview(planInfoLabel)
-        self.view.addSubview(completionButton)
-        applyConstraintsToTopSection()
+    func addView() {
+//        self.view.addSubview(backButton)
+//        self.view.addSubview(planInfoLabel)
+//        self.view.addSubview(completionButton)
         
         self.view.addSubview(planNameLabel)
         self.view.addSubview(planNameTextField)
-        self.view.addSubview(xnameButton)
+        self.view.addSubview(xNameButton)
         self.view.addSubview(textCountLabel)
         self.view.addSubview(grayLine1)
-        applyConstraintsToPlanName()
         
         self.view.addSubview(planDateLabel)
         self.view.addSubview(planDateTextField)
         self.view.addSubview(calendarButton)
         self.view.addSubview(grayLine2)
-        applyConstraintsToPlanDate()
-
+        
         self.view.addSubview(planTimeLabel)
         self.view.addSubview(planTimeTextField)
         self.view.addSubview(clockButton)
         self.view.addSubview(grayLine3)
-        applyConstraintsToPlanTime()
         
         self.view.addSubview(memberLabel)
         self.view.addSubview(memberCollectionView)
         self.view.addSubview(memberAddButton)
         self.view.addSubview(memberAddLabel)
+    }
+
+    func layoutConstraints() {
+//        applyConstraintsToTopSection()
+        applyConstraintsToPlanName()
+        applyConstraintsToPlanDate()
+        applyConstraintsToPlanTime()
         applyConstraintsToPlanMember()
     }
     
-    func applyConstraintsToTopSection() {
-        let safeArea = view.safeAreaLayoutGuide
-        planInfoLabel.snp.makeConstraints { make in
-            make.top.equalTo(safeArea.snp.top).offset(6)
-            make.leading.equalTo(backButton.snp.trailing).offset(116)
-        }
-        backButton.snp.makeConstraints { make in
-            make.width.height.equalTo(24)
-            make.centerY.equalTo(planInfoLabel.snp.centerY)
-            make.leading.equalTo(safeArea.snp.leading).offset(17)
-        }
-        completionButton.snp.makeConstraints { make in
-            make.centerY.equalTo(planInfoLabel.snp.centerY)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
-        }
-    }
+//    func applyConstraintsToTopSection() {
+//        let safeArea = view.safeAreaLayoutGuide
+//        planInfoLabel.snp.makeConstraints { make in
+//            make.top.equalTo(safeArea.snp.top).offset(6)
+//            make.leading.equalTo(backButton.snp.trailing).offset(116)
+//        }
+//        backButton.snp.makeConstraints { make in
+//            make.width.height.equalTo(24)
+//            make.centerY.equalTo(planInfoLabel.snp.centerY)
+//            make.leading.equalTo(safeArea.snp.leading).offset(17)
+//        }
+//        completionButton.snp.makeConstraints { make in
+//            make.centerY.equalTo(planInfoLabel.snp.centerY)
+//            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
+//        }
+//    }
     
     func applyConstraintsToPlanName() {
         let safeArea = view.safeAreaLayoutGuide
         planNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(backButton.snp.bottom).offset(19)
+            make.top.equalTo(safeArea.snp.top).offset(44)
             make.leading.equalTo(safeArea.snp.leading).offset(24)
         }
         planNameTextField.snp.makeConstraints { make in
             make.top.equalTo(planNameLabel.snp.bottom).offset(10)
             make.leading.equalTo(safeArea.snp.leading).offset(24)
+            make.trailing.equalTo(safeArea.snp.trailing).offset(-40)
         }
-        xnameButton.snp.makeConstraints { make in
+        xNameButton.snp.makeConstraints { make in
             make.width.height.equalTo(16)
-            make.top.equalTo(planNameLabel.snp.bottom).offset(12)
+            make.centerY.equalTo(planNameTextField.snp.centerY)
             make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
         }
         grayLine1.snp.makeConstraints { make in
             make.height.equalTo(1)
-            make.top.equalTo(planNameLabel.snp.bottom).offset(40)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
+            make.top.equalTo(planNameTextField.snp.bottom).offset(8)
+            make.horizontalEdges.equalTo(safeArea.snp.horizontalEdges).inset(24)
         }
         textCountLabel.snp.makeConstraints { make in
             make.height.equalTo(16)
@@ -389,14 +445,13 @@ extension PlanInfoEditViewController {
         }
         calendarButton.snp.makeConstraints { make in
             make.width.height.equalTo(16)
-            make.top.equalTo(planDateLabel.snp.bottom).offset(12)
+            make.centerY.equalTo(planDateTextField.snp.centerY)
             make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
         }
         grayLine2.snp.makeConstraints { make in
             make.height.equalTo(1)
-            make.top.equalTo(planDateLabel.snp.bottom).offset(40)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
+            make.top.equalTo(planDateTextField.snp.bottom).offset(8)
+            make.horizontalEdges.equalTo(safeArea.snp.horizontalEdges).inset(24)
         }
     }
     
@@ -412,14 +467,13 @@ extension PlanInfoEditViewController {
         }
         clockButton.snp.makeConstraints { make in
             make.width.height.equalTo(16)
-            make.top.equalTo(planTimeLabel.snp.bottom).offset(12)
+            make.centerY.equalTo(planTimeTextField.snp.centerY)
             make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
         }
         grayLine3.snp.makeConstraints { make in
             make.height.equalTo(1)
-            make.top.equalTo(planTimeLabel.snp.bottom).offset(40)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
+            make.top.equalTo(planTimeTextField.snp.bottom).offset(8)
+            make.horizontalEdges.equalTo(safeArea.snp.horizontalEdges).inset(24)
         }
     }
     
@@ -438,30 +492,8 @@ extension PlanInfoEditViewController {
             make.height.equalTo(height)
             
             make.top.equalTo(memberLabel.snp.bottom).offset(14)
-            make.leading.trailing.equalToSuperview().inset(24)
+            make.horizontalEdges.equalTo(safeArea.snp.horizontalEdges).inset(24)
         }
-        
-//        if members.count.isMultiple(of: 2) {
-//            memberAddButton.snp.makeConstraints { make in
-//                make.width.height.equalTo(42)
-//                make.top.equalTo(memberCollectionView.snp.bottom).offset(10)
-//                make.leading.equalTo(safeArea.snp.leading).offset(24)
-//            }
-//            memberAddLabel.snp.makeConstraints { make in
-//                make.centerY.equalTo(memberAddButton.snp.centerY)
-//                make.leading.equalTo(memberAddButton.snp.trailing).offset(10)
-//            }
-//        } else {
-//            memberAddButton.snp.makeConstraints { make in
-//                make.width.height.equalTo(42)
-//                make.top.equalTo(memberCollectionView.snp.bottom).offset(-42)
-////                make.leading.equalTo(safeArea.snp.leading).offset()
-//            }
-//            memberAddLabel.snp.makeConstraints { make in
-//                make.centerY.equalTo(memberAddButton)
-//                make.leading.equalTo(memberAddButton.snp.trailing).offset(10)
-//            }
-//        }
         
         memberAddButton.snp.makeConstraints { make in
             make.width.height.equalTo(42)

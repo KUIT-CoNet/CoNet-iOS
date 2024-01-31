@@ -41,19 +41,18 @@ class PlanTimePickerViewController: UIViewController {
     }
     
     var formattedTime = ""
+    var onDismiss: (() -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
-        
-        view.addSubview(background)
-        view.addSubview(bottomSheet)
-        view.addSubview(grayLine)
-        view.addSubview(timePicker)
-        view.addSubview(applyButton)
-        applyConstraintsToBackground()
-        applyConstraintsToComponents()
-        
+
+        addView()
+        layoutConstraints()
+        buttonActions()
+    }
+    
+    func buttonActions() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopUp))
         background.addGestureRecognizer(tapGesture)
         
@@ -62,10 +61,12 @@ class PlanTimePickerViewController: UIViewController {
     }
     
     @objc func dismissPopUp() {
+        self.onDismiss?()
         dismiss(animated: true, completion: nil)
     }
     
     @objc func didClickApplyButton() {
+        self.onDismiss?()
         NotificationCenter.default.post(name: NSNotification.Name("ToPlanInfoEditVC"), object: nil, userInfo: ["time": formattedTime])
         dismissPopUp()
     }
@@ -78,6 +79,21 @@ class PlanTimePickerViewController: UIViewController {
         dateFormatter.dateFormat = "HH:mm"  // 24시간제
         
         formattedTime = dateFormatter.string(from: selectedTime)
+    }
+}
+
+extension PlanTimePickerViewController {
+    func addView() {
+        view.addSubview(background)
+        view.addSubview(bottomSheet)
+        view.addSubview(grayLine)
+        view.addSubview(timePicker)
+        view.addSubview(applyButton)
+    }
+    
+    func layoutConstraints() {
+        applyConstraintsToBackground()
+        applyConstraintsToComponents()
     }
     
     func applyConstraintsToBackground() {
@@ -95,27 +111,23 @@ class PlanTimePickerViewController: UIViewController {
     }
     
     func applyConstraintsToComponents() {
-        let safeArea = view.safeAreaLayoutGuide
         grayLine.snp.makeConstraints { make in
             make.width.equalTo(36)
             make.height.equalTo(3)
             make.top.equalTo(bottomSheet.snp.top).offset(10)
-            make.leading.equalTo(bottomSheet.snp.leading).offset(179)
-            make.trailing.equalTo(bottomSheet.snp.trailing).offset(-178)
+            make.centerX.equalTo(bottomSheet.snp.centerX)
         }
         timePicker.snp.makeConstraints { make in
             make.width.equalTo(335)
             make.height.equalTo(164)
             make.top.equalTo(grayLine.snp.bottom).offset(36)
-            make.leading.equalTo(safeArea.snp.leading).offset(29)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-29)
+            make.centerX.equalTo(bottomSheet.snp.centerX)
         }
         applyButton.snp.makeConstraints { make in
-            make.width.equalTo(345)
             make.height.equalTo(44)
-            make.top.equalTo(timePicker.snp.bottom).offset(35)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
+            make.centerX.equalTo(bottomSheet.snp.centerX)
+            make.horizontalEdges.equalTo(bottomSheet.snp.horizontalEdges).inset(24)
+            make.bottom.equalTo(view.snp.bottom).offset(-45)
         }
     }
 }

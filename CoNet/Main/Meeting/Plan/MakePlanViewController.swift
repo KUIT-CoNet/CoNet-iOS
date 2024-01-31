@@ -187,11 +187,16 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc private func calendarButtonTapped() {
+        planNameTextField.resignFirstResponder()
         // grayLine2 색상 purpleMain으로 변경됨
         grayLine2.backgroundColor = UIColor.purpleMain
+        
         let bottomSheetVC = PlanDateButtonSheetViewController()
         bottomSheetVC.modalPresentationStyle = .overCurrentContext
         bottomSheetVC.modalTransitionStyle = .crossDissolve
+        bottomSheetVC.onDismiss = { [weak self] in
+            self?.grayLine2.backgroundColor = UIColor.iconDisabled
+        }
         present(bottomSheetVC, animated: false, completion: nil)
     }
     
