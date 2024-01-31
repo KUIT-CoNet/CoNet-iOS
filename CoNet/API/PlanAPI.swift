@@ -183,7 +183,7 @@ class PlanAPI {
                     completion(serverPlans)
                 case .failure(let error):
                     print("DEBUG(약속 상세 정보 조회 api) error: \(error)")
-            }
+                }
         }
     }
     
@@ -195,13 +195,13 @@ class PlanAPI {
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
         
-        var requestBody: [String: Any] = [
+        let requestBody: [String: Any] = [
             "planId": planId,
             "planName": planName,
             "time": time,
-            "date": date,
-            "members": members,
-            "historyDescription": historyDescription,
+            "date": date ?? "",
+            "members": members ?? [],
+            "historyDescription": historyDescription ?? "",
             "isRegisteredToHistory": isRegisteredToHistory
         ]
         var requestBodyJson: String = ""
@@ -354,7 +354,7 @@ class PlanAPI {
                     
                 case .failure(let error):
                     print("구성원 가능 여부 조회 \(error)")
-            }
+                }
         }
     }
 }

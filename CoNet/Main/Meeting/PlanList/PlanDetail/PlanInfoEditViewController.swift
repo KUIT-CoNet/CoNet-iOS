@@ -171,7 +171,7 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
             data = data.replacingOccurrences(of: "-", with: ". ")
             planDateTextField.text = data
         }
-        if var data = notification.userInfo?["time"] as? String {
+        if let data = notification.userInfo?["time"] as? String {
             time = data
             planTimeTextField.text = data
         }
