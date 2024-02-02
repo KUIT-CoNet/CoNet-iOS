@@ -47,13 +47,20 @@ class FixPlanPopUpView: UIView {
     }
     
     // 가로 구분선
-    let horizontalDivider = UIView().then { $0.backgroundColor = UIColor.gray100 }
+    let horizontalDivider = UIView().then {
+        $0.backgroundColor = UIColor.gray100
+    }
     
     // 세로 짧은 구분선
-    let verticalDivider = UIView().then { $0.backgroundColor = UIColor.gray100 }
+    let verticalDivider = UIView().then {
+        $0.backgroundColor = UIColor.gray100
+    }
     
     // 왼쪽 버튼
-    let leftButton = UIButton().then { $0.backgroundColor = .clear }
+    let leftButton = UIButton().then {
+        $0.backgroundColor = .clear
+    }
+    
     let leftButtonTitle = UILabel().then {
         $0.text = "취소"
         $0.font = UIFont.body1Medium
@@ -61,7 +68,10 @@ class FixPlanPopUpView: UIView {
     }
     
     // 오른쪽 버튼
-    let rightButton = UIButton().then { $0.backgroundColor = .clear }
+    let rightButton = UIButton().then {
+        $0.backgroundColor = .clear
+    }
+    
     let rightButtonTitle = UILabel().then {
         $0.text = "확정"
         $0.font = UIFont.body1Bold
@@ -71,100 +81,16 @@ class FixPlanPopUpView: UIView {
     // Custom View 초기화
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViews()
+        addView()
+        layoutConstraints()
         buttonActions()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupViews()
+        addView()
+        layoutConstraints()
         buttonActions()
-    }
-    
-    // 구성 요소들을 Custom View에 추가하고 레이아웃 설정
-    private func setupViews() {
-        contentsConstraints()
-        buttonsConstraints()
-    }
-    
-    private func contentsConstraints() {
-        addSubview(background)
-        background.snp.makeConstraints { make in
-            make.width.equalToSuperview().offset(-48)
-            make.height.equalTo(340)
-        }
-        
-        background.addSubview(dateLabel)
-        dateLabel.snp.makeConstraints { make in
-            make.height.equalTo(22)
-            make.centerX.equalTo(background.snp.centerX)
-            make.top.equalTo(background.snp.top).offset(48)
-        }
-        
-        background.addSubview(timeLabel)
-        timeLabel.snp.makeConstraints { make in
-            make.height.equalTo(22)
-            make.centerX.equalTo(background.snp.centerX)
-            make.top.equalTo(dateLabel.snp.bottom).offset(6)
-        }
-        
-        background.addSubview(membersLabel)
-        membersLabel.snp.makeConstraints { make in
-            make.centerX.equalTo(background.snp.centerX)
-            make.top.equalTo(timeLabel.snp.bottom).offset(14)
-        }
-    }
-    
-    private func buttonsConstraints() {
-        background.addSubview(horizontalDivider)
-        horizontalDivider.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.width.equalTo(background.snp.width)
-            make.bottom.equalTo(background.snp.bottom).offset(-60)
-        }
-        
-        background.addSubview(fixPlanLabel)
-        fixPlanLabel.snp.makeConstraints { make in
-            make.height.equalTo(20)
-            make.centerX.equalTo(background.snp.centerX)
-            make.bottom.equalTo(horizontalDivider.snp.top).offset(-58)
-        }
-        
-        background.addSubview(verticalDivider)
-        verticalDivider.snp.makeConstraints { make in
-            make.height.equalTo(24)
-            make.width.equalTo(1)
-            make.centerX.equalTo(background.snp.centerX)
-            make.bottom.equalTo(background.snp.bottom).offset(-18)
-        }
-        
-        background.addSubview(leftButton)
-        leftButton.snp.makeConstraints { make in
-            make.width.equalTo(background.snp.width).dividedBy(2)
-            make.height.equalTo(60)
-            make.leading.equalTo(background.snp.leading)
-            make.bottom.equalTo(background.snp.bottom)
-        }
-        
-        leftButton.addSubview(leftButtonTitle)
-        leftButtonTitle.snp.makeConstraints { make in
-            make.height.equalTo(20)
-            make.center.equalTo(leftButton.snp.center)
-        }
-        
-        background.addSubview(rightButton)
-        rightButton.snp.makeConstraints { make in
-            make.width.equalTo(background.snp.width).dividedBy(2)
-            make.height.equalTo(60)
-            make.trailing.equalTo(background.snp.trailing)
-            make.bottom.equalTo(background.snp.bottom)
-        }
-        
-        rightButton.addSubview(rightButtonTitle)
-        rightButtonTitle.snp.makeConstraints { make in
-            make.height.equalTo(20)
-            make.center.equalTo(rightButton.snp.center)
-        }
     }
     
     // 버튼 action
@@ -193,5 +119,100 @@ class FixPlanPopUpView: UIView {
     
     func setMembers(_ title: String) {
         membersLabel.text = title
+    }
+}
+
+// addView, layout
+extension FixPlanPopUpView {
+    func addView() {
+        addSubview(background)
+        background.addSubview(dateLabel)
+        background.addSubview(timeLabel)
+        background.addSubview(membersLabel)
+        background.addSubview(horizontalDivider)
+        background.addSubview(fixPlanLabel)
+        background.addSubview(verticalDivider)
+        background.addSubview(leftButton)
+        leftButton.addSubview(leftButtonTitle)
+        background.addSubview(rightButton)
+        rightButton.addSubview(rightButtonTitle)
+    }
+    
+    // 구성 요소들을 Custom View에 추가하고 레이아웃 설정
+    private func layoutConstraints() {
+        contentsConstraints()
+        buttonsConstraints()
+    }
+    
+    private func contentsConstraints() {
+        let screenWidth = UIScreen.main.bounds.size.width
+        let screenHeight = UIScreen.main.bounds.size.height
+        
+        background.snp.makeConstraints { make in
+            make.width.equalTo(screenWidth*0.8)
+            make.height.equalTo(screenHeight*0.35)
+        }
+    
+        dateLabel.snp.makeConstraints { make in
+            make.height.equalTo(22)
+            make.centerX.equalTo(background.snp.centerX)
+            make.top.equalTo(background.snp.top).offset(48)
+        }
+        
+        timeLabel.snp.makeConstraints { make in
+            make.height.equalTo(22)
+            make.centerX.equalTo(background.snp.centerX)
+            make.top.equalTo(dateLabel.snp.bottom).offset(6)
+        }
+        
+        membersLabel.snp.makeConstraints { make in
+            make.centerX.equalTo(background.snp.centerX)
+            make.top.equalTo(timeLabel.snp.bottom).offset(14)
+        }
+    }
+    
+    private func buttonsConstraints() {
+        horizontalDivider.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.width.equalTo(background.snp.width)
+            make.bottom.equalTo(background.snp.bottom).offset(-60)
+        }
+        
+        fixPlanLabel.snp.makeConstraints { make in
+            make.height.equalTo(20)
+            make.centerX.equalTo(background.snp.centerX)
+            make.bottom.equalTo(horizontalDivider.snp.top).offset(-58)
+        }
+        
+        verticalDivider.snp.makeConstraints { make in
+            make.height.equalTo(24)
+            make.width.equalTo(1)
+            make.centerX.equalTo(background.snp.centerX)
+            make.bottom.equalTo(background.snp.bottom).offset(-18)
+        }
+        
+        leftButton.snp.makeConstraints { make in
+            make.width.equalTo(background.snp.width).dividedBy(2)
+            make.height.equalTo(60)
+            make.leading.equalTo(background.snp.leading)
+            make.bottom.equalTo(background.snp.bottom)
+        }
+        
+        leftButtonTitle.snp.makeConstraints { make in
+            make.height.equalTo(20)
+            make.center.equalTo(leftButton.snp.center)
+        }
+        
+        rightButton.snp.makeConstraints { make in
+            make.width.equalTo(background.snp.width).dividedBy(2)
+            make.height.equalTo(60)
+            make.trailing.equalTo(background.snp.trailing)
+            make.bottom.equalTo(background.snp.bottom)
+        }
+        
+        rightButtonTitle.snp.makeConstraints { make in
+            make.height.equalTo(20)
+            make.center.equalTo(rightButton.snp.center)
+        }
     }
 }
