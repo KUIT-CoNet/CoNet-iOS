@@ -97,6 +97,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         view.backgroundColor = .white
         view.layoutIfNeeded()
         timeTable.planId = planId
+        timeTable.timeShareVC = self
         
         navigationSetting()
         
@@ -199,6 +200,12 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         
         nextVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    // TimeTable -> TimeShareVC date, sendDate 전달
+    func moveSendDateToTimeShare(date: [String], sendDate: [String]) {
+        self.date = date
+        self.sendDate = sendDate
     }
     
     // 약속 수정페이지 설정

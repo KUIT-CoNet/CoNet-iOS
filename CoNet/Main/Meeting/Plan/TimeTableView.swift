@@ -43,6 +43,15 @@ class TimeTableView: UIViewController {
     let weekDay = ["일", "월", "화", "수", "목", "금", "토"]
     var possibleMemberDateTime: [PossibleMemberDateTime] = []
     var apiCheck = false
+    var timeShareVC: TimeShareViewController?
+    
+    // TimeInputVC
+    var hasRegisteredTime = false
+    var hasPossibleTime = false
+    // 0: 입력한 적 없는 초기 상태, 1: 가능한 시간 없음 버튼 클릭 상태, 2: 시간 있음
+    var timeStateCheck = -1
+    var possibleTime: [PossibleTime] = [PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: [])]
+    var timeInputVC: TimeInputViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,8 +66,11 @@ class TimeTableView: UIViewController {
         timeTableSetting()
         buttonActions()
         hourSetting()
-        
-        getMemberPossibleTimeAPI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        timeApiByVC()
     }
     
     func timeTableSetting() {
@@ -84,13 +96,26 @@ class TimeTableView: UIViewController {
         }
     }
     
+    func timeApiByVC() {
+        if let parentVC = parent {
+            if parentVC is TimeShareViewController {
+                getMemberPossibleTimeAPI()
+            } else if parentVC is TimeInputViewController {
+                for index in 0 ..< 7 {
+                    possibleTime[index].date = sendDate[index]
+                }
+                
+                getMyPossibleTimeAPI()
+            }
+        }
+    }
+    
     @objc func didClickPrevButton() {
         page -= 1
         btnVisible()
     }
     
     @objc func didClickNextButton() {
-        print("click", page)
         page += 1
         btnVisible()
     }
@@ -135,10 +160,12 @@ class TimeTableView: UIViewController {
             
             currentDate = currentCalendar.date(byAdding: .day, value: 1, to: currentDate)!
         }
+        
+        timeShareVC?.moveSendDateToTimeShare(date: date, sendDate: sendDate)
     }
     
     func getMemberPossibleTimeAPI() {
-        PlanTimeAPI().getMemberPossibleTime(planId: planId) { _, _, _, planStartPeriod, planEndPeriod, sectionMemberCounts, possibleMemberDateTime in
+        PlanTimeAPI().getMemberPossibleTime(planId: planId) { _, _, _, planStartPeriod, planEndPeriod, _, possibleMemberDateTime in
             self.possibleMemberDateTime = possibleMemberDateTime
             self.apiCheck = true
             
@@ -157,6 +184,30 @@ class TimeTableView: UIViewController {
 //            }
         }
     }
+    
+    func getMyPossibleTimeAPI() {
+        // 내가 입력한 시간 조회 api
+        PlanTimeAPI().getMyPossibleTime(planId: planId) { _, _, hasRegisteredTime, hasPossibleTime, possibleTime in
+            self.hasRegisteredTime = hasRegisteredTime
+            self.hasPossibleTime = hasPossibleTime
+            self.apiCheck = true
+            
+            if hasRegisteredTime && !hasPossibleTime {
+                self.timeStateCheck = 1
+            } else if !hasRegisteredTime && !hasPossibleTime {
+                self.timeStateCheck = 0
+            } else if hasRegisteredTime && hasPossibleTime {
+                self.timeStateCheck = 2
+            }
+            
+            // 입력한 시간 있을 때만 배열 초기화
+            if self.timeStateCheck == 2 {
+                self.possibleTime = possibleTime
+            }
+            
+            self.timeTableCollectionView.reloadData()
+        }
+    }
 }
 
 extension TimeTableView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -170,7 +221,7 @@ extension TimeTableView: UICollectionViewDataSource, UICollectionViewDelegate, U
         
         // 해당 시간에 가능한 멤버
 //        let memberList = possibleMemberDateTime[page*3 + indexPath.section].possibleMember[indexPath.row]
-//        
+//
 //        // 셀 색이 흰 색이 아닌 경우 약속 확정 팝업 띄우기
 //        if collectionView.cellForItem(at: indexPath)?.contentView.backgroundColor != UIColor.grayWhite {
 //            let nextVC = FixPlanPopUpViewController()
@@ -219,15 +270,21 @@ extension TimeTableView: UICollectionViewDataSource, UICollectionViewDelegate, U
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimeTableViewCell.identifier, for: indexPath) as? TimeTableViewCell else { return UICollectionViewCell() }
         
-        if !apiCheck { return cell }
-        
         // 날짜 보여주기
         if indexPath.row == 0 {
-            cell.show7Days(text: date[page*3+indexPath.section])
-        } else {
-            cell.hide7Days()
-            let section = possibleMemberDateTime[page*3 + indexPath.section].possibleMember[indexPath.row-1].section
-            cell.showCellColor(section: section)
+            cell.show7Days(text: date[page*3 + indexPath.section])
+            return cell
+        }
+        cell.hide7Days()
+        
+        if !apiCheck { return cell }
+        
+        if let parentVC = parent {
+            // 상위 뷰가 TimeShareVC
+            if parentVC is TimeShareViewController {
+                let section = possibleMemberDateTime[page*3 + indexPath.section].possibleMember[indexPath.row - 1].section
+                cell.showCellColor(section: section)
+            }
         }
         
         return cell

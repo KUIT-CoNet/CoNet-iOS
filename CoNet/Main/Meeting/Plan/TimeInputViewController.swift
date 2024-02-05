@@ -55,35 +55,36 @@ class TimeInputViewController: UIViewController {
     var page: Int = 0
     
     // 화면에 표시할 날짜
-    var date: [String] = ["07.03", "07.04", "07.05", "07.06", "07.07", "07.08", "07.09"]
+    var date: [String] = []
     // 서버에 보낼 날짜 데이터
-    var sendDate: [String] = ["07.03", "07.04", "07.05", "07.06", "07.07", "07.08", "07.09"]
+    var sendDate: [String] = []
     
-    let weekDay = ["일", "월", "화", "수", "목", "금", "토"]
+//    let weekDay = ["일", "월", "화", "수", "목", "금", "토"]
     
     // 가능한 시간 저장할 배열 초기화
-    var possibleTime: [PossibleTime] = [PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: [])]
+//    var possibleTime: [PossibleTime] = [PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: [])]
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .white
         
+        timeTableSetting()
         navigationSetting()
         addView()
         layoutConstraints()
         
         buttonActions()
         
-        for index in 0 ..< 7 {
-            possibleTime[index].date = sendDate[index]
-        }
+//        for index in 0 ..< 7 {
+//            possibleTime[index].date = sendDate[index]
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
-        getMyPossibleTimeAPI()
+//        getMyPossibleTimeAPI()
         changeSaveButtonColor()
     }
     
@@ -100,28 +101,35 @@ class TimeInputViewController: UIViewController {
         navigationItem.leftBarButtonItem = leftbarButtonItem
     }
     
-    func getMyPossibleTimeAPI() {
-        // 내가 입력한 시간 조회 api
-        PlanTimeAPI().getMyPossibleTime(planId: planId) { _, _, hasRegisteredTime, hasPossibleTime, possibleTime in
-            self.hasRegisteredTime = hasRegisteredTime
-            self.hasPossibleTime = hasPossibleTime
-            
-            if hasRegisteredTime && !hasPossibleTime {
-                self.timeStateCheck = 1
-            } else if !hasRegisteredTime && !hasPossibleTime {
-                self.timeStateCheck = 0
-            } else if hasRegisteredTime && hasPossibleTime {
-                self.timeStateCheck = 2
-            }
-            
-            // 입력한 시간 있을 때만 배열 초기화
-            if self.timeStateCheck == 2 {
-                self.possibleTime = possibleTime
-            }
-            
-            self.timeTable.timeTableCollectionView.reloadData()
-        }
+    private func timeTableSetting() {
+        timeTable.timeInputVC = self
+        timeTable.planId = planId
+        timeTable.sendDate = sendDate
+        timeTable.date = date
     }
+    
+//    func getMyPossibleTimeAPI() {
+//        // 내가 입력한 시간 조회 api
+//        PlanTimeAPI().getMyPossibleTime(planId: planId) { _, _, hasRegisteredTime, hasPossibleTime, possibleTime in
+//            self.hasRegisteredTime = hasRegisteredTime
+//            self.hasPossibleTime = hasPossibleTime
+//            
+//            if hasRegisteredTime && !hasPossibleTime {
+//                self.timeStateCheck = 1
+//            } else if !hasRegisteredTime && !hasPossibleTime {
+//                self.timeStateCheck = 0
+//            } else if hasRegisteredTime && hasPossibleTime {
+//                self.timeStateCheck = 2
+//            }
+//            
+//            // 입력한 시간 있을 때만 배열 초기화
+//            if self.timeStateCheck == 2 {
+//                self.possibleTime = possibleTime
+//            }
+//            
+//            self.timeTable.timeTableCollectionView.reloadData()
+//        }
+//    }
     
     func changeSaveButtonColor() {
         // 저장 버튼 색
@@ -134,13 +142,13 @@ class TimeInputViewController: UIViewController {
     
     // timePossible 배열에 time 정보가 비었는지 확인
     func timePossibleCountCheck() {
-        for index in 0 ..< 7 {
-            timeStateCheck = 2
-            if possibleTime[index].time.count > 0 {
-                return
-            }
-            timeStateCheck = 0
-        }
+//        for index in 0 ..< 7 {
+//            timeStateCheck = 2
+//            if possibleTime[index].time.count > 0 {
+//                return
+//            }
+//            timeStateCheck = 0
+//        }
     }
     
     // 버튼 클릭 이벤트
@@ -174,18 +182,18 @@ class TimeInputViewController: UIViewController {
     
     @objc func didClickSaveButton() {
         // save button 활성화 시에만
-        if saveButton.backgroundColor == UIColor.purpleMain {
-            // 가능한 시간 없음 버튼 클릭 시 빈 배열로 초기화
-            if timeStateCheck == 1 {
-                for index in 0 ..< 7 {
-                    possibleTime[index].time.removeAll()
-                }
-            }
-            
-            // 나의 가능한 시간 저장 api
-            PlanTimeAPI().postMyPossibleTime(planId: planId, possibleDateTimes: possibleTime)
-            navigationController?.popViewController(animated: true)
-        }
+//        if saveButton.backgroundColor == UIColor.purpleMain {
+//            // 가능한 시간 없음 버튼 클릭 시 빈 배열로 초기화
+//            if timeStateCheck == 1 {
+//                for index in 0 ..< 7 {
+//                    possibleTime[index].time.removeAll()
+//                }
+//            }
+//            
+//            // 나의 가능한 시간 저장 api
+//            PlanTimeAPI().postMyPossibleTime(planId: planId, possibleDateTimes: possibleTime)
+//            navigationController?.popViewController(animated: true)
+//        }
     }
     
 }
@@ -216,8 +224,8 @@ extension TimeInputViewController {
         timeTable.didMove(toParent: self)
         timeTable.view.snp.makeConstraints { make in
             make.leading.equalTo(safeArea.snp.leading)
-            make.trailing.equalTo(timeTable.view.snp.leading).offset(300)
-            make.top.equalTo(safeArea.snp.top).offset(7)
+            make.trailing.equalToSuperview().offset(-60)
+            make.top.equalTo(safeArea.snp.top)
             make.bottom.equalTo(saveButton.snp.top).offset(-10)
         }
         
