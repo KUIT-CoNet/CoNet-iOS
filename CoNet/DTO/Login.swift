@@ -7,8 +7,7 @@
 
 import Foundation
 
-// apple login
-struct PostAppleLoginResult: Codable {
+struct LoginResponse: Codable {
     let email: String
     let accessToken: String
     let refreshToken: String

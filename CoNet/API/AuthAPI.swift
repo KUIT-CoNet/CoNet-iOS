@@ -56,16 +56,18 @@ class AuthAPI {
             }
     }
     
-    // MARK: apple login
-    func appleLogin(completion: @escaping (_ isRegistered: Bool) -> Void) {
+    // login
+    // platform: apple or kakao
+    func login(platform: String, completion: @escaping (_ isRegistered: Bool) -> Void) {
         // 통신할 API 주소
-        let url = "\(baseUrl)/auth/login/apple"
+        let url = "\(baseUrl)/auth/login"
         
         // HTTP Headers : 요청 헤더
         let headers: HTTPHeaders = ["Content-Type": "application/json"]
         
         // request body
         let body: [String: Any] = [
+            "platform": platform,
             "idToken": keychain.get("idToken") ?? ""
         ]
         
@@ -74,20 +76,20 @@ class AuthAPI {
         
         // responseData를 호출하면서 데이터 통신 시작
         // response에 데이터 통신의 결과가 담깁니다.
-        dataRequest.responseDecodable(of: BaseResponse<PostAppleLoginResult>.self) { response in
+        dataRequest.responseDecodable(of: BaseResponse<LoginResponse>.self) { response in
             switch response.result {
             case .success(let response):  // 성공한 경우에
+                print(response.message)
                 print(response.result ?? "result empty")
                 
                 // 사용자 정보 저장
                 self.keychain.set(response.result!.email, forKey: "email")
                 self.keychain.set(response.result!.accessToken, forKey: "accessToken")
                 self.keychain.set(response.result!.refreshToken, forKey: "refreshToken")
-                self.keychain.set(response.result!.isRegistered, forKey: "appleIsRegistered")
                 completion(response.result!.isRegistered)
                 
             case .failure(let error):
-                print("DEBUG(apple login api) error: \(error)")
+                print("DEBUG(login api) error: \(error)")
             }
         }
     }
