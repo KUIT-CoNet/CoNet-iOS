@@ -14,14 +14,6 @@ struct LoginResponse: Codable {
     let isRegistered: Bool
 }
 
-// kakao login
-struct PostKakaoLoginResult: Codable {
-    let email: String
-    let accessToken: String
-    let refreshToken: String
-    let isRegistered: Bool
-}
-
 // 회원가입 sign up
 struct PostSignUpResult: Codable {
     let name: String

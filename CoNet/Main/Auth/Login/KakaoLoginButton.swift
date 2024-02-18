@@ -14,6 +14,8 @@ import Then
 import UIKit
 
 class KakaoLoginButton: UIViewController {
+    let keychain = KeychainSwift()
+    
     let button = UIButton().then {
         $0.backgroundColor = UIColor(red: 0.976, green: 0.922, blue: 0, alpha: 1)
         $0.layer.cornerRadius = 12
@@ -60,7 +62,8 @@ class KakaoLoginButton: UIViewController {
                     print("loginWithKakaoTalk() success")
                     print("Kakao id token: \(oauthToken?.idToken ?? "id token 없음..")")
                     
-                    self.postKakaoLogin(idToken: oauthToken?.idToken ?? "")
+                    self.keychain.set(oauthToken?.idToken ?? "", forKey: "idToken")
+                    self.postKakaoLogin()
                 }
             }
         } else {
@@ -74,14 +77,15 @@ class KakaoLoginButton: UIViewController {
                     print("loginWithKakaoTalkAccount() success")
                     print("Kakao id token: \(oauthToken?.idToken ?? "id token 없음..")")
                     
-                    self.postKakaoLogin(idToken: oauthToken?.idToken ?? "")
+                    self.keychain.set(oauthToken?.idToken ?? "", forKey: "idToken")
+                    self.postKakaoLogin()
                 }
             }
         }
     }
     
-    private func postKakaoLogin(idToken: String) {
-        AuthAPI.shared.kakaoLogin(idToken: idToken) { isRegistered in
+    private func postKakaoLogin() {
+        AuthAPI.shared.login(platform: "kakao") { isRegistered in
             if isRegistered {
                 // 홈 탭으로 이동
                 let nextVC = TabbarViewController()
