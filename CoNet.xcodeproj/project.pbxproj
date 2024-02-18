@@ -100,9 +100,9 @@
 		51B526CC2A6C3988009DBFB4 /* DecidedPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B526CB2A6C3988009DBFB4 /* DecidedPlanCell.swift */; };
 		51DA64962A532CB300BBA4C0 /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 51DA64952A532CB300BBA4C0 /* KakaoSDK */; };
 		51DA64992A532CF800BBA4C0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 51DA64982A532CF800BBA4C0 /* SnapKit */; };
-		51E8242F2B63B61200A56F3A /* TermRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E8242E2B63B61200A56F3A /* TermRow.swift */; };
 		51E8242B2B62AEEA00A56F3A /* KakaoLoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E8242A2B62AEEA00A56F3A /* KakaoLoginButton.swift */; };
 		51E8242D2B62B70700A56F3A /* AppleLoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E8242C2B62B70700A56F3A /* AppleLoginButton.swift */; };
+		51E8242F2B63B61200A56F3A /* TermRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E8242E2B63B61200A56F3A /* TermRow.swift */; };
 		51F2A4682A54804100D134CC /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2A4672A54804100D134CC /* ColorExtension.swift */; };
 		51F2A46A2A548A1000D134CC /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2A4692A548A1000D134CC /* FontExtension.swift */; };
 		51F2A46D2A54960200D134CC /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 51F2A46C2A54960200D134CC /* KeychainSwift */; };
@@ -205,9 +205,9 @@
 		51B526C92A6C3901009DBFB4 /* DecidedPlanListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecidedPlanListViewController.swift; sourceTree = "<group>"; };
 		51B526CB2A6C3988009DBFB4 /* DecidedPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecidedPlanCell.swift; sourceTree = "<group>"; };
 		51C29AF22B31DD7600B1A1BA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		51E8242E2B63B61200A56F3A /* TermRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermRow.swift; sourceTree = "<group>"; };
 		51E8242A2B62AEEA00A56F3A /* KakaoLoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginButton.swift; sourceTree = "<group>"; };
 		51E8242C2B62B70700A56F3A /* AppleLoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginButton.swift; sourceTree = "<group>"; };
+		51E8242E2B63B61200A56F3A /* TermRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermRow.swift; sourceTree = "<group>"; };
 		51F2A4672A54804100D134CC /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		51F2A4692A548A1000D134CC /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
 		51F2A4702A5497A500D134CC /* AuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthAPI.swift; sourceTree = "<group>"; };
@@ -235,12 +235,9 @@
 		236054F52A593F2E00CA991E /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				515E53BB2A77B9A900536C6D /* PlanCell */,
 				236054F62A593F3B00CA991E /* HomeViewController.swift */,
-				23DA182B2A695541004EC6A6 /* CalendarCollectionViewCell.swift */,
 				235F5B722A69893F00ADC0D6 /* CalendarDateFormatter.swift */,
 				231E97CE2A6BCA04000BB2AD /* MonthViewController.swift */,
-				231E97D02A6BD3F8000BB2AD /* MonthCollectionViewCell.swift */,
 				23C9BF702A7C126A00B3D9C9 /* CalendarViewController.swift */,
 			);
 			path = Home;
@@ -249,17 +246,78 @@
 		236054F82A593F4000CA991E /* Meeting */ = {
 			isa = PBXGroup;
 			children = (
+				23C3D0D22B8264FF00A49D6F /* MeetingManage */,
 				5199BCD12A72401000CE585C /* MeetingTable */,
 				5199BCD02A723ECC00CE585C /* MeetingMain */,
 				51B526C22A6C2F65009DBFB4 /* SideBar */,
-				5199BCD92A72432700CE585C /* Plan */,
-				518F55EC2A6BA59A002D8F0F /* PlanList */,
-				1A3AD0122A6958B400975427 /* InvitationCodeViewController.swift */,
-				1ABF8C872A694B3800023A8D /* MeetingInfoEditViewController.swift */,
-				1A99CFDF2A70CE220080091B /* MeetingOutPopUpViewController.swift */,
-				1A99CFE12A70D4650080091B /* MeetingDelPopUpViewController.swift */,
 			);
 			path = Meeting;
+			sourceTree = "<group>";
+		};
+		23C3D0CF2B82646F00A49D6F /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				23C3D0D02B82649000A49D6F /* Calendar */,
+				512675862A81DEA800AFC46C /* Member */,
+				23C3D0D12B82649C00A49D6F /* PlanList */,
+				1AF858072B381E63005D058B /* MeetingCollectionViewCell.swift */,
+				23DE37C42A72A6A700F1DFE0 /* TimeTableViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		23C3D0D02B82649000A49D6F /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				23DA182B2A695541004EC6A6 /* CalendarCollectionViewCell.swift */,
+				231E97D02A6BD3F8000BB2AD /* MonthCollectionViewCell.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
+		23C3D0D12B82649C00A49D6F /* PlanList */ = {
+			isa = PBXGroup;
+			children = (
+				518F55F12A6BC172002D8F0F /* WaitingPlanCell.swift */,
+				23A7DEE12A657C0600D52436 /* PlanTableViewCell.swift */,
+				515E53B72A77B48000536C6D /* ShadowWaitingPlanCell.swift */,
+				51B526CB2A6C3988009DBFB4 /* DecidedPlanCell.swift */,
+				23ED93952A6D427A007B0E63 /* DayPlanCell.swift */,
+			);
+			path = PlanList;
+			sourceTree = "<group>";
+		};
+		23C3D0D22B8264FF00A49D6F /* MeetingManage */ = {
+			isa = PBXGroup;
+			children = (
+				1A99CFE12A70D4650080091B /* MeetingDelPopUpViewController.swift */,
+				1A99CFDF2A70CE220080091B /* MeetingOutPopUpViewController.swift */,
+				1ABF8C872A694B3800023A8D /* MeetingInfoEditViewController.swift */,
+				1A3AD0122A6958B400975427 /* InvitationCodeViewController.swift */,
+			);
+			path = MeetingManage;
+			sourceTree = "<group>";
+		};
+		23C3D0D32B82653100A49D6F /* TimeManage */ = {
+			isa = PBXGroup;
+			children = (
+				23DE37C22A72A40C00F1DFE0 /* TimeTableView.swift */,
+				239B625C2A738CEE00C48CBE /* TimeInputViewController.swift */,
+				23DE37C02A7287BD00F1DFE0 /* TimeShareViewController.swift */,
+				23F6F9052A6FE9A300772AFF /* TimeShareBottomSheetViewController.swift */,
+			);
+			path = TimeManage;
+			sourceTree = "<group>";
+		};
+		23C3D0D42B82654300A49D6F /* PlanManage */ = {
+			isa = PBXGroup;
+			children = (
+				512856362A81671100C1FBA7 /* FixPlanPopUpViewController.swift */,
+				23CAB74D2A82A06F000F05D3 /* FixPlanInfoViewController.swift */,
+				1AE5C78A2A6F6957001B88D1 /* MakePlanViewController.swift */,
+				1AC014272A70A75700E3E9C9 /* PlanConfirmViewController.swift */,
+			);
+			path = PlanManage;
 			sourceTree = "<group>";
 		};
 		23FE4ECA2A55B03600BBF17E /* SignUp */ = {
@@ -362,16 +420,6 @@
 			path = CoNet;
 			sourceTree = "<group>";
 		};
-		515E53BB2A77B9A900536C6D /* PlanCell */ = {
-			isa = PBXGroup;
-			children = (
-				23A7DEE12A657C0600D52436 /* PlanTableViewCell.swift */,
-				23ED93952A6D427A007B0E63 /* DayPlanCell.swift */,
-				515E53B72A77B48000536C6D /* ShadowWaitingPlanCell.swift */,
-			);
-			path = PlanCell;
-			sourceTree = "<group>";
-		};
 		5186D2742B5D45D7005C1007 /* PopUp */ = {
 			isa = PBXGroup;
 			children = (
@@ -419,7 +467,6 @@
 			children = (
 				5199BCD52A72422600CE585C /* WaitingPlan */,
 				5199BCD62A72423A00CE585C /* DecidedPlan */,
-				5199BCD82A7242AD00CE585C /* PlanDetail */,
 			);
 			path = PlanList;
 			sourceTree = "<group>";
@@ -437,7 +484,6 @@
 			isa = PBXGroup;
 			children = (
 				236054F92A593F5400CA991E /* MeetingViewController.swift */,
-				1AF858072B381E63005D058B /* MeetingCollectionViewCell.swift */,
 				1ADA54952A65161F00609041 /* MeetingAddViewController.swift */,
 				1ABF8C852A69150900023A8D /* MeetingCodeViewController.swift */,
 			);
@@ -479,7 +525,6 @@
 			isa = PBXGroup;
 			children = (
 				518F55ED2A6BA5AE002D8F0F /* WaitingPlanListViewController.swift */,
-				518F55F12A6BC172002D8F0F /* WaitingPlanCell.swift */,
 			);
 			path = WaitingPlan;
 			sourceTree = "<group>";
@@ -488,7 +533,6 @@
 			isa = PBXGroup;
 			children = (
 				51B526C92A6C3901009DBFB4 /* DecidedPlanListViewController.swift */,
-				51B526CB2A6C3988009DBFB4 /* DecidedPlanCell.swift */,
 			);
 			path = DecidedPlan;
 			sourceTree = "<group>";
@@ -498,7 +542,6 @@
 			children = (
 				512675952A83F89400AFC46C /* InfoVC */,
 				512675942A83F86200AFC46C /* Sheet */,
-				512675862A81DEA800AFC46C /* Member */,
 				1AC014252A6F7B3100E3E9C9 /* PlanDateButtonSheetViewController.swift */,
 				1AE5C7882A6F683D001B88D1 /* PlanInfoEditViewController.swift */,
 				1AA197BC2A7F7430001064F8 /* PlanEditDelBottomSheetViewController.swift */,
@@ -510,15 +553,10 @@
 		5199BCD92A72432700CE585C /* Plan */ = {
 			isa = PBXGroup;
 			children = (
-				23F6F9052A6FE9A300772AFF /* TimeShareBottomSheetViewController.swift */,
-				1AE5C78A2A6F6957001B88D1 /* MakePlanViewController.swift */,
-				1AC014272A70A75700E3E9C9 /* PlanConfirmViewController.swift */,
-				23DE37C02A7287BD00F1DFE0 /* TimeShareViewController.swift */,
-				23DE37C22A72A40C00F1DFE0 /* TimeTableView.swift */,
-				23DE37C42A72A6A700F1DFE0 /* TimeTableViewCell.swift */,
-				239B625C2A738CEE00C48CBE /* TimeInputViewController.swift */,
-				512856362A81671100C1FBA7 /* FixPlanPopUpViewController.swift */,
-				23CAB74D2A82A06F000F05D3 /* FixPlanInfoViewController.swift */,
+				23C3D0D32B82653100A49D6F /* TimeManage */,
+				5199BCD82A7242AD00CE585C /* PlanDetail */,
+				23C3D0D42B82654300A49D6F /* PlanManage */,
+				518F55EC2A6BA59A002D8F0F /* PlanList */,
 			);
 			path = Plan;
 			sourceTree = "<group>";
@@ -556,9 +594,11 @@
 		51F2A46E2A54972700D134CC /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				23C3D0CF2B82646F00A49D6F /* Cells */,
 				518F55E52A691731002D8F0F /* Components */,
 				236054F52A593F2E00CA991E /* Home */,
 				236054F82A593F4000CA991E /* Meeting */,
+				5199BCD92A72432700CE585C /* Plan */,
 				51F72C572A592B3E0055E8C4 /* MyPage */,
 				5199BCD42A7241A800CE585C /* Auth */,
 				236054EE2A592B0C00CA991E /* TabbarViewController.swift */,
