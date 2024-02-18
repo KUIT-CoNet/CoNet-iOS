@@ -93,52 +93,19 @@ class AuthAPI {
         }
     }
     
-//    // MARK: kakao login
-//    func kakaoLogin(idToken: String, completion: @escaping (_ isRegistered: Bool) -> Void) {
-//        let url = "\(baseUrl)/auth/login/kakao"
-//        let headers: HTTPHeaders = ["Content-Type": "application/json"]
-//        let body: [String: Any] = [
-//            "idToken": idToken
-//        ]
-//        
-//        let dataRequest = AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
-//        
-//        dataRequest.responseDecodable(of: BaseResponse<PostKakaoLoginResult>.self) { response in
-//            switch response.result {
-//            case .success(let response):
-//                print("DEBUG(kakao login) access token: \(response.result?.accessToken ?? "")")
-//                print("DEBUG(kakao login) refresh token: \(response.result?.refreshToken ?? "")")
-//                
-//                guard let result = response.result else { return }
-//                
-//                self.keychain.set(result.email, forKey: "email")
-//                self.keychain.set(result.accessToken, forKey: "accessToken")
-//                self.keychain.set(result.refreshToken, forKey: "refreshToken")
-//                self.keychain.set(result.isRegistered, forKey: "kakaoIsRegistered")
-//                
-//                completion(response.result!.isRegistered)
-//                print(response.result!.isRegistered)
-//                
-//            case .failure(let error):
-//                print("DEBUG(kakao login api) error: \(error)")
-//            }
-//        }
-//    }
-    
     // signUp - 약관 동의, 이름 입력
-    func signUp(name: String, optionTerm: Bool, completion: @escaping (_ isSuccess: Bool) -> Void) {
-        let url = "\(baseUrl)/auth/term-and-name"
+    func signUp(name: String, completion: @escaping (_ isSuccess: Bool) -> Void) {
+        let url = "\(baseUrl)/auth/term"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
         let body: [String: Any] = [
-            "name": name,
-            "optionTerm": optionTerm
+            "name": name
         ]
         
         AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
-            .responseDecodable(of: BaseResponse<PostSignUpResult>.self) { response in
+            .responseDecodable(of: BaseResponse<SignUpResponse>.self) { response in
             switch response.result {
             case .success(let response):  // 성공한 경우에
                 // 회원가입 성공 Bool 반환

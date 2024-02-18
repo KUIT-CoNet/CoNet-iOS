@@ -15,9 +15,8 @@ struct LoginResponse: Codable {
 }
 
 // 회원가입 sign up
-struct PostSignUpResult: Codable {
+struct SignUpResponse: Codable {
     let name: String
     let email: String
     let serviceTerm: Bool
-    let optionTerm: Bool
 }

@@ -152,7 +152,7 @@ class EnterNameViewController: UIViewController, UITextFieldDelegate {
         if isButtonAvailable {
             let isOptionTermSelected = termsSelectedStates?[3] ?? false
             
-            AuthAPI().signUp(name: name, optionTerm: isOptionTermSelected) { isSuccess in
+            AuthAPI().signUp(name: name) { isSuccess in
                 if isSuccess {
                     self.showTabBarViewController()
                 }
