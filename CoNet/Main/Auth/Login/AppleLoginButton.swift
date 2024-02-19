@@ -64,7 +64,7 @@ class AppleLoginButton: UIViewController {
     
     private func postAppleLogin() {
         // apple login api 호출
-        AuthAPI.shared.appleLogin { isRegistered in
+        AuthAPI.shared.login(platform: "apple") { isRegistered in
             if isRegistered {
                 // 홈 탭으로 이동
                 let nextVC = TabbarViewController()

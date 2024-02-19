@@ -7,16 +7,7 @@
 
 import Foundation
 
-// apple login
-struct PostAppleLoginResult: Codable {
-    let email: String
-    let accessToken: String
-    let refreshToken: String
-    let isRegistered: Bool
-}
-
-// kakao login
-struct PostKakaoLoginResult: Codable {
+struct LoginResponse: Codable {
     let email: String
     let accessToken: String
     let refreshToken: String
@@ -24,9 +15,8 @@ struct PostKakaoLoginResult: Codable {
 }
 
 // 회원가입 sign up
-struct PostSignUpResult: Codable {
+struct SignUpResponse: Codable {
     let name: String
     let email: String
     let serviceTerm: Bool
-    let optionTerm: Bool
 }
