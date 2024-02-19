@@ -11,7 +11,7 @@ import KeychainSwift
 
 class AuthAPI {
     let keychain = KeychainSwift()
-    let baseUrl = "http://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
+    let baseUrl = "https://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
     static let shared = AuthAPI()
     
     func regenerateToken(completion: @escaping (_ isSuccess: Bool) -> Void) {
@@ -82,10 +82,10 @@ class AuthAPI {
                 print(response.result ?? "result empty")
                 
                 // 사용자 정보 저장
-                self.keychain.set(response.result!.email, forKey: "email")
-                self.keychain.set(response.result!.accessToken, forKey: "accessToken")
-                self.keychain.set(response.result!.refreshToken, forKey: "refreshToken")
-                completion(response.result!.isRegistered)
+                self.keychain.set(response.result?.email ?? "", forKey: "email")
+                self.keychain.set(response.result?.accessToken ?? "", forKey: "accessToken")
+                self.keychain.set(response.result?.refreshToken ?? "", forKey: "refreshToken")
+                completion(response.result?.isRegistered ?? false)
                 
             case .failure(let error):
                 print("DEBUG(login api) error: \(error)")
