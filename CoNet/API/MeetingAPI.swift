@@ -10,11 +10,6 @@ import Foundation
 import KeychainSwift
 import UIKit
 
-struct PostCreateMeetingResponse: Codable {
-    let teamId: Int
-    let inviteCode: String
-}
-
 struct PostUpdateMeetingResponse: Codable {
     let name, imgUrl: String
 }
@@ -26,17 +21,23 @@ struct BadRequestResponse: Codable {
 
 class MeetingAPI {
     let keychain = KeychainSwift()
-    let baseUrl = "http://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
+    let baseUrl = "https://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
     
     // 모임 생성
     func createMeeting(name: String, image: UIImage, completion: @escaping (_ isSuccess: Bool) -> Void) {
-        let url = "\(baseUrl)/team/create"
+        let url = "\(baseUrl)/team"
         let headers: HTTPHeaders = [
-            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Type": "multipart/form-data",
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
         let request = "{\"teamName\":\"\(name)\"}"
-        guard let image = image.pngData() else { return }
+        
+        let resizedImage = image.resize(newSize: 150)
+        guard let image = resizedImage.pngData() else {
+            print("image png 처리 실패")
+            completion(false)
+            return
+        }
         
         // Multipart Form 데이터 생성
         AF.upload(multipartFormData: { multipartFormData in
@@ -320,5 +321,22 @@ class MeetingAPI {
                     print("DEBUG(edit name api) error: \(error)")
                 }
             }
+    }
+}
+
+extension UIImage {
+    func resize(newSize: CGFloat) -> UIImage {
+        let biggerSize = max(self.size.width, self.size.height)
+        let scale = newSize / biggerSize
+        let newWidth = self.size.width * scale
+        let newHeight = self.size.height * scale
+
+        let size = CGSize(width: newWidth, height: newHeight)
+        let render = UIGraphicsImageRenderer(size: size)
+        let renderImage = render.image { _ in
+            self.draw(in: CGRect(origin: .zero, size: size))
+        }
+
+        return renderImage
     }
 }
