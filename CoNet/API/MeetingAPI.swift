@@ -166,7 +166,7 @@ class MeetingAPI {
     
     // 모임 삭제
     func deleteMeeting(id: Int, completion: @escaping (_ isSuccess: Bool) -> Void) {
-        let url = "\(baseUrl)/team/delete"
+        let url = "\(baseUrl)/team/\(id)"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
@@ -175,7 +175,7 @@ class MeetingAPI {
             "teamId": id
         ]
         
-        AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
+        AF.request(url, method: .delete, parameters: body, encoding: JSONEncoding.default, headers: headers)
             .responseDecodable(of: BaseResponse<String>.self) { response in
                 switch response.result {
                 case .success(let response):
