@@ -43,3 +43,8 @@ struct MeetingDetailInfo {
     let memberCount: Int
     let isNew, bookmark: Bool
 }
+
+struct PostCreateMeetingResponse: Codable {
+    let teamId: Int
+    let inviteCode: String
+}
