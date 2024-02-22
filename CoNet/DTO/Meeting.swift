@@ -18,6 +18,7 @@ struct PostParticipateMeetingResponse: Codable {
 }
 
 struct GetMeetingDetailInfoResponse: Codable {
+    let teamId: Int
     let teamName, teamImgUrl: String
     let teamMemberCount: Int
     let isNew: Bool?
