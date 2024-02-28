@@ -10,81 +10,13 @@ import Foundation
 import KeychainSwift
 import UIKit
 
-struct GetPlansAtMeetingResult<T: Codable>: Codable {
-    let count: Int
-    let plans: T?
-}
-
-struct WaitingPlanInfo: Codable {
-    let planId: Int
-    let startDate, endDate, planName: String
-    let teamName: String?
-}
-
-struct DecidedPlanInfo: Codable {
-    let planId: Int
-    let date, time: String
-    let teamName: String?
-    let planName: String
-    let dday: Int
-}
-
-struct PastPlanInfo: Codable {
-    let planId: Int
-    let date, time, planName: String
-    let isRegisteredToHistory: Bool
-}
-
-struct PlanDetail: Codable {
-    let planId: Int
-    let planName, date, time: String
-    let members: [PlanDetailMember]
-    let isRegisteredToHistory: Bool
-    let historyImgUrl, historyDescription: String?
-}
-
-struct PlanDetailMember: Codable {
-    let id: Int
-    let name, image: String
-}
-
-struct EditPlanMember: Codable {
-    let id: Int
-    let name, image: String
-    let isAvailable: Bool
-    
-    private enum CodingKeys: String, CodingKey {
-        case id = "userId"
-        case name = "name"
-        case image = "userImgUrl"
-        case isAvailable = "isInPlan"
-    }
-}
-
-struct PlanEditResponse: Codable {
-    let code, status: Int
-    let message, result: String
-}
-
-struct CreatePlanResponse: Codable {
-    let planId: Int
-}
-
-struct Result: Codable {
-    let planID: Int
-
-    enum CodingKeys: String, CodingKey {
-        case planID = "planId"
-    }
-}
-
 class PlanAPI {
     let keychain = KeychainSwift()
-    let baseUrl = "http://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
+    let baseUrl = "https://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
     
     // 팀 내 대기중인 약속 조회
     func getWaitingPlansAtMeeting(meetingId: Int, completion: @escaping (_ count: Int, _ plans: [WaitingPlanInfo]) -> Void) {
-        let url = "\(baseUrl)/team/plan/waiting?teamId=\(meetingId)"
+        let url = "\(baseUrl)/plan/waiting?teamId=\(meetingId)"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json"
         ]
@@ -236,16 +168,17 @@ class PlanAPI {
     }
     
     // 약속 생성
-    func createPlan(teamId: Int, planName: String, planStartPeriod: String, completion: @escaping (_ planId: Int, _ isSuccess: Bool) -> Void) {
-        let url = "\(baseUrl)/team/plan/create"
+    func createPlan(teamId: Int, planName: String, planStartDate: String, completion: @escaping (_ planId: Int, _ isSuccess: Bool) -> Void) {
+        let url = "\(baseUrl)/plan"
         let headers: HTTPHeaders = [
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
         
         let parameters: Parameters = [
             "teamId": teamId,
             "planName": planName,
-            "planStartPeriod": planStartPeriod
+            "planStartDate": planStartDate
         ]
         
         AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
@@ -264,20 +197,17 @@ class PlanAPI {
 
     // 약속 삭제
     func deletePlan(planId: Int, completion: @escaping (_ isSuccess: Bool) -> Void) {
-        let url = "\(baseUrl)/team/plan/delete"
+        let url = "\(baseUrl)/plan/\(planId)"
         let headers: HTTPHeaders = [
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
         
-        let parameters: Parameters = [
-            "planId": planId
-        ]
-        
-        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+        AF.request(url, method: .delete, encoding: JSONEncoding.default, headers: headers)
         .responseDecodable(of: BaseResponse<String>.self) { response in
             switch response.result {
             case .success(let response):
-                print("DEBUG(약속 삭제 api) success response: \(response)")
+                print("DEBUG(약속 삭제 api) success response: \(response.message)")
                 completion(response.code == 1000)
                 
             case .failure(let error):
@@ -314,9 +244,10 @@ class PlanAPI {
     
     // 대기 중 약속 수정
     func editWaitingPlan(planId: Int, planName: String, completion: @escaping (_ isSuccess: Bool) -> Void) {
-        let url = "\(baseUrl)/team/plan/update-waiting"
+        let url = "\(baseUrl)/plan/update/waiting"
         let headers: HTTPHeaders = [
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
         
         let parameters: Parameters = [
@@ -328,11 +259,11 @@ class PlanAPI {
         .responseDecodable(of: BaseResponse<String>.self) { response in
             switch response.result {
             case .success(let response):
-                print("DEBUG(약속 확정 api) success response: \(response.result ?? "empty")")
+                print("DEBUG(약속 수정 api) success response: \(response.result ?? "empty")")
                 
                 completion(response.code == 1000)
             case .failure(let error):
-                print("DEBUG(약속 확정 api) error: \(error)")
+                print("DEBUG(약속 수정 api) error: \(error)")
             }
         }
     }

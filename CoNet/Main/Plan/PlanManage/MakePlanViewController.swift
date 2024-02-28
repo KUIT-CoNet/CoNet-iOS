@@ -236,7 +236,7 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
                     guard let newName = planNameTextField.text else { return }
                     guard let newStartDate = planStartDateField.text else { return }
                     let date = newStartDate.replacingOccurrences(of: ".", with: "-")
-                    PlanAPI().createPlan(teamId: meetingId, planName: newName, planStartPeriod: date) { planId, isSuccess in
+                    PlanAPI().createPlan(teamId: meetingId, planName: newName, planStartDate: date) { planId, isSuccess in
                         if isSuccess {
                             self.navigationController?.popViewController(animated: true)
                             self.delegate?.sendIntDataBack(data: planId)

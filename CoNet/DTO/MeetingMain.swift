@@ -13,12 +13,6 @@ struct GetMeetingDayPlanResult: Codable {
     let plans: [MeetingDayPlan]
 }
 
-// 팀 내 대기 중인 약속 조회
-struct GetMeetingWaitingPlanResult: Codable {
-    let count: Int
-    let plans: [MeetingWaitingPlan]
-}
-
 struct MeetingDayPlan: Codable {
     let planId: Int
     let date: String?
