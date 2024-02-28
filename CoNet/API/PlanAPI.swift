@@ -66,10 +66,6 @@ struct PlanEditResponse: Codable {
     let message, result: String
 }
 
-struct CreatePlanResponse: Codable {
-    let planId: Int
-}
-
 struct Result: Codable {
     let planID: Int
 
@@ -80,7 +76,7 @@ struct Result: Codable {
 
 class PlanAPI {
     let keychain = KeychainSwift()
-    let baseUrl = "http://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
+    let baseUrl = "https://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
     
     // 팀 내 대기중인 약속 조회
     func getWaitingPlansAtMeeting(meetingId: Int, completion: @escaping (_ count: Int, _ plans: [WaitingPlanInfo]) -> Void) {
@@ -236,16 +232,17 @@ class PlanAPI {
     }
     
     // 약속 생성
-    func createPlan(teamId: Int, planName: String, planStartPeriod: String, completion: @escaping (_ planId: Int, _ isSuccess: Bool) -> Void) {
-        let url = "\(baseUrl)/team/plan/create"
+    func createPlan(teamId: Int, planName: String, planStartDate: String, completion: @escaping (_ planId: Int, _ isSuccess: Bool) -> Void) {
+        let url = "\(baseUrl)/plan"
         let headers: HTTPHeaders = [
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
         
         let parameters: Parameters = [
             "teamId": teamId,
             "planName": planName,
-            "planStartPeriod": planStartPeriod
+            "planStartDate": planStartDate
         ]
         
         AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)

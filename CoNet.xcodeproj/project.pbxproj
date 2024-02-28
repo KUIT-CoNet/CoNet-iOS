@@ -47,6 +47,7 @@
 		23DE37C32A72A40C00F1DFE0 /* TimeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DE37C22A72A40C00F1DFE0 /* TimeTableView.swift */; };
 		23DE37C52A72A6A700F1DFE0 /* TimeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DE37C42A72A6A700F1DFE0 /* TimeTableViewCell.swift */; };
 		23ED93962A6D427A007B0E63 /* DayPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23ED93952A6D427A007B0E63 /* DayPlanCell.swift */; };
+		23EE9DB12B8CE9FE00EB610E /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EE9DB02B8CE9FE00EB610E /* Plan.swift */; };
 		23F6F9062A6FE9A300772AFF /* TimeShareBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F6F9052A6FE9A300772AFF /* TimeShareBottomSheetViewController.swift */; };
 		23F6F9082A700F4700772AFF /* HomeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F6F9072A700F4700772AFF /* HomeAPI.swift */; };
 		23F6F90A2A7011C000772AFF /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F6F9092A7011C000772AFF /* Home.swift */; };
@@ -150,6 +151,7 @@
 		23DE37C22A72A40C00F1DFE0 /* TimeTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableView.swift; sourceTree = "<group>"; };
 		23DE37C42A72A6A700F1DFE0 /* TimeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableViewCell.swift; sourceTree = "<group>"; };
 		23ED93952A6D427A007B0E63 /* DayPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanCell.swift; sourceTree = "<group>"; };
+		23EE9DB02B8CE9FE00EB610E /* Plan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plan.swift; sourceTree = "<group>"; };
 		23F6F9052A6FE9A300772AFF /* TimeShareBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeShareBottomSheetViewController.swift; sourceTree = "<group>"; };
 		23F6F9072A700F4700772AFF /* HomeAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAPI.swift; sourceTree = "<group>"; };
 		23F6F9092A7011C000772AFF /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
@@ -626,6 +628,7 @@
 				515E53BE2A77D16D00536C6D /* Meeting.swift */,
 				2387E7572A7FCCEA0003044E /* MeetingMain.swift */,
 				2387E75B2A8018430003044E /* PlanTime.swift */,
+				23EE9DB02B8CE9FE00EB610E /* Plan.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";
@@ -771,6 +774,7 @@
 				512856372A81671100C1FBA7 /* FixPlanPopUpViewController.swift in Sources */,
 				51F2A46A2A548A1000D134CC /* FontExtension.swift in Sources */,
 				51046AA92A6147F500AD543D /* ChangeNameViewController.swift in Sources */,
+				23EE9DB12B8CE9FE00EB610E /* Plan.swift in Sources */,
 				512856352A8110A100C1FBA7 /* DeletePlanPopUpViewController.swift in Sources */,
 				2387E7542A7F84F50003044E /* MeetingMainAPI.swift in Sources */,
 				518F55F22A6BC172002D8F0F /* WaitingPlanCell.swift in Sources */,
