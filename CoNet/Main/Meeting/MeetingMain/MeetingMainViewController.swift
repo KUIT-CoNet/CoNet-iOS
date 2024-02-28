@@ -267,7 +267,7 @@ class MeetingMainViewController: UIViewController {
     
     // 즐겨찾기 off
     private func deleteBookmark() {
-        MeetingAPI().postDeleteBookmark(teamId: meetingId) { isSuccess in
+        MeetingAPI().postBookmark(teamId: meetingId) { isSuccess in
             if isSuccess {
                 self.isBookmarked = false
                 self.starButton.setImage(UIImage(named: "meetingStarOff"), for: .normal)

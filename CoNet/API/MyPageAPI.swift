@@ -14,7 +14,7 @@ class MyPageAPI {
     let baseUrl = "http://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
     
     func getUser(completion: @escaping (_ name: String, _ imageUrl: String, _ email: String, _ social: String) -> Void) {
-        let url = "\(baseUrl)/user"
+        let url = "\(baseUrl)/member"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
@@ -120,7 +120,7 @@ struct GetUserResponse: Codable {
     private enum CodingKeys: String, CodingKey {
         case name = "name"
         case email = "email"
-        case imageUrl = "userImgUrl"
+        case imageUrl = "memberImgUrl"
         case social = "platform"
     }
 }
