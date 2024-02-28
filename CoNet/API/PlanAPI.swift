@@ -80,7 +80,7 @@ class PlanAPI {
     
     // 팀 내 대기중인 약속 조회
     func getWaitingPlansAtMeeting(meetingId: Int, completion: @escaping (_ count: Int, _ plans: [WaitingPlanInfo]) -> Void) {
-        let url = "\(baseUrl)/team/plan/waiting?teamId=\(meetingId)"
+        let url = "\(baseUrl)/plan/waiting?teamId=\(meetingId)"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json"
         ]
