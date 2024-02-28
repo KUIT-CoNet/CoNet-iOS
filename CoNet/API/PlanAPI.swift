@@ -261,20 +261,17 @@ class PlanAPI {
 
     // 약속 삭제
     func deletePlan(planId: Int, completion: @escaping (_ isSuccess: Bool) -> Void) {
-        let url = "\(baseUrl)/team/plan/delete"
+        let url = "\(baseUrl)/plan/\(planId)"
         let headers: HTTPHeaders = [
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
         
-        let parameters: Parameters = [
-            "planId": planId
-        ]
-        
-        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+        AF.request(url, method: .delete, encoding: JSONEncoding.default, headers: headers)
         .responseDecodable(of: BaseResponse<String>.self) { response in
             switch response.result {
             case .success(let response):
-                print("DEBUG(약속 삭제 api) success response: \(response)")
+                print("DEBUG(약속 삭제 api) success response: \(response.message)")
                 completion(response.code == 1000)
                 
             case .failure(let error):
