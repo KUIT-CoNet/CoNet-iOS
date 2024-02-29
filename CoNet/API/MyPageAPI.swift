@@ -43,7 +43,7 @@ class MyPageAPI {
     
     // 프로필 이미지 수정
     func editProfileImage(image: UIImage, completion: @escaping (_ imageUrl: String) -> Void) {
-        let url = "\(baseUrl)/user/image"
+        let url = "\(baseUrl)/member/image"
         let headers: HTTPHeaders = [
             "Content-Type": "multipart/form-data",
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
