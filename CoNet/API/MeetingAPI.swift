@@ -246,7 +246,7 @@ class MeetingAPI {
     
     // 북마크 조회
     func getBookmark(completion: @escaping (_ bookmarks: [MeetingDetailInfo]) -> Void) {
-        let url = "\(baseUrl)/user/bookmark"
+        let url = "\(baseUrl)/member/bookmark"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
