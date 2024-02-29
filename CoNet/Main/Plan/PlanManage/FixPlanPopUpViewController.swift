@@ -56,7 +56,9 @@ class FixPlanPopUpViewController: UIViewController, FixPlanDelegate {
     
     func fixPlan() {
         // 약속 확정 api 연동
-        PlanAPI().fixPlan(planId: planId, fixedDate: date, fixedTime: time, userId: userIds)
+        PlanAPI().fixPlan(planId: planId, fixedDate: date, fixedTime: time, userId: userIds) { _ in
+            // 필요한 경우 fixedPlan 사용
+        }
         
         dismiss(animated: true) {
             self.timeShareVC?.pushFixPlanInfo(planId: self.planId)

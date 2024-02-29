@@ -74,3 +74,8 @@ struct Result: Codable {
         case planID = "planId"
     }
 }
+
+struct FixedPlanResponse: Codable {
+    let planName, fixedDate, fixedTime: String
+    let memberCount: Int
+}

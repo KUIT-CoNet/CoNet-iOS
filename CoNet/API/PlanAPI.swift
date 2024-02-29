@@ -217,24 +217,28 @@ class PlanAPI {
     }
     
     // 약속 확정
-    func fixPlan(planId: Int, fixedDate: String, fixedTime: Int, userId: [Int]) {
-        let url = "\(baseUrl)/team/plan/fix"
+    func fixPlan(planId: Int, fixedDate: String, fixedTime: Int, userId: [Int], completion: @escaping (_ fixedPlan: FixedPlanResponse) -> Void) {
+        let url = "\(baseUrl)/plan/fix"
         let headers: HTTPHeaders = [
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
         
         let parameters: Parameters = [
             "planId": planId,
-            "fixed_date": fixedDate,
-            "fixed_time": fixedTime,
-            "userId": userId
+            "fixedDate": fixedDate,
+            "fixedTime": fixedTime,
+            "memberIds": userId
         ]
         
         AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
-        .responseDecodable(of: BaseResponse<String>.self) { response in
+        .responseDecodable(of: BaseResponse<FixedPlanResponse>.self) { response in
             switch response.result {
             case .success(let response):
-                print("DEBUG(약속 확정 api) success response: \(response.result ?? "empty")")
+                print("DEBUG(약속 확정 api) success response: \(response.message)")
+                guard let result = response.result else { return }
+                
+                completion(result)
                 
             case .failure(let error):
                 print("DEBUG(약속 확정 api) error: \(error)")
