@@ -101,7 +101,7 @@ class PlanAPI {
     
     // 약속 상세 정보 조회
     func getPlanDetail(planId: Int, completion: @escaping (_ plans: PlanDetail) -> Void) {
-        let url = "\(baseUrl)/team/plan/detail?planId=\(planId)"
+        let url = "\(baseUrl)/plan/\(planId)"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json"
         ]
