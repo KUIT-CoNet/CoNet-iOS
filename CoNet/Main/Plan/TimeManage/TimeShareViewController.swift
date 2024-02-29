@@ -179,12 +179,20 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
             self.timeTable.timeTableCollectionView.reloadData()
             
             // 인원 수 별 셀 색 예시 인원
-            for index in 0 ..< sectionMemberCounts.count {
-                let sectionIndex = sectionMemberCounts[index].section
-                if sectionMemberCounts[index].memberCount.count == 1 {
-                    self.sectionMemberCount[sectionIndex] = String(sectionMemberCounts[index].memberCount[0])
-                } else {
-                    self.sectionMemberCount[sectionIndex] = String(sectionMemberCounts[index].memberCount[0]) + "-" + String(sectionMemberCounts[index].memberCount.last!)
+            self.sectionMemberCount[1] = "1"
+            if sectionMemberCounts.section1 > 1 {
+                self.sectionMemberCount[1] += "-\(sectionMemberCounts.section1)"
+            }
+            if sectionMemberCounts.section1 != sectionMemberCounts.section2 {
+                self.sectionMemberCount[2] = String(sectionMemberCounts.section1+1)
+                if sectionMemberCounts.section1 + 1 < sectionMemberCounts.section2 {
+                    self.sectionMemberCount[2] += "-\(sectionMemberCounts.section2)"
+                }
+            }
+            if sectionMemberCounts.section2 != sectionMemberCounts.section3 {
+                self.sectionMemberCount[3] = String(sectionMemberCounts.section2+1)
+                if sectionMemberCounts.section2 + 1 < sectionMemberCounts.section3 {
+                    self.sectionMemberCount[3] += "-\(sectionMemberCounts.section3)"
                 }
             }
         }
@@ -363,7 +371,7 @@ extension TimeShareViewController: UICollectionViewDataSource, UICollectionViewD
         format.dateFormat = "yyyy-MM-dd"
         
         // 해당 시간에 가능한 멤버
-        let memberList = possibleMemberDateTime[page*3 + indexPath.section].possibleMember[indexPath.row]
+        let memberList = possibleMemberDateTime[page*3 + indexPath.section].sectionAndAvailableTimes[indexPath.row]
         
         // 셀 색이 흰 색이 아닌 경우 약속 확정 팝업 띄우기
         if collectionView.cellForItem(at: indexPath)?.contentView.backgroundColor != UIColor.grayWhite {
@@ -412,7 +420,7 @@ extension TimeShareViewController: UICollectionViewDataSource, UICollectionViewD
         
         if !apiCheck { return cell }
         
-        let section = possibleMemberDateTime[page*3 + indexPath.section].possibleMember[indexPath.row].section
+        let section = possibleMemberDateTime[page*3 + indexPath.section].sectionAndAvailableTimes[indexPath.row].section
         cell.showCellColor(section: section)
         
         return cell

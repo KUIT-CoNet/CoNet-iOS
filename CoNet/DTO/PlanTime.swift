@@ -8,21 +8,22 @@
 import Foundation
 
 // 구성원의 가능한 시간 조회
-struct GetMemberPossibleTimeResult: Codable {
+struct GetMemberPossibleTimeResponse: Codable {
     let teamId, planId: Int
     let planName, planStartPeriod, planEndPeriod: String
-    let sectionMemberCounts: [SectionMemberCounts]
-    let possibleMemberDateTime: [PossibleMemberDateTime]
+    let endNumberForEachSection: SectionMemberCounts
+    let availableMemberDateTime: [PossibleMemberDateTime]
 }
 
 struct SectionMemberCounts: Codable {
-    let section: Int
-    let memberCount: [Int]
+    let section1: Int
+    let section2: Int
+    let section3: Int
 }
 
 struct PossibleMemberDateTime: Codable {
     let date: String
-    let possibleMember: [PossibleMember]
+    let sectionAndAvailableTimes: [PossibleMember]
 }
 
 struct PossibleMember: Codable {
