@@ -79,15 +79,9 @@ class TimeInputViewController: UIViewController {
         $0.layer.cornerRadius = 12
     }
     
-    /* 나의 가능한 시간 조회 시
-     * hasRegisteredTime: false, hasPossibleTime: false -> 입력한 적 없는 초기 상태
-     * hasRegisteredTime: true, hasPossibleTime: false -> 가능한 시간 없음 버튼 클릭 상태
-     * hasRegisteredTime: true, hasPossibleTime: true -> 시간 있음
-     */
-    var hasRegisteredTime = false
-    var hasPossibleTime = false
+    // 나의 가능한 시간 조회 시
     // 0: 입력한 적 없는 초기 상태, 1: 가능한 시간 없음 버튼 클릭 상태, 2: 시간 있음
-    var timeStateCheck = -1
+    var availableTimeRegisteredStatus: Int = 0
     
     // 현재 페이지
     var page: Int = 0
@@ -100,7 +94,7 @@ class TimeInputViewController: UIViewController {
     let weekDay = ["일", "월", "화", "수", "목", "금", "토"]
     
     // 가능한 시간 저장할 배열 초기화
-    var possibleTime: [PossibleTime] = [PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: []), PossibleTime(date: "", time: [])]
+    var possibleTime: [PossibleTime] = [PossibleTime(date: "", availableTimes: []), PossibleTime(date: "", availableTimes: []), PossibleTime(date: "", availableTimes: []), PossibleTime(date: "", availableTimes: []), PossibleTime(date: "", availableTimes: []), PossibleTime(date: "", availableTimes: []), PossibleTime(date: "", availableTimes: [])]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,20 +120,12 @@ class TimeInputViewController: UIViewController {
     
     func getMyPossibleTimeAPI() {
         // 내가 입력한 시간 조회 api
-        PlanTimeAPI().getMyPossibleTime(planId: planId) { _, _, hasRegisteredTime, hasPossibleTime, possibleTime in
-            self.hasRegisteredTime = hasRegisteredTime
-            self.hasPossibleTime = hasPossibleTime
+        PlanTimeAPI().getMyPossibleTime(planId: planId) { _, _, availableTimeRegisteredStatus, possibleTime in
             
-            if hasRegisteredTime && !hasPossibleTime {
-                self.timeStateCheck = 1
-            } else if !hasRegisteredTime && !hasPossibleTime {
-                self.timeStateCheck = 0
-            } else if hasRegisteredTime && hasPossibleTime {
-                self.timeStateCheck = 2
-            }
+            self.availableTimeRegisteredStatus = availableTimeRegisteredStatus
             
             // 입력한 시간 있을 때만 배열 초기화
-            if self.timeStateCheck == 2 {
+            if self.availableTimeRegisteredStatus == 2 {
                 self.possibleTime = possibleTime
             }
             
@@ -179,7 +165,7 @@ class TimeInputViewController: UIViewController {
     
     func changeSaveButtonColor() {
         // 저장 버튼 색
-        if timeStateCheck == 0 || timeStateCheck == -1 {
+        if availableTimeRegisteredStatus == 0 || availableTimeRegisteredStatus == -1 {
             saveButton.backgroundColor = UIColor.gray200
         } else {
             saveButton.backgroundColor = UIColor.purpleMain
@@ -189,11 +175,11 @@ class TimeInputViewController: UIViewController {
     // timePossible 배열에 time 정보가 비었는지 확인
     func timePossibleCountCheck() {
         for index in 0 ..< 7 {
-            timeStateCheck = 2
-            if possibleTime[index].time.count > 0 {
+            availableTimeRegisteredStatus = 2
+            if possibleTime[index].availableTimes.count > 0 {
                 return
             }
-            timeStateCheck = 0
+            availableTimeRegisteredStatus = 0
         }
     }
     
@@ -214,12 +200,12 @@ class TimeInputViewController: UIViewController {
     // 가능한 시간 없음 버튼 클릭 시
     // possibleTimeCheck: true/false
     @objc func didClickTimeImpossibleButton() {
-        if timeStateCheck == 1 {
+        if availableTimeRegisteredStatus == 1 {
             timePossibleCountCheck()
             timeImpossibleButton.setImage(UIImage(named: "timeImpossible"), for: .normal)
             timeImpossibleLabel.textColor = UIColor.textDisabled
         } else {
-            timeStateCheck = 1
+            availableTimeRegisteredStatus = 1
             timeImpossibleButton.setImage(UIImage(named: "timeImpossibleSelected"), for: .normal)
             timeImpossibleLabel.textColor = UIColor.purpleMain
         }
@@ -244,9 +230,9 @@ class TimeInputViewController: UIViewController {
         // save button 활성화 시에만
         if saveButton.backgroundColor == UIColor.purpleMain {
             // 가능한 시간 없음 버튼 클릭 시 빈 배열로 초기화
-            if timeStateCheck == 1 {
+            if availableTimeRegisteredStatus == 1 {
                 for index in 0 ..< 7 {
-                    possibleTime[index].time.removeAll()
+                    possibleTime[index].availableTimes.removeAll()
                 }
             }
             
@@ -365,17 +351,17 @@ extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewD
         print("Selected cell at indexPath: \(indexPath)")
         
         // 가능한 시간 없은 버튼 체크하지 않은 경우만
-        if timeStateCheck != 1 {
+        if availableTimeRegisteredStatus != 1 {
             // change cell background color
             let cell = collectionView.cellForItem(at: indexPath) as! TimeTableViewCell
             print(cell.contentView.backgroundColor ?? UIColor.red)
             let num = cell.changeCellColor()
             // 클릭 시 possibleTime 배열에 추가/삭제
             if num == 1 {
-                possibleTime[page*3 + indexPath.section].time.append(indexPath.row)
-                timeStateCheck = 2
+                possibleTime[page*3 + indexPath.section].availableTimes.append(indexPath.row)
+                availableTimeRegisteredStatus = 2
             } else if num == 0 {
-                possibleTime[page*3 + indexPath.section].time.removeAll { $0 == indexPath.row }
+                possibleTime[page*3 + indexPath.section].availableTimes.removeAll { $0 == indexPath.row }
                 timePossibleCountCheck()
             }
             changeSaveButtonColor()
@@ -413,15 +399,15 @@ extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewD
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimeTableViewCell.identifier, for: indexPath) as? TimeTableViewCell else { return UICollectionViewCell() }
         
         // 가능한 시간 없음 버튼 클릭 여부 체크
-        if timeStateCheck == 1 {
+        if availableTimeRegisteredStatus == 1 {
             cell.contentView.backgroundColor = UIColor.gray50
-        } else if timeStateCheck == 2 {
-            if possibleTime[page*3 + indexPath.section].time.contains(indexPath.row) {
+        } else if availableTimeRegisteredStatus == 2 {
+            if possibleTime[page*3 + indexPath.section].availableTimes.contains(indexPath.row) {
                 cell.contentView.backgroundColor = UIColor.mainSub1?.withAlphaComponent(0.5)
             } else {
                 cell.contentView.backgroundColor = UIColor.grayWhite
             }
-        } else if timeStateCheck == 0 {
+        } else if availableTimeRegisteredStatus == 0 {
             cell.contentView.backgroundColor = UIColor.grayWhite
         }
         

@@ -34,14 +34,13 @@ struct PossibleMember: Codable {
 }
 
 // 나의 가능한 시간 조회
-struct GetMyPossibleTimeResult: Codable {
-    let planId, userId: Int
-    let hasRegisteredTime: Bool     // 시간 입력한 적이 있는가에 대한 값
-    let hasPossibleTime: Bool       // 가능한 시간이 있는가에 대한 값 -> 시간 없음 버튼을 클릭하면 false 값
-    var possibleTime: [PossibleTime]
+struct GetMyPossibleTimeResponse: Codable {
+    let planId, memberId: Int
+    let availableTimeRegisteredStatus: Int
+    var timeSlot: [PossibleTime]
 }
 
 struct PossibleTime: Codable {
     var date: String
-    var time: [Int]
+    var availableTimes: [Int]
 }
