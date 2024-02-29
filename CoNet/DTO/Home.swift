@@ -20,7 +20,7 @@ struct GetDayPlanResult: Codable {
 }
 
 // 대기 중인 약속 조회
-struct GetWaitingPlanResult: Codable {
+struct GetWaitingPlanResponse: Codable {
     let count: Int
     let plans: [WaitingPlan]
 }
