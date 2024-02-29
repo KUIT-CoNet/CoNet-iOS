@@ -246,7 +246,7 @@ class MeetingAPI {
     
     // 북마크 조회
     func getBookmark(completion: @escaping (_ bookmarks: [MeetingDetailInfo]) -> Void) {
-        let url = "\(baseUrl)/team/bookmark"
+        let url = "\(baseUrl)/member/bookmark"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
@@ -276,9 +276,9 @@ class MeetingAPI {
             }
     }
     
-    // 북마크
+    // 북마크 추가, 삭제
     func postBookmark(teamId: Int, completion: @escaping (_ isSuccess: Bool) -> Void) {
-        let url = "\(baseUrl)/team/bookmark"
+        let url = "\(baseUrl)/member/bookmark"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
@@ -299,28 +299,28 @@ class MeetingAPI {
             }
     }
     
-    // 북마크 삭제
-    func postDeleteBookmark(teamId: Int, completion: @escaping (_ isSuccess: Bool) -> Void) {
-        let url = "\(baseUrl)/team/bookmark/delete"
-        let headers: HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
-        ]
-        let body: [String: Any] = [
-            "teamId": teamId
-        ]
-        
-        AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
-            .responseDecodable(of: BaseResponse<String>.self) { response in
-                switch response.result {
-                case .success(let response):
-                    completion(response.code == 1000)
-                    
-                case .failure(let error):
-                    print("DEBUG(edit name api) error: \(error)")
-                }
-            }
-    }
+//    // 북마크 삭제
+//    func postDeleteBookmark(teamId: Int, completion: @escaping (_ isSuccess: Bool) -> Void) {
+//        let url = "\(baseUrl)/team/bookmark/delete"
+//        let headers: HTTPHeaders = [
+//            "Content-Type": "application/json",
+//            "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
+//        ]
+//        let body: [String: Any] = [
+//            "teamId": teamId
+//        ]
+//        
+//        AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
+//            .responseDecodable(of: BaseResponse<String>.self) { response in
+//                switch response.result {
+//                case .success(let response):
+//                    completion(response.code == 1000)
+//                    
+//                case .failure(let error):
+//                    print("DEBUG(edit name api) error: \(error)")
+//                }
+//            }
+//    }
 }
 
 extension UIImage {

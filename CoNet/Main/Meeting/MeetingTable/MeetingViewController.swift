@@ -402,7 +402,7 @@ extension MeetingViewController: UICollectionViewDelegate, UICollectionViewDataS
         cell.onStarButtonTapped = {
             if cell.starButton.currentImage == UIImage(named: "fullstar") {
                 // 북마크 되어 있을 때
-                MeetingAPI().postDeleteBookmark(teamId: self.meetings[indexPath.item].id) { isSuccess in
+                MeetingAPI().postBookmark(teamId: self.meetings[indexPath.item].id) { isSuccess in
                     if isSuccess {
                         cell.starButton.setImage(UIImage(named: "star"), for: .normal)
                     }
