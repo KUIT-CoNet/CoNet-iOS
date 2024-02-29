@@ -20,7 +20,7 @@ class HomeAPI {
         let query = URLQueryItem(name: "searchDate", value: date)
         
         // 통신할 API 주소
-        let url = "\(baseUrl)/home/month?\(query)"
+        let url = "\(baseUrl)/home/plan/month?\(query)"
         
         // HTTP Headers : 요청 헤더
         let headers: HTTPHeaders = [
@@ -37,7 +37,7 @@ class HomeAPI {
             switch response.result {
             case .success(let response): // 성공한 경우에
                 guard let result = response.result else { return }
-                
+                print("get month plan api", result)
                 let count = result.count
                 let dates = result.dates
                 
