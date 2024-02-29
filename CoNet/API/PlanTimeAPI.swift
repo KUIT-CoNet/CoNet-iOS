@@ -10,7 +10,7 @@ import Foundation
 import KeychainSwift
 
 class PlanTimeAPI {
-    let baseUrl = "http://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
+    let baseUrl = "https://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
     let keychain = KeychainSwift()
     
     // 구성원의 가능한 시간 조회
@@ -25,7 +25,6 @@ class PlanTimeAPI {
             .responseDecodable(of: BaseResponse<GetMemberPossibleTimeResponse>.self) { response in
                 switch response.result {
                 case .success(let response):
-                    print("time", response.result)
                     guard let result = response.result else { return }
                     completion(result.teamId, result.planId, result.planName, result.planStartPeriod, result.planEndPeriod, result.endNumberForEachSection, result.availableMemberDateTime)
 
@@ -60,7 +59,7 @@ class PlanTimeAPI {
     
     // 나의 가능한 시간 저장
     func postMyPossibleTime(planId: Int, possibleDateTimes: [PossibleTime]) {
-        let url = "\(baseUrl)/team/plan/time"
+        let url = "\(baseUrl)/plan/available-time-slot"
         
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
@@ -75,7 +74,7 @@ class PlanTimeAPI {
 
         let body: [String: Any] = [
             "planId": planId,
-            "possibleDateTimes": times
+            "availableDateTimes": times
         ]
         
         AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
