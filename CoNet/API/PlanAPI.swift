@@ -120,8 +120,8 @@ class PlanAPI {
     }
     
     // 약속 상세 수정
-    func updatePlan(planId: Int, planName: String, date: String?, time: String, members: [Int]?, isRegisteredToHistory: Bool, historyDescription: String?, image: UIImage, completion: @escaping (_ isSuccess: Bool) -> Void) {
-        let url = "\(baseUrl)/team/plan/update-fixed"
+    func updatePlan(planId: Int, planName: String, date: String?, time: String, members: [Int]?, completion: @escaping (_ isSuccess: Bool) -> Void) {
+        let url = "\(baseUrl)/plan/update/fixed"
         let headers: HTTPHeaders = [
             "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
@@ -132,30 +132,11 @@ class PlanAPI {
             "planName": planName,
             "time": time,
             "date": date ?? "",
-            "members": members ?? [],
-            "historyDescription": historyDescription ?? "",
-            "isRegisteredToHistory": isRegisteredToHistory
+            "members": members ?? []
         ]
-        var requestBodyJson: String = ""
         
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: requestBody, options: [])
-                if let jsonString = String(data: jsonData, encoding: .utf8) {
-                    print(jsonString)
-                    requestBodyJson = jsonString
-                }
-        } catch {
-            print("Error encoding JSON: (error)")
-        }
-        
-        guard let image = image.pngData() else { return }
-        
-        // Multipart Form 데이터 생성
-        AF.upload(multipartFormData: { multipartFormData in
-            multipartFormData.append(image, withName: "file", fileName: "\(image).png", mimeType: "image/png")
-            multipartFormData.append(requestBodyJson.data(using: .utf8)!, withName: "request", mimeType: "application/json")
-        }, to: url, method: .post, headers: headers)
-            .responseDecodable(of: BaseResponse<PlanEditResponse>.self) { response in
+        AF.request(url, method: .post, parameters: requestBody, encoding: JSONEncoding.default, headers: headers)
+            .responseDecodable(of: BaseResponse<String>.self) { response in
                 switch response.result {
                 case .success(let response):
                     print("DEBUG(약속 상세 수정 api) success response: \(response)")

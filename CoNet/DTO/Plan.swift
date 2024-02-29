@@ -61,11 +61,6 @@ struct EditPlanMember: Codable {
     }
 }
 
-struct PlanEditResponse: Codable {
-    let code, status: Int
-    let message, result: String
-}
-
 struct Result: Codable {
     let planID: Int
 
