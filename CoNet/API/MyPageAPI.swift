@@ -68,7 +68,7 @@ class MyPageAPI {
     
     // 이름 수정
     func editName(name: String, completion: @escaping (_ isSuccess: Bool) -> Void) {
-        let url = "\(baseUrl)/user/name"
+        let url = "\(baseUrl)/member/name"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
