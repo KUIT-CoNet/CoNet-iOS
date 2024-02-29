@@ -8,7 +8,7 @@
 import Foundation
 
 // 팀 내 특정 날짜 약속 조회
-struct GetMeetingDayPlanResult: Codable {
+struct GetMeetingDayPlanResponse: Codable {
     let count: Int
     let plans: [MeetingDayPlan]
 }

@@ -127,7 +127,7 @@ class MeetingMainViewController: UIViewController {
         navigationController?.navigationBar.isHidden = false
         
         let format = DateFormatter()
-        format.dateFormat = "yyyy-MM-dd"
+        format.dateFormat = "yyyy. MM. dd"
         format.locale = Locale(identifier: "ko_KR")
         format.timeZone = TimeZone(abbreviation: "KST")
         

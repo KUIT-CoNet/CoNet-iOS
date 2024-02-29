@@ -10,13 +10,13 @@ import Foundation
 import KeychainSwift
 
 class MeetingMainAPI {
-    let baseUrl = "http://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
+    let baseUrl = "https://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
     let keychain = KeychainSwift()
 
     // 팀 내 특정 달 약속 조회
     func getMeetingMonthPlan(teamId: Int, searchDate: String, completion: @escaping (_ count: Int, _ dates: [Int]) -> Void) {
         
-        let url = "\(baseUrl)/team/plan/month?teamId=\(teamId)&searchDate=\(searchDate)"
+        let url = "\(baseUrl)/plan/month?teamId=\(teamId)&searchDate=\(searchDate)"
         
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
@@ -38,14 +38,14 @@ class MeetingMainAPI {
     
     // 팀 내 특정 날짜 약속 조회
     func getMeetingDayPlan(teamId: Int, searchDate: String, completion: @escaping (_ count: Int, _ plans: [MeetingDayPlan]) -> Void) {
-        let url = "\(baseUrl)/team/plan/day?teamId=\(teamId)&searchDate=\(searchDate)"
+        let url = "\(baseUrl)/plan/day?teamId=\(teamId)&searchDate=\(searchDate)"
         
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
 
         AF.request(url, method: .get, encoding: JSONEncoding.default, headers: headers)
-            .responseDecodable(of: BaseResponse<GetMeetingDayPlanResult>.self) { response in
+            .responseDecodable(of: BaseResponse<GetMeetingDayPlanResponse>.self) { response in
                 switch response.result {
                 case .success(let response):
                     guard let result = response.result else { return }
