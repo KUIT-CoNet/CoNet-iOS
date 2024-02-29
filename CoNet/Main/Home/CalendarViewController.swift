@@ -202,7 +202,7 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
             NotificationCenter.default.post(name: NSNotification.Name("ToMeetingMain"), object: nil, userInfo: ["dayPlanlabel": calendarDateFormatter.getMonthText() + "월 " + calendarDay + "일의 약속"])
         }
         
-        // yyyy-MM-dd 형식
+        // yyyy. MM. dd 형식
         let clickDate = calendarDateFormatter.changeDateType(date: calendarDate) + calendarDay
         
         if let parentVC = parent {

@@ -33,7 +33,7 @@ class HomeAPI {
         
         // responseData를 호출하면서 데이터 통신 시작
         // response에 데이터 통신의 결과가 담깁니다.
-        dataRequest.responseDecodable(of: BaseResponse<GetMonthPlanResult>.self) { response in
+        dataRequest.responseDecodable(of: BaseResponse<GetMonthPlanResponse>.self) { response in
             switch response.result {
             case .success(let response): // 성공한 경우에
                 guard let result = response.result else { return }
@@ -55,7 +55,7 @@ class HomeAPI {
         let query = URLQueryItem(name: "searchDate", value: date)
         
         // 통신할 API 주소
-        let url = "\(baseUrl)/home/day?\(query)"
+        let url = "\(baseUrl)/home/plan/day?\(query)"
         
         // HTTP Headers : 요청 헤더
         let headers: HTTPHeaders = [
@@ -68,7 +68,7 @@ class HomeAPI {
         
         // responseData를 호출하면서 데이터 통신 시작
         // response에 데이터 통신의 결과가 담깁니다.
-        dataRequest.responseDecodable(of: BaseResponse<GetDayPlanResult>.self) { response in
+        dataRequest.responseDecodable(of: BaseResponse<GetDayPlanResponse>.self) { response in
             switch response.result {
             case .success(let response): // 성공한 경우에
                 guard let result = response.result else { return }

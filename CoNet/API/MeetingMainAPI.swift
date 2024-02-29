@@ -23,7 +23,7 @@ class MeetingMainAPI {
         ]
 
         AF.request(url, method: .get, encoding: JSONEncoding.default, headers: headers)
-            .responseDecodable(of: BaseResponse<GetMonthPlanResult>.self) { response in
+            .responseDecodable(of: BaseResponse<GetMonthPlanResponse>.self) { response in
                 switch response.result {
                 case .success(let response):
                     guard let result = response.result else { return }
