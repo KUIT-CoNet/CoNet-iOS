@@ -92,14 +92,14 @@ class MyPageAPI {
     
     // 회원 탈퇴
     func signout(completion: @escaping (_ isSuccess: Bool) -> Void) {
-        let url = "\(baseUrl)/user/delete"
+        let url = "\(baseUrl)/user"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
         
         AF.request(url,
-                   method: .post,
+                   method: .delete,
                    encoding: JSONEncoding.default,
                    headers: headers)
         .responseDecodable(of: BaseResponse<String>.self) { response in
