@@ -39,10 +39,10 @@ class CalendarDateFormatter {
     // [Int] -> yyyy-MM-dd
     func changeDateType(date: [Int]) -> String {
         // year
-        var returnDate = String(date[0])+"-"
+        var returnDate = String(date[0])+". "
         
         // month
-        returnDate += formatNumberToTwoDigit(date[1])+"-"
+        returnDate += formatNumberToTwoDigit(date[1])+". "
         
         /*
          // day

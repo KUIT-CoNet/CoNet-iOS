@@ -10,7 +10,7 @@ import Foundation
 import KeychainSwift
 
 class HomeAPI {
-    let baseUrl = "http://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
+    let baseUrl = "https://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
     static let shared = HomeAPI()
     let keychain = KeychainSwift()
     
@@ -20,7 +20,7 @@ class HomeAPI {
         let query = URLQueryItem(name: "searchDate", value: date)
         
         // 통신할 API 주소
-        let url = "\(baseUrl)/home/month?\(query)"
+        let url = "\(baseUrl)/home/plan/month?\(query)"
         
         // HTTP Headers : 요청 헤더
         let headers: HTTPHeaders = [
@@ -33,11 +33,11 @@ class HomeAPI {
         
         // responseData를 호출하면서 데이터 통신 시작
         // response에 데이터 통신의 결과가 담깁니다.
-        dataRequest.responseDecodable(of: BaseResponse<GetMonthPlanResult>.self) { response in
+        dataRequest.responseDecodable(of: BaseResponse<GetMonthPlanResponse>.self) { response in
             switch response.result {
             case .success(let response): // 성공한 경우에
                 guard let result = response.result else { return }
-                
+                print("get month plan api", result)
                 let count = result.count
                 let dates = result.dates
                 
@@ -55,7 +55,7 @@ class HomeAPI {
         let query = URLQueryItem(name: "searchDate", value: date)
         
         // 통신할 API 주소
-        let url = "\(baseUrl)/home/day?\(query)"
+        let url = "\(baseUrl)/home/plan/day?\(query)"
         
         // HTTP Headers : 요청 헤더
         let headers: HTTPHeaders = [
@@ -68,7 +68,7 @@ class HomeAPI {
         
         // responseData를 호출하면서 데이터 통신 시작
         // response에 데이터 통신의 결과가 담깁니다.
-        dataRequest.responseDecodable(of: BaseResponse<GetDayPlanResult>.self) { response in
+        dataRequest.responseDecodable(of: BaseResponse<GetDayPlanResponse>.self) { response in
             switch response.result {
             case .success(let response): // 성공한 경우에
                 guard let result = response.result else { return }
@@ -88,7 +88,7 @@ class HomeAPI {
     func getWaitingPlan(completion: @escaping (_ count: Int, _ plans: [WaitingPlan]) -> Void) {
         
         // 통신할 API 주소
-        let url = "\(baseUrl)/home/waiting"
+        let url = "\(baseUrl)/home/plan/waiting"
         
         // HTTP Headers : 요청 헤더
         let headers: HTTPHeaders = [
@@ -101,7 +101,7 @@ class HomeAPI {
         
         // responseData를 호출하면서 데이터 통신 시작
         // response에 데이터 통신의 결과가 담깁니다.
-        dataRequest.responseDecodable(of: BaseResponse<GetWaitingPlanResult>.self) { response in
+        dataRequest.responseDecodable(of: BaseResponse<GetWaitingPlanResponse>.self) { response in
             switch response.result {
             case .success(let response): // 성공한 경우에
                 guard let result = response.result else { return }

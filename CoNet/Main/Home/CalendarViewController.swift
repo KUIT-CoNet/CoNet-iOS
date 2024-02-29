@@ -73,7 +73,7 @@ class CalendarViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let format = DateFormatter()
-        format.dateFormat = "yyyy-MM"
+        format.dateFormat = "yyyy. MM"
         
         // api 호출
         getMonthPlanAPI(date: format.string(from: Date()))
@@ -114,7 +114,7 @@ class CalendarViewController: UIViewController {
         if let data = notification.userInfo?["meetingId"] as? Int {
             self.meetingId = data
             let format = DateFormatter()
-            format.dateFormat = "yyyy-MM"
+            format.dateFormat = "yyyy. MM"
             // api 호출
             getMonthPlanAPI(date: format.string(from: Date()))
         }
@@ -169,7 +169,7 @@ class CalendarViewController: UIViewController {
         yearMonth.setTitle(header, for: .normal) // yearMonth update
         
         // 날짜 포맷 변경: yyyy-MM
-        var changedHeader = header.replacingOccurrences(of: "년 ", with: "-")
+        var changedHeader = header.replacingOccurrences(of: "년 ", with: ". ")
         changedHeader = header.replacingOccurrences(of: "월", with: "")
         
         // api: 특정 달 약속 조회
@@ -202,7 +202,7 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
             NotificationCenter.default.post(name: NSNotification.Name("ToMeetingMain"), object: nil, userInfo: ["dayPlanlabel": calendarDateFormatter.getMonthText() + "월 " + calendarDay + "일의 약속"])
         }
         
-        // yyyy-MM-dd 형식
+        // yyyy. MM. dd 형식
         let clickDate = calendarDateFormatter.changeDateType(date: calendarDate) + calendarDay
         
         if let parentVC = parent {

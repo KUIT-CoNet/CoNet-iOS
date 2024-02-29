@@ -8,19 +8,19 @@
 import Foundation
 
 // 특정 달 약속 조회
-struct GetMonthPlanResult: Codable {
+struct GetMonthPlanResponse: Codable {
     let count: Int
     let dates: [Int]
 }
 
 // 특정 날짜 약속 조회
-struct GetDayPlanResult: Codable {
+struct GetDayPlanResponse: Codable {
     let count: Int
     let plans: [Plan]
 }
 
 // 대기 중인 약속 조회
-struct GetWaitingPlanResult: Codable {
+struct GetWaitingPlanResponse: Codable {
     let count: Int
     let plans: [WaitingPlan]
 }
