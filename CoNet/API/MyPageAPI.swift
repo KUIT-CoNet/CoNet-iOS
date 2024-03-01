@@ -11,7 +11,7 @@ import UIKit
 
 class MyPageAPI {
     let keychain = KeychainSwift()
-    let baseUrl = "http://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
+    let baseUrl = "https://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
     
     func getUser(completion: @escaping (_ name: String, _ imageUrl: String, _ email: String, _ social: String) -> Void) {
         let url = "\(baseUrl)/member"
@@ -43,7 +43,7 @@ class MyPageAPI {
     
     // 프로필 이미지 수정
     func editProfileImage(image: UIImage, completion: @escaping (_ imageUrl: String) -> Void) {
-        let url = "\(baseUrl)/user/image"
+        let url = "\(baseUrl)/member/image"
         let headers: HTTPHeaders = [
             "Content-Type": "multipart/form-data",
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
@@ -68,7 +68,7 @@ class MyPageAPI {
     
     // 이름 수정
     func editName(name: String, completion: @escaping (_ isSuccess: Bool) -> Void) {
-        let url = "\(baseUrl)/user/name"
+        let url = "\(baseUrl)/member/name"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
@@ -92,14 +92,14 @@ class MyPageAPI {
     
     // 회원 탈퇴
     func signout(completion: @escaping (_ isSuccess: Bool) -> Void) {
-        let url = "\(baseUrl)/user/delete"
+        let url = "\(baseUrl)/user"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
         
         AF.request(url,
-                   method: .post,
+                   method: .delete,
                    encoding: JSONEncoding.default,
                    headers: headers)
         .responseDecodable(of: BaseResponse<String>.self) { response in
