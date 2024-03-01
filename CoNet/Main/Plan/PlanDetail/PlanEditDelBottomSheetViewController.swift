@@ -78,9 +78,13 @@ class PlanEditDelBottomSheetViewController: UIViewController {
     @objc func showPlanEditVC() {
         let popUpVC = PlanInfoEditViewController()
         popUpVC.planId = planId
-        popUpVC.modalPresentationStyle = .overCurrentContext
-        popUpVC.modalTransitionStyle = .crossDissolve
-        present(popUpVC, animated: true, completion: nil)
+        
+        // 모달로 표시될 뷰 컨트롤러를 네비게이션 컨트롤러에 임베딩
+        let navigationController = UINavigationController(rootViewController: popUpVC)
+        
+        navigationController.modalPresentationStyle = .overCurrentContext
+        navigationController.modalTransitionStyle = .crossDissolve
+        present(navigationController, animated: true, completion: nil)
     }
     
     weak var delegate: PlanInfoViewControllerDelegate?

@@ -227,11 +227,11 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc private func backButtonTapped() {
-        navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true, completion: nil)
     }
     
     @objc private func updatePlan() {
-        guard let name = planNameTextField.text else { return }
+        // api 호출
     }
     
     @objc private func xNameButtonTapped() {
