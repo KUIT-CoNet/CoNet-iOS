@@ -84,7 +84,6 @@ class DecidedPlanInfoViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.navigationBar.isHidden = true
     }
     
     private func setupCollectionView() {
@@ -124,9 +123,13 @@ class DecidedPlanInfoViewController: UIViewController {
         let bottomSheetViewController = PlanEditDelBottomSheetViewController()
         bottomSheetViewController.planId = planId
         bottomSheetViewController.delegate = self
-        bottomSheetViewController.modalPresentationStyle = .overCurrentContext
-        bottomSheetViewController.modalTransitionStyle = .crossDissolve
-        present(bottomSheetViewController, animated: true, completion: nil)
+        
+        // 모달로 표시될 뷰 컨트롤러를 네비게이션 컨트롤러에 임베딩
+        let navigationController = UINavigationController(rootViewController: bottomSheetViewController)
+
+        navigationController.modalPresentationStyle = .overCurrentContext
+        navigationController.modalTransitionStyle = .crossDissolve
+        present(navigationController, animated: true, completion: nil)
     }
     
     @objc private func backButtonTapped() {
