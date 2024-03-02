@@ -123,7 +123,7 @@ class PlanAPI {
     func updatePlan(planId: Int, planName: String, date: String?, time: String, members: [Int]?, completion: @escaping (_ isSuccess: Bool) -> Void) {
         let url = "\(baseUrl)/plan/update/fixed"
         let headers: HTTPHeaders = [
-            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Type": "application/json",
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
         
@@ -139,7 +139,7 @@ class PlanAPI {
             .responseDecodable(of: BaseResponse<String>.self) { response in
                 switch response.result {
                 case .success(let response):
-                    print("DEBUG(약속 상세 수정 api) success response: \(response)")
+                    print("DEBUG(약속 상세 수정 api) success response: \(response.message)")
                     completion(response.code == 1000)
                     
                 case .failure(let error):
