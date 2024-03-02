@@ -35,21 +35,21 @@ class PlanTimeAPI {
     }
     
     // 나의 가능한 시간 조회
-    func getMyPossibleTime(planId: Int, completion: @escaping (_ planId: Int, _ userId: Int, _ hasRegisteredTime: Bool, _ hasPossibleTime: Bool, _ possibleTime: [PossibleTime]) -> Void) {
-        let url = "\(baseUrl)/team/plan/user-time?planId=\(planId)"
+    func getMyPossibleTime(planId: Int, completion: @escaping (_ planId: Int, _ userId: Int, _ availableTimeRegisteredStatus: Int, _ possibleTime: [PossibleTime]) -> Void) {
+        let url = "\(baseUrl)/plan/\(planId)/available-time-slot/my"
         
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
 
         AF.request(url, method: .get, encoding: JSONEncoding.default, headers: headers)
-            .responseDecodable(of: BaseResponse<GetMyPossibleTimeResult>.self) { response in
+            .responseDecodable(of: BaseResponse<GetMyPossibleTimeResponse>.self) { response in
                 switch response.result {
                 case .success(let response):
                     guard let result = response.result else { return }
-                    print("DEBUG(getMyPossibleTime api): \(result)")
+//                    print("DEBUG(getMyPossibleTime api): \(result)")
                     
-                    completion(result.planId, result.userId, result.hasRegisteredTime, result.hasPossibleTime, result.possibleTime)
+                    completion(result.planId, result.memberId, result.availableTimeRegisteredStatus, result.timeSlot)
 
                 case .failure(let error):
                     print("DEBUG(getMyPossibleTime api) error: \(error)")
@@ -68,7 +68,7 @@ class PlanTimeAPI {
         
         var times: [[String: Any]] = []
         for time in possibleDateTimes {
-            let data = ["date": time.date, "time": time.time] as [String: Any]
+            let data = ["date": time.date, "time": time.availableTimes] as [String: Any]
             times.append(data)
         }
 

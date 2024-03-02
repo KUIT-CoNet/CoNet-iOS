@@ -39,9 +39,8 @@ struct PastPlanInfo: Codable {
 struct PlanDetail: Codable {
     let planId: Int
     let planName, date, time: String
+    let memberCount: Int
     let members: [PlanDetailMember]
-    let isRegisteredToHistory: Bool
-    let historyImgUrl, historyDescription: String?
 }
 
 struct PlanDetailMember: Codable {
@@ -62,15 +61,15 @@ struct EditPlanMember: Codable {
     }
 }
 
-struct PlanEditResponse: Codable {
-    let code, status: Int
-    let message, result: String
-}
-
 struct Result: Codable {
     let planID: Int
 
     enum CodingKeys: String, CodingKey {
         case planID = "planId"
     }
+}
+
+struct FixedPlanResponse: Codable {
+    let planName, fixedDate, fixedTime: String
+    let memberCount: Int
 }
