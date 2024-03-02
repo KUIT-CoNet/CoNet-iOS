@@ -49,3 +49,9 @@ struct PostCreateMeetingResponse: Codable {
     let teamId: Int
     let inviteCode: String
 }
+
+struct TeamMember: Codable {
+    let userId: Int
+    let name: String
+    let userImgUrl: String
+}

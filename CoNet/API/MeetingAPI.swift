@@ -244,6 +244,30 @@ class MeetingAPI {
             }
     }
     
+    // 모임 구성원 조회
+    func getTeamMembers(teamId: Int, completion: @escaping (_ members: [TeamMember]?) -> Void) {
+        let url = "\(baseUrl)/team/\(teamId)/members"
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
+        ]
+        
+        AF.request(url, method: .get, headers: headers)
+            .responseDecodable(of: BaseResponse<[TeamMember]>.self) { response in
+                switch response.result {
+                case .success(let response):
+                    if response.code == 1000, let members = response.result {
+                        completion(members)
+                    } else {
+                        completion(nil)
+                    }
+                case .failure(let error):
+                    print("DEBUG(모임 구성원 조회 api) error: \(error)")
+                    completion(nil)
+                }
+            }
+    }
+    
     // 북마크 조회
     func getBookmark(completion: @escaping (_ bookmarks: [MeetingDetailInfo]) -> Void) {
         let url = "\(baseUrl)/member/bookmark"
@@ -298,29 +322,6 @@ class MeetingAPI {
                 }
             }
     }
-    
-//    // 북마크 삭제
-//    func postDeleteBookmark(teamId: Int, completion: @escaping (_ isSuccess: Bool) -> Void) {
-//        let url = "\(baseUrl)/team/bookmark/delete"
-//        let headers: HTTPHeaders = [
-//            "Content-Type": "application/json",
-//            "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
-//        ]
-//        let body: [String: Any] = [
-//            "teamId": teamId
-//        ]
-//        
-//        AF.request(url, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
-//            .responseDecodable(of: BaseResponse<String>.self) { response in
-//                switch response.result {
-//                case .success(let response):
-//                    completion(response.code == 1000)
-//                    
-//                case .failure(let error):
-//                    print("DEBUG(edit name api) error: \(error)")
-//                }
-//            }
-//    }
 }
 
 extension UIImage {
