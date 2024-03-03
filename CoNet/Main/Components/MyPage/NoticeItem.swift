@@ -35,11 +35,13 @@ class NoticeItem: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        addView()
         layoutContraints()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        addView()
         layoutContraints()
     }
 }
