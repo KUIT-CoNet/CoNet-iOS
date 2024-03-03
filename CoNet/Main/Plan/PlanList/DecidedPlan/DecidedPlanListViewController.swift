@@ -46,11 +46,11 @@ class DecidedPlanListViewController: UIViewController {
     
     // 확정된 약속 데이터 가져오기
     private func getDecidedPlan() {
-        PlanAPI().getDecidedPlansAtMeeting(meetingId: meetingId) { count, plans in
-            self.plansCount = count
-            self.decidedPlanData = plans
-            self.mainView.reload()
-        }
+//        PlanAPI().getDecidedPlansAtMeeting(meetingId: meetingId, period: <#T##String#>) { count, plans in
+//            self.plansCount = count
+//            self.decidedPlanData = plans
+//            self.mainView.reload()
+//        }
     }
 }
 
