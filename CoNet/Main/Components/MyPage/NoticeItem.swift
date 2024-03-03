@@ -34,18 +34,35 @@ class NoticeItem: UICollectionViewCell {
         $0.text = "내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요."
         $0.font = UIFont.body2Medium
         $0.textColor = .textHigh
+        $0.isHidden = true
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addView()
         layoutContraints()
+        buttonActions()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         addView()
         layoutContraints()
+        buttonActions()
+    }
+    
+    private func buttonActions() {
+        arrowImage.addTarget(self, action: #selector(didClickArrowButton), for: .touchUpInside)
+    }
+    
+    @objc func didClickArrowButton() {
+        if arrowImage.currentImage == UIImage(named: "arrow_down_gray") {
+            arrowImage.setImage(UIImage(named: "arrow_up_gray"), for: .normal)
+            contents.isHidden = false
+        } else if arrowImage.currentImage == UIImage(named: "arrow_up_gray") {
+            arrowImage.setImage(UIImage(named: "arrow_down_gray"), for: .normal)
+            contents.isHidden = true
+        }
     }
 }
 
