@@ -10,6 +10,7 @@ import Then
 import UIKit
 
 class NoticeItem: UICollectionViewCell {
+    static let registerId = "\(NoticeItem.self)"
     
     let date = UILabel().then {
         $0.text = "2024. 01. 24"
