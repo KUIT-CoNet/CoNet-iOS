@@ -100,6 +100,7 @@ class TimeInputViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .white
+        navigationBarSetting()
         
         addView()
         layoutConstraints()
@@ -117,6 +118,14 @@ class TimeInputViewController: UIViewController {
         getMyPossibleTimeAPI()
         updateTimeTable()
         changeSaveButtonColor()
+    }
+    
+    func navigationBarSetting() {
+        self.navigationController?.navigationBar.isHidden = false
+        navigationItem.title = "내 시간 입력하기"
+        
+        let leftbarButtonItem = UIBarButtonItem(customView: prevButton)
+        navigationItem.leftBarButtonItem = leftbarButtonItem
     }
     
     func timeTableSetting() {
@@ -322,8 +331,6 @@ extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewD
 
 extension TimeInputViewController {
     func addView() {
-        view.addSubview(prevButton)
-        view.addSubview(inputTimeLabel)
         view.addSubview(prevDayBtn)
         view.addSubview(date1)
         view.addSubview(date2)
@@ -335,36 +342,15 @@ extension TimeInputViewController {
         view.addSubview(timeImpossibleLabel)
     }
     
+    // time table
     func layoutConstraints() {
-        headerConstraintS()
-        timetableConstraints()
-    }
-    
-    // 헤더 - x버튼, 약속 이름 등
-    func headerConstraintS() {
         let safeArea = view.safeAreaLayoutGuide
         
-        // x 버튼
-        prevButton.snp.makeConstraints { make in
-            make.height.width.equalTo(24)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.top.equalTo(safeArea.snp.top).offset(30)
-        }
-        
-        // 약속 이름
-        inputTimeLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(prevButton)
-            make.centerX.equalTo(view.snp.centerX)
-        }
-    }
-    
-    // time table
-    func timetableConstraints() {
         // 이전 날짜로 이동 버튼
         prevDayBtn.snp.makeConstraints { make in
             make.height.width.equalTo(16)
             make.leading.equalTo(view.snp.leading).offset(44)
-            make.top.equalTo(prevButton.snp.bottom).offset(29)
+            make.top.equalTo(safeArea.snp.top).offset(29)
         }
         
         // 날짜 3개
@@ -395,7 +381,7 @@ extension TimeInputViewController {
         saveButton.snp.makeConstraints { make in
             make.height.equalTo(52)
             make.leading.trailing.equalToSuperview().inset(24)
-            make.bottom.equalTo(view.snp.bottom).offset(-35)
+            make.bottom.equalTo(safeArea.snp.bottom).offset(-35)
         }
         
         // 타임테이블
