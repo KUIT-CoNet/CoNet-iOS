@@ -26,7 +26,7 @@ struct DecidedPlanInfo: Codable {
     let planId: Int
     let date, time: String
     let planName: String
-    let participant: String
+    let participant: Bool
     let dday: Int
 }
 

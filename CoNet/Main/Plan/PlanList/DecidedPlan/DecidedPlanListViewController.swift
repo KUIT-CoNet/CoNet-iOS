@@ -105,13 +105,20 @@ class DecidedPlanListViewController: UIViewController {
         mainView.collectionView.register(DecidedPlanCell.self, forCellWithReuseIdentifier: DecidedPlanCell.registerId)
     }
     
-    // 확정된 약속 데이터 가져오기
+    // 확정된 다가오는/지난 약속 데이터 가져오기
     private func getDecidedPlan() {
-//        PlanAPI().getDecidedPlansAtMeeting(meetingId: meetingId, period: <#T##String#>) { count, plans in
-//            self.plansCount = count
-//            self.decidedPlanData = plans
-//            self.mainView.reload()
-//        }
+        var period: String = ""
+        if upcomingButton.isSelected {
+            period = "oncoming"
+        } else if pastButton.isSelected {
+            period = "past"
+        }
+        
+        PlanAPI().getDecidedPlansAtMeeting(meetingId: meetingId, period: period) { count, plans in
+            self.plansCount = count
+            self.decidedPlanData = plans
+            self.mainView.reload()
+        }
     }
 }
 
