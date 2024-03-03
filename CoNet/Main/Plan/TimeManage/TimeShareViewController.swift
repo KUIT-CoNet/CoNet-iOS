@@ -143,6 +143,8 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         
         view.backgroundColor = .white
         view.layoutIfNeeded()
+        
+        navigationBarSetting()
         addView()
         layoutConstraints()
         timeTableSetting()
@@ -166,6 +168,17 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         getMemberPossibleTimeAPI()
         updateTimeTable()
         memberCountUpdate()
+    }
+    
+    func navigationBarSetting() {
+        self.navigationController?.navigationBar.isHidden = false
+        navigationItem.title = planTitle.text
+        
+        let leftbarButtonItem = UIBarButtonItem(customView: xButton)
+        navigationItem.leftBarButtonItem = leftbarButtonItem
+        
+        let rightbarButtonItem = UIBarButtonItem(customView: dots)
+        navigationItem.rightBarButtonItem = rightbarButtonItem
     }
     
     func timeTableSetting() {
@@ -431,9 +444,6 @@ extension TimeShareViewController: UICollectionViewDataSource, UICollectionViewD
 // layout
 extension TimeShareViewController {
     func addView() {
-        view.addSubview(xButton)
-        view.addSubview(planTitle)
-        view.addSubview(dots)
         view.addSubview(prevBtn)
         view.addSubview(date1)
         view.addSubview(date2)
@@ -452,42 +462,19 @@ extension TimeShareViewController {
     }
     
     func layoutConstraints() {
-        headerConstraintS()
         timetableConstraints()
         colorExample() // 타임테이블 옆 색 예시
     }
 
-    // 헤더 - x버튼, 약속 이름 등
-    func headerConstraintS() {
-        let safeArea = view.safeAreaLayoutGuide
-        
-        // x 버튼
-        xButton.snp.makeConstraints { make in
-            make.height.width.equalTo(24)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.top.equalTo(safeArea.snp.top).offset(30)
-        }
-        
-        // 약속 이름
-        planTitle.snp.makeConstraints { make in
-            make.centerY.equalTo(xButton)
-            make.centerX.equalTo(view.snp.centerX)
-        }
-        
-        // dots 버튼
-        dots.snp.makeConstraints { make in
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
-            make.centerY.equalTo(xButton)
-        }
-    }
-    
     // time table
     func timetableConstraints() {
+        let safeArea = view.safeAreaLayoutGuide
+        
         // 이전 날짜로 이동 버튼
         prevBtn.snp.makeConstraints { make in
             make.height.width.equalTo(16)
-            make.leading.equalTo(view.snp.leading).offset(44)
-            make.top.equalTo(xButton.snp.bottom).offset(29)
+            make.leading.equalTo(safeArea.snp.leading).offset(44)
+            make.top.equalTo(safeArea.snp.top).offset(29)
         }
         
         // 날짜 3개
@@ -511,19 +498,19 @@ extension TimeShareViewController {
         nextBtn.snp.makeConstraints { make in
             make.height.width.equalTo(16)
             make.leading.equalTo(date3.snp.trailing).offset(9)
-            make.top.equalTo(dots.snp.bottom).offset(29)
+            make.centerY.equalTo(prevBtn.snp.centerY)
         }
         
         // 내 시간 입력하기 버튼
         inputTimeButton.snp.makeConstraints { make in
             make.height.equalTo(52)
             make.leading.trailing.equalToSuperview().inset(24)
-            make.bottom.equalTo(view.snp.bottom).offset(-35)
+            make.bottom.equalTo(safeArea.snp.bottom).offset(-35)
         }
         
         // 타임테이블
         timeTable.snp.makeConstraints { make in
-            make.leading.equalTo(view.snp.leading).offset(0)
+            make.leading.equalTo(safeArea.snp.leading)
             make.trailing.equalTo(timeTable.snp.leading).offset(300)
             make.top.equalTo(prevBtn.snp.bottom).offset(7)
             make.bottom.equalTo(inputTimeButton.snp.top).offset(-10)
