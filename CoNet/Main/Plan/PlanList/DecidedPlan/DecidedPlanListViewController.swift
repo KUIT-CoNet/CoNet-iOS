@@ -31,11 +31,10 @@ class DecidedPlanListViewController: UIViewController {
     // 내 약속만 보기 필터 버튼
     let filterButton = UIButton().then {
         $0.setTitle("내 약속만 보기", for: .normal)
-        $0.setTitleColor(UIColor.textDisabled, for: .normal)
-        $0.titleLabel?.font = UIFont.body3Medium
+        $0.setTitleColor(UIColor.gray500, for: .normal)
+        $0.titleLabel?.font = UIFont.body2Medium
         $0.setImage(UIImage(named: "uncheck-circle"), for: .normal)
         $0.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
-        $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -5)
     }
     
     // tab 선택 indicator
@@ -170,7 +169,7 @@ extension DecidedPlanListViewController {
         upcomingButton.snp.makeConstraints { make in
             make.width.equalTo(61)
             make.top.equalTo(safeArea.snp.top).offset(29)
-            make.leading.equalTo(safeArea.snp.leading).offset(34)
+            make.leading.equalTo(safeArea.snp.leading).offset(25)
         }
         
         pastButton.snp.makeConstraints { make in
@@ -180,7 +179,7 @@ extension DecidedPlanListViewController {
         }
         
         filterButton.snp.makeConstraints { make in
-            make.trailing.equalTo(safeArea.snp.trailing).offset(-35)
+            make.trailing.equalTo(safeArea.snp.trailing).offset(-25)
             make.centerY.equalTo(upcomingButton.snp.centerY)
         }
     }
@@ -194,7 +193,7 @@ extension DecidedPlanListViewController {
     }
     
     func setupselectedTabIndicator() {
-        let buttonWidth = upcomingButton.intrinsicContentSize.width
+//        let buttonWidth = upcomingButton.intrinsicContentSize.width
         updateUnderlinePosition(index: 0)
     }
     
@@ -216,7 +215,7 @@ extension DecidedPlanListViewController {
     private func updateUnderlinePosition(index: Int) {
         let selectedButton = index == 0 ? upcomingButton : pastButton
         let buttonWidth = selectedButton.intrinsicContentSize.width
-        let buttonXPosition = selectedButton.frame.origin.x
+//        let buttonXPosition = selectedButton.frame.origin.x
 
         selectedTabIndicator.snp.remakeConstraints { make in
             make.width.equalTo(buttonWidth)
