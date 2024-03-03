@@ -90,7 +90,7 @@ class PlanAPI {
             "planName": planName,
             "time": time,
             "date": date ?? "",
-            "members": members ?? []
+            "memberIds": members ?? []
         ]
         
         AF.request(url, method: .post, parameters: requestBody, encoding: JSONEncoding.default, headers: headers)
