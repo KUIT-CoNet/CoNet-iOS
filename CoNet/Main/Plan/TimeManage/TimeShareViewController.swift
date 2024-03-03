@@ -143,6 +143,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         
         view.backgroundColor = .white
         view.layoutIfNeeded()
+        addView()
         layoutConstraints()
         timeTableSetting()
         
