@@ -15,7 +15,7 @@ class NoticeViewController: UIViewController {
     }
     
     private lazy var noticeCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    var noticeData: [NoticeResponse] = [NoticeResponse(title: "test1", content: "dkdkdkdk", date: "2024. 01. 11"), NoticeResponse(title: "test1", content: "dkdkdkdk", date: "2024. 01. 11")]
+    var noticeData: [NoticeResponse] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
