@@ -67,6 +67,11 @@ extension NoticeViewController: UICollectionViewDelegate, UICollectionViewDataSo
         cell.title.text = noticeData[indexPath.item].title
         cell.contents.text = noticeData[indexPath.item].content
         
+        let bottomLine = CALayer()
+        bottomLine.frame = CGRect(x: 0.0, y: cell.frame.height - 1, width: cell.frame.width, height: 1.0)
+        bottomLine.backgroundColor = UIColor.gray100?.cgColor
+        cell.layer.addSublayer(bottomLine)
+        
         return cell
     }
     
@@ -74,7 +79,12 @@ extension NoticeViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width - 48
 
-        return CGSize(width: width, height: 100)
+        return CGSize(width: width, height: 70)
+    }
+    
+    // 셀 사이의 위아래 간격
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 20
     }
     
 }
