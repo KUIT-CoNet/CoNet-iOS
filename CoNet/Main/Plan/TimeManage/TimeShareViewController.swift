@@ -11,17 +11,11 @@ import UIKit
 
 class TimeShareViewController: UIViewController, TimeShareProtocol {
     var planId: Int = 0
+    var planName: String = ""
     
     // x 버튼
     let xButton = UIButton().then {
         $0.setImage(UIImage(named: "closeBtn"), for: .normal)
-    }
-    
-    // 약속 이름
-    let planTitle = UILabel().then {
-        $0.text = "약속 이름"
-        $0.font = UIFont.headline3Bold
-        $0.textColor = UIColor.textHigh
     }
     
     // 점 3개 버튼 (약속 수정/삭제 bottom sheet 나오는 버튼)
@@ -172,7 +166,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     
     func navigationBarSetting() {
         self.navigationController?.navigationBar.isHidden = false
-        navigationItem.title = planTitle.text
+        navigationItem.title = planName
         
         let leftbarButtonItem = UIBarButtonItem(customView: xButton)
         navigationItem.leftBarButtonItem = leftbarButtonItem
@@ -197,7 +191,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     // 구성원 시간 조회
     func getMemberPossibleTimeAPI() {
         PlanTimeAPI().getMemberPossibleTime(planId: planId) { _, _, planName, planStartPeriod, planEndPeriod, sectionMemberCounts, possibleMemberDateTime in
-            self.planTitle.text = planName
+            self.planName = planName
             self.possibleMemberDateTime = possibleMemberDateTime
             self.apiCheck = true
             
@@ -350,7 +344,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     func setupEditPlanPage(_ viewController: MakePlanViewController) {
         viewController.titleLabel.text = "약속 수정하기"
         
-        viewController.planNameTextField.text = planTitle.text
+        viewController.planNameTextField.text = planName
         viewController.planStartDateField.text = sendDate[0].replacingOccurrences(of: "-", with: ". ")
         viewController.planStartDateField.textColor = UIColor.textDisabled
         viewController.calendarButton.isEnabled = false

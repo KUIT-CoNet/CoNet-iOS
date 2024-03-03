@@ -184,6 +184,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         } else {
             let nextVC = TimeShareViewController()
             nextVC.planId = waitingPlanData[indexPath.item].planId
+            nextVC.planName = waitingPlanData[indexPath.item].planName
             nextVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(nextVC, animated: true)
         }

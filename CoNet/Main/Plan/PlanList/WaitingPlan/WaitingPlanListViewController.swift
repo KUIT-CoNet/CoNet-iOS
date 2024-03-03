@@ -59,6 +59,8 @@ extension WaitingPlanListViewController: UICollectionViewDelegate, UICollectionV
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let nextVC = TimeShareViewController()
         nextVC.planId = waitingPlanData[indexPath.item].planId
+        nextVC.planName = waitingPlanData[indexPath.item].planName
+        print(waitingPlanData[indexPath.item].planName)
         nextVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(nextVC, animated: true)
     }
@@ -103,5 +105,5 @@ extension WaitingPlanListViewController: UICollectionViewDelegate, UICollectionV
 
 protocol MeetingMainViewControllerDelegate: AnyObject {
     func sendDataBack(data: SideBarMenu)
-    func sendIntDataBack(data: Int)
+    func sendIntDataBack(data: Int, planName: String)
 }
