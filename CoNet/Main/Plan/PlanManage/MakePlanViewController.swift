@@ -235,7 +235,7 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
                     // 약속 만들기
                     guard let newName = planNameTextField.text else { return }
                     guard let newStartDate = planStartDateField.text else { return }
-                    let date = newStartDate.replacingOccurrences(of: ".", with: "-")
+                    let date = newStartDate.replacingOccurrences(of: ". ", with: "-")
                     PlanAPI().createPlan(teamId: meetingId, planName: newName, planStartDate: date) { planId, isSuccess in
                         if isSuccess {
                             self.navigationController?.popViewController(animated: true)
