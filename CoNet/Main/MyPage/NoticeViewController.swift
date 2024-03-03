@@ -49,13 +49,11 @@ class NoticeViewController: UIViewController {
 
 extension NoticeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    // 각 셀을 클릭했을 때 이벤트 처리
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-    }
-    
     // 셀 수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if noticeData.count == 0 {
+            noticeCollectionView.isHidden = true
+        }
         return noticeData.count
     }
     
