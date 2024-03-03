@@ -24,7 +24,6 @@ class NoticeAPI {
     let keychain = KeychainSwift()
     let baseUrl = "https://\(Bundle.main.infoDictionary?["BASE_URL"] ?? "nil baseUrl")"
 
-    
     func getNotice(completion: @escaping (_ notices: [NoticeResponse]?) -> Void) {
         let url = "\(baseUrl)/notice"
         let headers: HTTPHeaders = [

@@ -12,9 +12,11 @@ import UIKit
 class NoticeItem: UICollectionViewCell {
     static let registerId = "\(NoticeItem.self)"
     
+    let background = UIView()
+    
     let date = UILabel().then {
         $0.text = "2024. 01. 24"
-        $0.font = UIFont.body1Medium
+        $0.font = UIFont.body3Medium
         $0.textColor = .textHigh
     }
     
@@ -49,13 +51,17 @@ class NoticeItem: UICollectionViewCell {
 
 extension NoticeItem {
     func addView() {
-        contentView.addSubview(date)
-        contentView.addSubview(title)
-        contentView.addSubview(arrowImage)
-        contentView.addSubview(contents)
+        addSubview(background)
+        background.addSubview(date)
+        background.addSubview(title)
+        background.addSubview(arrowImage)
+        background.addSubview(contents)
     }
     
     func layoutContraints() {
+        background.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         date.snp.makeConstraints { make in
             make.leading.top.equalToSuperview()
         }
