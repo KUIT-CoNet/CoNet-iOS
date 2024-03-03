@@ -167,6 +167,19 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         memberCountUpdate()
     }
     
+    func timeTableSetting() {
+        timeTable.timeTableCollectionView.dataSource = self
+        timeTable.timeTableCollectionView.delegate = self
+    }
+    
+    func buttonActions() {
+        xButton.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
+        inputTimeButton.addTarget(self, action: #selector(didClickInputTimeButton), for: .touchUpInside)
+        prevBtn.addTarget(self, action: #selector(didClickPrevButton), for: .touchUpInside)
+        nextBtn.addTarget(self, action: #selector(didClickNextButton), for: .touchUpInside)
+        dots.addTarget(self, action: #selector(didClickDots), for: .touchUpInside)
+    }
+    
     // 구성원 시간 조회
     func getMemberPossibleTimeAPI() {
         PlanTimeAPI().getMemberPossibleTime(planId: planId) { _, _, planName, planStartPeriod, planEndPeriod, sectionMemberCounts, possibleMemberDateTime in
@@ -263,14 +276,6 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         peopleNum4.text = sectionMemberCount[3]
     }
     
-    func buttonActions() {
-        xButton.addTarget(self, action: #selector(xButtonTapped), for: .touchUpInside)
-        inputTimeButton.addTarget(self, action: #selector(didClickInputTimeButton), for: .touchUpInside)
-        prevBtn.addTarget(self, action: #selector(didClickPrevButton), for: .touchUpInside)
-        nextBtn.addTarget(self, action: #selector(didClickNextButton), for: .touchUpInside)
-        dots.addTarget(self, action: #selector(didClickDots), for: .touchUpInside)
-    }
-    
     @objc private func xButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
@@ -302,11 +307,6 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         bottomSheetViewController.modalPresentationStyle = .overCurrentContext
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
         present(bottomSheetViewController, animated: true, completion: nil)
-    }
-    
-    func timeTableSetting() {
-        timeTable.timeTableCollectionView.dataSource = self
-        timeTable.timeTableCollectionView.delegate = self
     }
     
     // 약속 확정 버튼 클릭 시
@@ -429,6 +429,27 @@ extension TimeShareViewController: UICollectionViewDataSource, UICollectionViewD
 
 // layout
 extension TimeShareViewController {
+    func addView() {
+        view.addSubview(xButton)
+        view.addSubview(planTitle)
+        view.addSubview(dots)
+        view.addSubview(prevBtn)
+        view.addSubview(date1)
+        view.addSubview(date2)
+        view.addSubview(date3)
+        view.addSubview(nextBtn)
+        view.addSubview(timeTable)
+        view.addSubview(inputTimeButton)
+        view.addSubview(purpleEx1)
+        view.addSubview(purpleEx2)
+        view.addSubview(purpleEx3)
+        view.addSubview(purpleEx4)
+        view.addSubview(peopleNum1)
+        view.addSubview(peopleNum2)
+        view.addSubview(peopleNum3)
+        view.addSubview(peopleNum4)
+    }
+    
     func layoutConstraints() {
         headerConstraintS()
         timetableConstraints()
@@ -440,7 +461,6 @@ extension TimeShareViewController {
         let safeArea = view.safeAreaLayoutGuide
         
         // x 버튼
-        view.addSubview(xButton)
         xButton.snp.makeConstraints { make in
             make.height.width.equalTo(24)
             make.leading.equalTo(safeArea.snp.leading).offset(24)
@@ -448,14 +468,12 @@ extension TimeShareViewController {
         }
         
         // 약속 이름
-        view.addSubview(planTitle)
         planTitle.snp.makeConstraints { make in
             make.centerY.equalTo(xButton)
             make.centerX.equalTo(view.snp.centerX)
         }
         
         // dots 버튼
-        view.addSubview(dots)
         dots.snp.makeConstraints { make in
             make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
             make.centerY.equalTo(xButton)
@@ -465,7 +483,6 @@ extension TimeShareViewController {
     // time table
     func timetableConstraints() {
         // 이전 날짜로 이동 버튼
-        view.addSubview(prevBtn)
         prevBtn.snp.makeConstraints { make in
             make.height.width.equalTo(16)
             make.leading.equalTo(view.snp.leading).offset(44)
@@ -473,19 +490,16 @@ extension TimeShareViewController {
         }
         
         // 날짜 3개
-        view.addSubview(date1)
         date1.snp.makeConstraints { make in
             make.width.equalTo(59)
             make.leading.equalTo(prevBtn.snp.trailing).offset(10)
             make.centerY.equalTo(prevBtn.snp.centerY)
         }
-        view.addSubview(date2)
         date2.snp.makeConstraints { make in
             make.width.equalTo(59)
             make.leading.equalTo(date1.snp.trailing).offset(20)
             make.centerY.equalTo(prevBtn.snp.centerY)
         }
-        view.addSubview(date3)
         date3.snp.makeConstraints { make in
             make.width.equalTo(59)
             make.leading.equalTo(date2.snp.trailing).offset(20)
@@ -493,15 +507,11 @@ extension TimeShareViewController {
         }
         
         // 다음 날짜로 이동 버튼
-        view.addSubview(nextBtn)
         nextBtn.snp.makeConstraints { make in
             make.height.width.equalTo(16)
             make.leading.equalTo(date3.snp.trailing).offset(9)
             make.top.equalTo(dots.snp.bottom).offset(29)
         }
-        
-        view.addSubview(timeTable)
-        view.addSubview(inputTimeButton)
         
         // 내 시간 입력하기 버튼
         inputTimeButton.snp.makeConstraints { make in
@@ -522,7 +532,6 @@ extension TimeShareViewController {
     // 타임테이블 옆 색 예시
     func colorExample() {
         // 색 view
-        view.addSubview(purpleEx1)
         purpleEx1.snp.makeConstraints { make in
             make.width.equalTo(24)
             make.height.equalTo(33)
@@ -530,7 +539,6 @@ extension TimeShareViewController {
             make.top.equalTo(nextBtn.snp.bottom).offset(13)
         }
         
-        view.addSubview(purpleEx2)
         purpleEx2.snp.makeConstraints { make in
             make.width.equalTo(24)
             make.height.equalTo(33)
@@ -538,7 +546,6 @@ extension TimeShareViewController {
             make.top.equalTo(purpleEx1.snp.bottom).offset(-1)
         }
         
-        view.addSubview(purpleEx3)
         purpleEx3.snp.makeConstraints { make in
             make.width.equalTo(24)
             make.height.equalTo(33)
@@ -546,7 +553,6 @@ extension TimeShareViewController {
             make.top.equalTo(purpleEx2.snp.bottom).offset(-1)
         }
         
-        view.addSubview(purpleEx4)
         purpleEx4.snp.makeConstraints { make in
             make.width.equalTo(24)
             make.height.equalTo(33)
@@ -555,28 +561,24 @@ extension TimeShareViewController {
         }
         
         // 인원 수 label
-        view.addSubview(peopleNum1)
         peopleNum1.snp.makeConstraints { make in
             make.height.equalTo(12)
             make.leading.equalTo(purpleEx1.snp.trailing).offset(6)
             make.bottom.equalTo(purpleEx1.snp.bottom)
         }
         
-        view.addSubview(peopleNum2)
         peopleNum2.snp.makeConstraints { make in
             make.height.equalTo(12)
             make.leading.equalTo(purpleEx1.snp.trailing).offset(6)
             make.bottom.equalTo(purpleEx2.snp.bottom)
         }
         
-        view.addSubview(peopleNum3)
         peopleNum3.snp.makeConstraints { make in
             make.height.equalTo(12)
             make.leading.equalTo(purpleEx1.snp.trailing).offset(6)
             make.bottom.equalTo(purpleEx3.snp.bottom)
         }
         
-        view.addSubview(peopleNum4)
         peopleNum4.snp.makeConstraints { make in
             make.height.equalTo(12)
             make.leading.equalTo(purpleEx1.snp.trailing).offset(6)
