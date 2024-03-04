@@ -100,11 +100,13 @@ class TimeInputViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .white
+        navigationBarSetting()
         
+        addView()
         layoutConstraints()
         timeTableSetting()
         
-        btnClickEvents()
+        buttonActions()
         
         for index in 0 ..< 7 {
             possibleTime[index].date = sendDate[index]
@@ -116,6 +118,28 @@ class TimeInputViewController: UIViewController {
         getMyPossibleTimeAPI()
         updateTimeTable()
         changeSaveButtonColor()
+    }
+    
+    func navigationBarSetting() {
+        self.navigationController?.navigationBar.isHidden = false
+        navigationItem.title = "내 시간 입력하기"
+        
+        let leftbarButtonItem = UIBarButtonItem(customView: prevButton)
+        navigationItem.leftBarButtonItem = leftbarButtonItem
+    }
+    
+    func timeTableSetting() {
+        timeTable.timeTableCollectionView.dataSource = self
+        timeTable.timeTableCollectionView.delegate = self
+    }
+    
+    // 버튼 클릭 이벤트
+    func buttonActions() {
+        prevButton.addTarget(self, action: #selector(didClickPrevButton), for: .touchUpInside)
+        timeImpossibleButton.addTarget(self, action: #selector(didClickTimeImpossibleButton), for: .touchUpInside)
+        prevDayBtn.addTarget(self, action: #selector(didClickPrevDayButton), for: .touchUpInside)
+        nextDayBtn.addTarget(self, action: #selector(didClickNextDayButton), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(didClickSaveButton), for: .touchUpInside)
     }
     
     func getMyPossibleTimeAPI() {
@@ -183,15 +207,6 @@ class TimeInputViewController: UIViewController {
         }
     }
     
-    // 버튼 클릭 이벤트
-    func btnClickEvents() {
-        prevButton.addTarget(self, action: #selector(didClickPrevButton), for: .touchUpInside)
-        timeImpossibleButton.addTarget(self, action: #selector(didClickTimeImpossibleButton), for: .touchUpInside)
-        prevDayBtn.addTarget(self, action: #selector(didClickPrevDayButton), for: .touchUpInside)
-        nextDayBtn.addTarget(self, action: #selector(didClickNextDayButton), for: .touchUpInside)
-        saveButton.addTarget(self, action: #selector(didClickSaveButton), for: .touchUpInside)
-    }
-    
     // 이전 버튼 클릭 시 창 끄기
     @objc func didClickPrevButton() {
         navigationController?.popViewController(animated: true)
@@ -242,107 +257,6 @@ class TimeInputViewController: UIViewController {
         }
     }
     
-    func timeTableSetting() {
-        timeTable.timeTableCollectionView.dataSource = self
-        timeTable.timeTableCollectionView.delegate = self
-    }
-    
-    func layoutConstraints() {
-        headerConstraintS()
-        timetableConstraints()
-    }
-    
-    // 헤더 - x버튼, 약속 이름 등
-    func headerConstraintS() {
-        let safeArea = view.safeAreaLayoutGuide
-        
-        // x 버튼
-        view.addSubview(prevButton)
-        prevButton.snp.makeConstraints { make in
-            make.height.width.equalTo(24)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-            make.top.equalTo(safeArea.snp.top).offset(30)
-        }
-        
-        // 약속 이름
-        view.addSubview(inputTimeLabel)
-        inputTimeLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(prevButton)
-            make.centerX.equalTo(view.snp.centerX)
-        }
-    }
-    
-    // time table
-    func timetableConstraints() {
-        // 이전 날짜로 이동 버튼
-        view.addSubview(prevDayBtn)
-        prevDayBtn.snp.makeConstraints { make in
-            make.height.width.equalTo(16)
-            make.leading.equalTo(view.snp.leading).offset(44)
-            make.top.equalTo(prevButton.snp.bottom).offset(29)
-        }
-        
-        // 날짜 3개
-        view.addSubview(date1)
-        date1.snp.makeConstraints { make in
-            make.width.equalTo(59)
-            make.leading.equalTo(prevDayBtn.snp.trailing).offset(10)
-            make.centerY.equalTo(prevDayBtn.snp.centerY)
-        }
-        view.addSubview(date2)
-        date2.snp.makeConstraints { make in
-            make.width.equalTo(59)
-            make.leading.equalTo(date1.snp.trailing).offset(20)
-            make.centerY.equalTo(prevDayBtn.snp.centerY)
-        }
-        view.addSubview(date3)
-        date3.snp.makeConstraints { make in
-            make.width.equalTo(59)
-            make.leading.equalTo(date2.snp.trailing).offset(20)
-            make.centerY.equalTo(prevDayBtn.snp.centerY)
-        }
-        
-        // 다음 날짜로 이동 버튼
-        view.addSubview(nextDayBtn)
-        nextDayBtn.snp.makeConstraints { make in
-            make.height.width.equalTo(16)
-            make.leading.equalTo(date3.snp.trailing).offset(9)
-            make.centerY.equalTo(prevDayBtn.snp.centerY)
-        }
-        
-        view.addSubview(timeTable)
-        view.addSubview(saveButton)
-        
-        // 저장 버튼
-        saveButton.snp.makeConstraints { make in
-            make.height.equalTo(52)
-            make.leading.trailing.equalToSuperview().inset(24)
-            make.bottom.equalTo(view.snp.bottom).offset(-35)
-        }
-        
-        // 타임테이블
-        timeTable.snp.makeConstraints { make in
-            make.leading.equalTo(view.snp.leading).offset(0)
-            make.trailing.equalTo(timeTable.snp.leading).offset(300)
-            make.top.equalTo(prevDayBtn.snp.bottom).offset(7)
-            make.bottom.equalTo(saveButton.snp.top).offset(-10)
-        }
-        
-        // 가능한 시간 없음 버튼
-        view.addSubview(timeImpossibleButton)
-        timeImpossibleButton.snp.makeConstraints { make in
-            make.trailing.equalTo(view.snp.trailing).offset(-33)
-            make.top.equalTo(nextDayBtn.snp.bottom).offset(507)
-        }
-        
-        // 가능한 시간 없음 label
-        view.addSubview(timeImpossibleLabel)
-        timeImpossibleLabel.snp.makeConstraints { make in
-            make.height.equalTo(12)
-            make.trailing.equalTo(view.snp.trailing).offset(-22)
-            make.top.equalTo(timeImpossibleButton.snp.bottom).offset(5)
-        }
-    }
 }
 
 extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -412,5 +326,83 @@ extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewD
         }
         
         return cell
+    }
+}
+
+extension TimeInputViewController {
+    func addView() {
+        view.addSubview(prevDayBtn)
+        view.addSubview(date1)
+        view.addSubview(date2)
+        view.addSubview(date3)
+        view.addSubview(nextDayBtn)
+        view.addSubview(timeTable)
+        view.addSubview(saveButton)
+        view.addSubview(timeImpossibleButton)
+        view.addSubview(timeImpossibleLabel)
+    }
+    
+    // time table
+    func layoutConstraints() {
+        let safeArea = view.safeAreaLayoutGuide
+        
+        // 이전 날짜로 이동 버튼
+        prevDayBtn.snp.makeConstraints { make in
+            make.height.width.equalTo(16)
+            make.leading.equalTo(view.snp.leading).offset(44)
+            make.top.equalTo(safeArea.snp.top).offset(29)
+        }
+        
+        // 날짜 3개
+        date1.snp.makeConstraints { make in
+            make.width.equalTo(59)
+            make.leading.equalTo(prevDayBtn.snp.trailing).offset(10)
+            make.centerY.equalTo(prevDayBtn.snp.centerY)
+        }
+        date2.snp.makeConstraints { make in
+            make.width.equalTo(59)
+            make.leading.equalTo(date1.snp.trailing).offset(20)
+            make.centerY.equalTo(prevDayBtn.snp.centerY)
+        }
+        date3.snp.makeConstraints { make in
+            make.width.equalTo(59)
+            make.leading.equalTo(date2.snp.trailing).offset(20)
+            make.centerY.equalTo(prevDayBtn.snp.centerY)
+        }
+        
+        // 다음 날짜로 이동 버튼
+        nextDayBtn.snp.makeConstraints { make in
+            make.height.width.equalTo(16)
+            make.leading.equalTo(date3.snp.trailing).offset(9)
+            make.centerY.equalTo(prevDayBtn.snp.centerY)
+        }
+        
+        // 저장 버튼
+        saveButton.snp.makeConstraints { make in
+            make.height.equalTo(52)
+            make.leading.trailing.equalToSuperview().inset(24)
+            make.bottom.equalTo(safeArea.snp.bottom).offset(-35)
+        }
+        
+        // 타임테이블
+        timeTable.snp.makeConstraints { make in
+            make.leading.equalTo(view.snp.leading).offset(0)
+            make.trailing.equalTo(timeTable.snp.leading).offset(300)
+            make.top.equalTo(prevDayBtn.snp.bottom).offset(7)
+            make.bottom.equalTo(saveButton.snp.top).offset(-10)
+        }
+        
+        // 가능한 시간 없음 버튼
+        timeImpossibleButton.snp.makeConstraints { make in
+            make.trailing.equalTo(view.snp.trailing).offset(-33)
+            make.top.equalTo(nextDayBtn.snp.bottom).offset(507)
+        }
+        
+        // 가능한 시간 없음 label
+        timeImpossibleLabel.snp.makeConstraints { make in
+            make.height.equalTo(12)
+            make.trailing.equalTo(view.snp.trailing).offset(-22)
+            make.top.equalTo(timeImpossibleButton.snp.bottom).offset(5)
+        }
     }
 }
