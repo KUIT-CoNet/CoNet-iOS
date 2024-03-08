@@ -231,7 +231,15 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc private func updatePlan() {
+        date = planDateTextField.text?.replacingOccurrences(of: ". ", with: "-") ?? ""
+        updateUserId()
         // api 호출
+        PlanAPI().updatePlan(planId: planId, planName: planNameTextField.text ?? "", date: date, time: planTimeTextField.text ?? "", members: userIds) { isSuccess in
+            if isSuccess {
+                // 화면 끄기
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
     
     @objc private func xNameButtonTapped() {

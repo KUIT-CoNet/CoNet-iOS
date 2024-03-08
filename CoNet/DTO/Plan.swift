@@ -25,15 +25,9 @@ struct WaitingPlanInfo: Codable {
 struct DecidedPlanInfo: Codable {
     let planId: Int
     let date, time: String
-    let teamName: String?
     let planName: String
+    let participant: Bool
     let dday: Int
-}
-
-struct PastPlanInfo: Codable {
-    let planId: Int
-    let date, time, planName: String
-    let isRegisteredToHistory: Bool
 }
 
 struct PlanDetail: Codable {

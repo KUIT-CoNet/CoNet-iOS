@@ -35,66 +35,38 @@ class PlanAPI {
             }
     }
     
-    // 팀 내 확정된 약속 조회
-    func getDecidedPlansAtMeeting(meetingId: Int, completion: @escaping (_ count: Int, _ plans: [DecidedPlanInfo]) -> Void) {
-        let url = "\(baseUrl)/team/plan/fixed?teamId=\(meetingId)"
+    // 팀 내 확정된 지난/다가오는 약속 조회
+    func getDecidedPlansAtMeeting(meetingId: Int, period: String, status: Bool, completion: @escaping (_ count: Int, _ plans: [DecidedPlanInfo]) -> Void) {
+        let url = "\(baseUrl)/plan/fixed?teamId=\(meetingId)&period=\(period)"
         let headers: HTTPHeaders = [
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
         
         AF.request(url, method: .get, encoding: JSONEncoding.default, headers: headers)
-            .responseDecodable(of: BaseResponse<[DecidedPlanInfo]>.self) { response in
+            .responseDecodable(of: BaseResponse<GetPlansAtMeetingResult<[DecidedPlanInfo]>>.self) { response in
                 switch response.result {
                 case .success(let response):
                     guard let count = response.result?.count else { return }
-                    guard let serverPlans = response.result else { return }
-                    completion(count, serverPlans)
+                    guard let serverPlans = response.result?.plans else { return }
+                    
+                    if !status {
+                        completion(count, serverPlans)
+                        return
+                    }
+                    
+                    var myPlans: [DecidedPlanInfo] = []
+                    for plan in serverPlans {
+                        if plan.participant {
+                            let myPlan = DecidedPlanInfo(planId: plan.planId, date: plan.date, time: plan.time, planName: plan.planName, participant: plan.participant, dday: plan.dday)
+                            myPlans.append(myPlan)
+                        }
+                    }
+                    
+                    completion(count, myPlans)
                     
                 case .failure(let error):
-                    print("DEBUG(팀 내 확정된 약속 api) error: \(error)")
-                }
-            }
-    }
-    
-    // 팀 내 지난 약속 조회
-    func getPastPlansAtMeeting(meetingId: Int, completion: @escaping (_ count: Int, _ plans: [PastPlanInfo]) -> Void) {
-        let url = "\(baseUrl)/team/plan/past?teamId=\(meetingId)"
-        let headers: HTTPHeaders = [
-            "Content-Type": "application/json"
-        ]
-        
-        AF.request(url, method: .get, encoding: JSONEncoding.default, headers: headers)
-            .responseDecodable(of: BaseResponse<[PastPlanInfo]>.self) { response in
-                switch response.result {
-                case .success(let response):
-                    guard let count = response.result?.count else { return }
-                    guard let serverPlans = response.result else { return }
-                    print(serverPlans)
-                    completion(count, serverPlans)
-                    
-                case .failure(let error):
-                    print("DEBUG(팀 내 지난 약속 api) error: \(error)")
-                }
-            }
-    }
-    
-    // 팀 내 지난 약속 조회
-    func getUnRegisteredPastPlansAtMeeting(meetingId: Int, completion: @escaping (_ plans: [PastPlanInfo]) -> Void) {
-        let url = "\(baseUrl)/team/plan/non-history?teamId=\(meetingId)"
-        let headers: HTTPHeaders = [
-            "Content-Type": "application/json"
-        ]
-        
-        AF.request(url, method: .get, encoding: JSONEncoding.default, headers: headers)
-            .responseDecodable(of: BaseResponse<[PastPlanInfo]>.self) { response in
-                switch response.result {
-                case .success(let response):
-                    guard let serverPlans = response.result else { return }
-                    print(serverPlans)
-                    completion(serverPlans)
-                    
-                case .failure(let error):
-                    print("DEBUG(팀 내 지난 약속 api) error: \(error)")
+                    print("DEBUG(팀 내 확정된 지난/다가오는 약속 api) error: \(error)")
                 }
             }
     }
@@ -123,7 +95,7 @@ class PlanAPI {
     func updatePlan(planId: Int, planName: String, date: String?, time: String, members: [Int]?, completion: @escaping (_ isSuccess: Bool) -> Void) {
         let url = "\(baseUrl)/plan/update/fixed"
         let headers: HTTPHeaders = [
-            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Type": "application/json",
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
         
@@ -132,14 +104,14 @@ class PlanAPI {
             "planName": planName,
             "time": time,
             "date": date ?? "",
-            "members": members ?? []
+            "memberIds": members ?? []
         ]
         
         AF.request(url, method: .post, parameters: requestBody, encoding: JSONEncoding.default, headers: headers)
             .responseDecodable(of: BaseResponse<String>.self) { response in
                 switch response.result {
                 case .success(let response):
-                    print("DEBUG(약속 상세 수정 api) success response: \(response)")
+                    print("DEBUG(약속 상세 수정 api) success response: \(response.message)")
                     completion(response.code == 1000)
                     
                 case .failure(let error):
