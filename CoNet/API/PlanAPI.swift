@@ -36,7 +36,7 @@ class PlanAPI {
     }
     
     // 팀 내 확정된 지난/다가오는 약속 조회
-    func getDecidedPlansAtMeeting(meetingId: Int, period: String, completion: @escaping (_ count: Int, _ plans: [DecidedPlanInfo]) -> Void) {
+    func getDecidedPlansAtMeeting(meetingId: Int, period: String, status: Bool, completion: @escaping (_ count: Int, _ plans: [DecidedPlanInfo]) -> Void) {
         let url = "\(baseUrl)/plan/fixed?teamId=\(meetingId)&period=\(period)"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
@@ -49,7 +49,21 @@ class PlanAPI {
                 case .success(let response):
                     guard let count = response.result?.count else { return }
                     guard let serverPlans = response.result?.plans else { return }
-                    completion(count, serverPlans)
+                    
+                    if !status {
+                        completion(count, serverPlans)
+                        return
+                    }
+                    
+                    var myPlans: [DecidedPlanInfo] = []
+                    for plan in serverPlans {
+                        if plan.participant {
+                            let myPlan = DecidedPlanInfo(planId: plan.planId, date: plan.date, time: plan.time, planName: plan.planName, participant: plan.participant, dday: plan.dday)
+                            myPlans.append(myPlan)
+                        }
+                    }
+                    
+                    completion(count, myPlans)
                     
                 case .failure(let error):
                     print("DEBUG(팀 내 확정된 지난/다가오는 약속 api) error: \(error)")

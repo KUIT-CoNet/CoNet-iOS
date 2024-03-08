@@ -89,6 +89,7 @@ class DecidedPlanListViewController: UIViewController {
         let imageName = sender.isSelected ? "check-circle" : "uncheck-circle"
         sender.setImage(UIImage(named: imageName), for: .normal)
         
+        getDecidedPlan()
         mainView.collectionView.reloadData()
     }
     
@@ -113,7 +114,14 @@ class DecidedPlanListViewController: UIViewController {
             period = "past"
         }
         
-        PlanAPI().getDecidedPlansAtMeeting(meetingId: meetingId, period: period) { count, plans in
+        var status: Bool = false
+        if filterButton.isSelected {
+            status = true
+        } else {
+            status = false
+        }
+        
+        PlanAPI().getDecidedPlansAtMeeting(meetingId: meetingId, period: period, status: status) { count, plans in
             self.plansCount = count
             self.decidedPlanData = plans
             self.mainView.reload()
