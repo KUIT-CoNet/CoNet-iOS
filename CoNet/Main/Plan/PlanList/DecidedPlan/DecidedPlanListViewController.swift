@@ -58,7 +58,6 @@ class DecidedPlanListViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = false
         navigationItem.title = "확정된 약속"
         
-        view = mainView
         view.backgroundColor = UIColor.gray50
         
         addView()
@@ -164,10 +163,11 @@ extension DecidedPlanListViewController: UICollectionViewDelegate, UICollectionV
 
 extension DecidedPlanListViewController {
     func addView() {
-        self.view.addSubview(upcomingButton)
-        self.view.addSubview(pastButton)
-        self.view.addSubview(selectedTabIndicator)
-        self.view.addSubview(filterButton)
+        view.addSubview(upcomingButton)
+        view.addSubview(pastButton)
+        view.addSubview(selectedTabIndicator)
+        view.addSubview(filterButton)
+        view.addSubview(mainView)
     }
     
     func layoutConstriants() {
@@ -189,14 +189,21 @@ extension DecidedPlanListViewController {
             make.trailing.equalTo(safeArea.snp.trailing).offset(-25)
             make.centerY.equalTo(upcomingButton.snp.centerY)
         }
+        
+        mainView.snp.makeConstraints { make in
+            make.top.equalTo(upcomingButton.snp.bottom).offset(24)
+            make.leading.trailing.bottom.equalToSuperview()
+        }
     }
     
     @objc private func upcomingTapped() {
         selectTab(index: 0)
+        getDecidedPlan()
     }
 
     @objc private func pastTapped() {
         selectTab(index: 1)
+        getDecidedPlan()
     }
     
     func setupselectedTabIndicator() {
