@@ -362,10 +362,6 @@ extension PlanInfoEditViewController {
 // addView, layout
 extension PlanInfoEditViewController {
     func addView() {
-//        self.view.addSubview(backButton)
-//        self.view.addSubview(planInfoLabel)
-//        self.view.addSubview(completionButton)
-        
         self.view.addSubview(planNameLabel)
         self.view.addSubview(planNameTextField)
         self.view.addSubview(xNameButton)
@@ -389,29 +385,11 @@ extension PlanInfoEditViewController {
     }
 
     func layoutConstraints() {
-//        applyConstraintsToTopSection()
         applyConstraintsToPlanName()
         applyConstraintsToPlanDate()
         applyConstraintsToPlanTime()
         applyConstraintsToPlanMember()
     }
-    
-//    func applyConstraintsToTopSection() {
-//        let safeArea = view.safeAreaLayoutGuide
-//        planInfoLabel.snp.makeConstraints { make in
-//            make.top.equalTo(safeArea.snp.top).offset(6)
-//            make.leading.equalTo(backButton.snp.trailing).offset(116)
-//        }
-//        backButton.snp.makeConstraints { make in
-//            make.width.height.equalTo(24)
-//            make.centerY.equalTo(planInfoLabel.snp.centerY)
-//            make.leading.equalTo(safeArea.snp.leading).offset(17)
-//        }
-//        completionButton.snp.makeConstraints { make in
-//            make.centerY.equalTo(planInfoLabel.snp.centerY)
-//            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
-//        }
-//    }
     
     func applyConstraintsToPlanName() {
         let safeArea = view.safeAreaLayoutGuide
