@@ -227,7 +227,7 @@ class PlanAPI {
     
     // 구성원 약속 가능 여부 조회
     func getPlanMemberIsAvailable(planId: Int, completion: @escaping (_ members: [EditPlanMember]) -> Void) {
-        let url = "\(baseUrl)/team/plan/member-plan?planId=\(planId)"
+        let url = "\(baseUrl)/plan/\(planId)/member-participation"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json"
         ]
