@@ -13,6 +13,7 @@ class PlanMemberBottomSheetViewController: UIViewController {
     var planId: Int = 17
     var members: [PlanDetailMember] = []
     var allMembers: [EditPlanMember] = []
+    weak var delegate: PlanMemberBottomSheetViewControllerDelegate?
     
     let background = UIView().then {
         $0.backgroundColor = UIColor.black.withAlphaComponent(0.5)
@@ -73,15 +74,6 @@ class PlanMemberBottomSheetViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    // 추가하기 버튼 활성화
-    func updateAddButtonBackgroundColor() {
-//        if isMember1Checked || isMember2Checked || isMember3Checked {
-//            addButton.backgroundColor = .purple
-//        } else {
-//            addButton.backgroundColor = UIColor.iconDisabled
-//        }
-    }
-    
     func buttonActions() {
         addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         
@@ -90,16 +82,21 @@ class PlanMemberBottomSheetViewController: UIViewController {
     }
 
     @objc func addButtonTapped() {
-        // "추가하기" 버튼을 눌렀을 때 수행할 동작
         var newMembers: [PlanDetailMember] = []
-        for member in allMembers {
-            if member.isAvailable {
-                let member = PlanDetailMember(id: member.id, name: member.name, image: member.image)
-                newMembers.append(member)
-            }
+        
+        for member in allMembers where member.isAvailable {
+            let newMember = PlanDetailMember(id: member.id, name: member.name, image: member.image)
+            newMembers.append(newMember)
         }
-        // 멤버를 선택된 멤버로 변경
         self.members = newMembers
+        delegate?.didUpdateMembers(members: newMembers)
+        dismiss(animated: true, completion: nil)
+    }
+    
+    // 추가하기 버튼 활성화
+    func updateAddButtonBackgroundColor() {
+        let isSelectedMemberExists = allMembers.contains { $0.isAvailable }
+        addButton.backgroundColor = isSelectedMemberExists ? .purpleMain : UIColor.iconDisabled
     }
 }
 
@@ -120,15 +117,24 @@ extension PlanMemberBottomSheetViewController: UICollectionViewDelegate, UIColle
             return UICollectionViewCell()
         }
         
-        cell.name.text = allMembers[indexPath.item].name
-        if let url = URL(string: allMembers[indexPath.item].image) {
+        let member = allMembers[indexPath.item]
+        cell.name.text = member.name
+        if let url = URL(string: member.image) {
             cell.profileImage.kf.setImage(with: url, placeholder: UIImage(named: "defaultProfile"))
         }
-        cell.checkButton.setImage(UIImage(named: allMembers[indexPath.item].isAvailable ? "check-circle" : "uncheck-circle"), for: .normal)
+        let imageName = member.isAvailable ? "check-circle" : "uncheck-circle"
+        cell.checkButton.setImage(UIImage(named: imageName), for: .normal)
+        
+        // 체크 상태 변경시 
+        cell.toggleSelection = { [weak self] (isSelected: Bool) in
+            guard let self = self else { return }
+            self.allMembers[indexPath.item].isAvailable = isSelected
+            self.updateAddButtonBackgroundColor()
+        }
         
         return cell
     }
-    
+
     // 셀 크기
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width
@@ -202,4 +208,8 @@ extension PlanMemberBottomSheetViewController {
             make.bottom.equalTo(view.snp.bottom).offset(-45)
         }
     }
+}
+
+protocol PlanMemberBottomSheetViewControllerDelegate: AnyObject {
+    func didUpdateMembers(members: [PlanDetailMember])
 }

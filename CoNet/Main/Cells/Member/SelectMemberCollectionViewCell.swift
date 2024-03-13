@@ -11,6 +11,7 @@ import UIKit
 
 class SelectMemberCollectionViewCell: UICollectionViewCell {
     static let cellId = "\(SelectMemberCollectionViewCell.self)"
+    var toggleSelection: ((Bool) -> Void)?
     
     let background = UIView().then { $0.backgroundColor = .clear }
     let profileImage = UIImageView().then {
@@ -70,10 +71,9 @@ class SelectMemberCollectionViewCell: UICollectionViewCell {
     }
     
     @objc func checkButtonTapped() {
-        if checkButton.currentImage == UIImage(named: "check-circle") {
-            checkButton.setImage(UIImage(named: "uncheck-circle"), for: .normal)
-        } else {
-            checkButton.setImage(UIImage(named: "check-circle"), for: .normal)
-        }
+        // 체크버튼의 현재 상태에 따라 토글
+        let isSelected = checkButton.currentImage == UIImage(named: "uncheck-circle")
+        checkButton.setImage(UIImage(named: isSelected ? "check-circle" : "uncheck-circle"), for: .normal)
+        toggleSelection?(isSelected)
     }
 }

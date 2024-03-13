@@ -42,17 +42,10 @@ struct PlanDetailMember: Codable {
     let name, image: String
 }
 
-struct PlanMemberAvailability: Codable {
-    let memberId: Int
-    let name: String
-    let memberImgUrl: String
-    let inPlan: Bool
-}
-
 struct EditPlanMember: Codable {
     let id: Int
     let name, image: String
-    let isAvailable: Bool
+    var isAvailable: Bool
     
     private enum CodingKeys: String, CodingKey {
         case id = "memberId"

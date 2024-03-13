@@ -251,6 +251,8 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         let addVC = PlanMemberBottomSheetViewController()
         addVC.planId = self.planId
         addVC.members = members
+        addVC.delegate = self
+        
         addVC.modalPresentationStyle = .overFullScreen
         addVC.modalTransitionStyle = .crossDissolve
         present(addVC, animated: false, completion: nil)
@@ -490,5 +492,12 @@ extension PlanInfoEditViewController {
             make.centerY.equalTo(memberAddButton.snp.centerY)
             make.leading.equalTo(memberAddButton.snp.trailing).offset(10)
         }
+    }
+}
+
+extension PlanInfoEditViewController: PlanMemberBottomSheetViewControllerDelegate {
+    func didUpdateMembers(members: [PlanDetailMember]) {
+        self.members = members
+        self.memberCollectionView.reloadData()
     }
 }
