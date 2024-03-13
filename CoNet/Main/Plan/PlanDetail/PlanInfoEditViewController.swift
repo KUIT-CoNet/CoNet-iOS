@@ -236,7 +236,6 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         // api 호출
         PlanAPI().updatePlan(planId: planId, planName: planNameTextField.text ?? "", date: date, time: planTimeTextField.text ?? "", members: userIds) { isSuccess in
             if isSuccess {
-                // 화면 끄기
                 self.dismiss(animated: true, completion: nil)
             }
         }
@@ -308,6 +307,21 @@ extension PlanInfoEditViewController: UICollectionViewDelegate, UICollectionView
             cell.profileImage.kf.setImage(with: url, placeholder: UIImage(named: "defaultProfile"))
         }
         
+        cell.onDelete = { [weak self] in
+            guard let strongSelf = self else { return }
+            
+            // 삭제할 멤버의 ID를 구하고
+            let memberIdToDelete = strongSelf.members[indexPath.item].id
+            
+            // 로컬 리스트에서 해당 멤버를 제거
+            strongSelf.members.removeAll { $0.id == memberIdToDelete }
+            
+            // UI를 즉시 업데이트하여 삭제된 멤버를 반영
+            strongSelf.memberCollectionView.performBatchUpdates({
+                strongSelf.memberCollectionView.deleteItems(at: [indexPath])
+            }, completion: nil)
+        }
+
         return cell
     }
     

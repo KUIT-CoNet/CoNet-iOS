@@ -11,6 +11,7 @@ import UIKit
 
 class EditMemberCollectionViewCell: UICollectionViewCell {
     static let cellId = "\(EditMemberCollectionViewCell.self)"
+    var onDelete: (() -> Void)?
     
     let background = UIView().then { $0.backgroundColor = .clear }
     let profileImage = UIImageView().then {
@@ -70,6 +71,6 @@ class EditMemberCollectionViewCell: UICollectionViewCell {
     }
     
     @objc func deleteMember() {
-        print("wow")
+        onDelete?()
     }
 }
