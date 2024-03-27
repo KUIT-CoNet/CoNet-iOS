@@ -38,12 +38,20 @@ class NoticeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = false
+        noticeAPI()
     }
     
     private func setupCollectionView() {
         noticeCollectionView.delegate = self
         noticeCollectionView.dataSource = self
         noticeCollectionView.register(NoticeItem.self, forCellWithReuseIdentifier: NoticeItem.registerId)
+    }
+    
+    private func noticeAPI() {
+        NoticeAPI().getNotice { notices in
+            self.noticeData = notices ?? []
+            self.noticeCollectionView.reloadData()
+        }
     }
 }
 
@@ -54,6 +62,7 @@ extension NoticeViewController: UICollectionViewDelegate, UICollectionViewDataSo
         if noticeData.count == 0 {
             noticeCollectionView.isHidden = true
         }
+        noticeCollectionView.isHidden = false
         return noticeData.count
     }
     

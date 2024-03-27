@@ -11,6 +11,7 @@ import KeychainSwift
 import UIKit
 
 struct NoticeResponse: Codable {
+    let id: Int
     let title: String
     let content: String
     let date: String
