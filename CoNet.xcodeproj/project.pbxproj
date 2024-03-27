@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1A3AD0132A6958B400975427 /* InvitationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3AD0122A6958B400975427 /* InvitationCodeViewController.swift */; };
+		1A8D7EBD2B935D7400B88AE9 /* NoticeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8D7EBC2B935D7400B88AE9 /* NoticeAPI.swift */; };
 		1A99CFE02A70CE220080091B /* MeetingOutPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A99CFDF2A70CE220080091B /* MeetingOutPopUpViewController.swift */; };
 		1A99CFE22A70D4650080091B /* MeetingDelPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A99CFE12A70D4650080091B /* MeetingDelPopUpViewController.swift */; };
 		1A99CFE42A7233580080091B /* PlanTimePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A99CFE32A7233580080091B /* PlanTimePickerViewController.swift */; };
@@ -33,6 +34,7 @@
 		236054EF2A592B0C00CA991E /* TabbarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236054EE2A592B0C00CA991E /* TabbarViewController.swift */; };
 		236054F72A593F3B00CA991E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236054F62A593F3B00CA991E /* HomeViewController.swift */; };
 		236054FA2A593F5400CA991E /* MeetingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236054F92A593F5400CA991E /* MeetingViewController.swift */; };
+		237B0CB42B94786700162456 /* NoticeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237B0CB32B94786700162456 /* NoticeItem.swift */; };
 		2387E7542A7F84F50003044E /* MeetingMainAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2387E7532A7F84F50003044E /* MeetingMainAPI.swift */; };
 		2387E7582A7FCCEA0003044E /* MeetingMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2387E7572A7FCCEA0003044E /* MeetingMain.swift */; };
 		2387E75A2A8014890003044E /* PlanTimeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2387E7592A8014890003044E /* PlanTimeAPI.swift */; };
@@ -114,6 +116,7 @@
 
 /* Begin PBXFileReference section */
 		1A3AD0122A6958B400975427 /* InvitationCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitationCodeViewController.swift; sourceTree = "<group>"; };
+		1A8D7EBC2B935D7400B88AE9 /* NoticeAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeAPI.swift; sourceTree = "<group>"; };
 		1A99CFDF2A70CE220080091B /* MeetingOutPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingOutPopUpViewController.swift; sourceTree = "<group>"; };
 		1A99CFE12A70D4650080091B /* MeetingDelPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingDelPopUpViewController.swift; sourceTree = "<group>"; };
 		1A99CFE32A7233580080091B /* PlanTimePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanTimePickerViewController.swift; sourceTree = "<group>"; };
@@ -138,6 +141,7 @@
 		236054EE2A592B0C00CA991E /* TabbarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarViewController.swift; sourceTree = "<group>"; };
 		236054F62A593F3B00CA991E /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		236054F92A593F5400CA991E /* MeetingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingViewController.swift; sourceTree = "<group>"; };
+		237B0CB32B94786700162456 /* NoticeItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeItem.swift; sourceTree = "<group>"; };
 		2387E7532A7F84F50003044E /* MeetingMainAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingMainAPI.swift; sourceTree = "<group>"; };
 		2387E7572A7FCCEA0003044E /* MeetingMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingMain.swift; sourceTree = "<group>"; };
 		2387E7592A8014890003044E /* PlanTimeAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanTimeAPI.swift; sourceTree = "<group>"; };
@@ -447,6 +451,7 @@
 				514D73CF2A59839200404E64 /* MyPageList.swift */,
 				518F55D82A683F68002D8F0F /* PopUpView.swift */,
 				51A3DA122A72BF4D00CAEE2A /* ArrowList.swift */,
+				237B0CB32B94786700162456 /* NoticeItem.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -500,6 +505,7 @@
 				51F2A4702A5497A500D134CC /* AuthAPI.swift */,
 				515E53BC2A77CF9400536C6D /* MeetingAPI.swift */,
 				517C28C52A7E8F0600D2CE50 /* PlanAPI.swift */,
+				1A8D7EBC2B935D7400B88AE9 /* NoticeAPI.swift */,
 				2387E7532A7F84F50003044E /* MeetingMainAPI.swift */,
 				2387E7592A8014890003044E /* PlanTimeAPI.swift */,
 			);
@@ -816,9 +822,11 @@
 				515E53B82A77B48000536C6D /* ShadowWaitingPlanCell.swift in Sources */,
 				1ABF8C862A69150900023A8D /* MeetingCodeViewController.swift in Sources */,
 				1AE5C78B2A6F6957001B88D1 /* MakePlanViewController.swift in Sources */,
+				1A8D7EBD2B935D7400B88AE9 /* NoticeAPI.swift in Sources */,
 				236054FA2A593F5400CA991E /* MeetingViewController.swift in Sources */,
 				23F6F9082A700F4700772AFF /* HomeAPI.swift in Sources */,
 				1AC014262A6F7B3100E3E9C9 /* PlanDateButtonSheetViewController.swift in Sources */,
+				237B0CB42B94786700162456 /* NoticeItem.swift in Sources */,
 				518F55E42A68EF7B002D8F0F /* SideBarViewController.swift in Sources */,
 				5186D2762B5D45F2005C1007 /* InviteCodePopUp.swift in Sources */,
 				1A99CFE02A70CE220080091B /* MeetingOutPopUpViewController.swift in Sources */,
