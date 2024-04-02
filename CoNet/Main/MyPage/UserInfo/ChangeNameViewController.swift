@@ -10,6 +10,8 @@ import Then
 import UIKit
 
 class ChangeNameViewController: UIViewController {
+    var userName: String = ""
+    
     // label: 이름
     let nameLabel = UILabel().then {
         $0.text = "이름"
@@ -53,12 +55,8 @@ class ChangeNameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.isHidden = false
-        navigationItem.title = "이름변경"
         
-        // background color를 white로 설정 (default: black)
-        view.backgroundColor = .white
-        
+        viewSetting()
         addView()
         layoutConstraints()
         buttonActions()
@@ -72,6 +70,16 @@ class ChangeNameViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.navigationBar.isHidden = true
+    }
+    
+    private func viewSetting() {
+        // navigation setting
+        navigationController?.navigationBar.isHidden = false
+        navigationItem.title = "이름변경"
+        
+        // background color를 white로 설정 (default: black)
+        view.backgroundColor = .white
+        nameTextField.text = userName
     }
 
     private func buttonActions() {
@@ -141,8 +149,11 @@ class ChangeNameViewController: UIViewController {
     
     // 이름 입력 텍스트필드의 클리어 버튼을 클릭했을 때 입력된 텍스트를 지웁니다.
     @objc func didClickClearButton() {
-        nameTextField.text = ""
-        nextButtonEnable(false)
+        // clear button 일때만 text clear
+        if clearButton.currentImage == UIImage(named: "clearBtn") {
+            nameTextField.text = ""
+            nextButtonEnable(false)
+        }
     }
     
     // 텍스트필드 외의 공간 클릭시 키보드가 내려갑니다.
