@@ -249,6 +249,7 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
     @objc func didTapmemberAddButton(_ sender: Any) {
         let addVC = PlanMemberBottomSheetViewController()
         addVC.planId = self.planId
+        addVC.selectedMembers = self.members.map { $0.id }
         addVC.members = members
         addVC.delegate = self
         

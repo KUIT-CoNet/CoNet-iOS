@@ -12,6 +12,7 @@ import UIKit
 class PlanMemberBottomSheetViewController: UIViewController {
     var planId: Int = 17
     var members: [PlanDetailMember] = []
+    var selectedMembers: [Int] = []
     var allMembers: [EditPlanMember] = []
     weak var delegate: PlanMemberBottomSheetViewControllerDelegate?
     
@@ -58,7 +59,13 @@ class PlanMemberBottomSheetViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         PlanAPI().getPlanMemberIsAvailable(planId: planId) { members in
-            self.allMembers = members
+            self.allMembers = members.map { member in
+                var member = member
+                if self.selectedMembers.contains(member.id) {
+                    member.isAvailable = true
+                }
+                return member
+            }
             self.memberCollectionView.reloadData()
             self.layoutConstraints()
         }
@@ -83,7 +90,6 @@ class PlanMemberBottomSheetViewController: UIViewController {
 
     @objc func addButtonTapped() {
         var newMembers: [PlanDetailMember] = []
-        
         for member in allMembers where member.isAvailable {
             let newMember = PlanDetailMember(id: member.id, name: member.name, image: member.image)
             newMembers.append(newMember)
@@ -91,6 +97,7 @@ class PlanMemberBottomSheetViewController: UIViewController {
         self.members = newMembers
         delegate?.didUpdateMembers(members: newMembers)
         dismiss(animated: true, completion: nil)
+
     }
     
     // 추가하기 버튼 활성화
@@ -125,7 +132,7 @@ extension PlanMemberBottomSheetViewController: UICollectionViewDelegate, UIColle
         let imageName = member.isAvailable ? "check-circle" : "uncheck-circle"
         cell.checkButton.setImage(UIImage(named: imageName), for: .normal)
         
-        // 체크 상태 변경시 
+        // 체크 상태 변경시
         cell.toggleSelection = { [weak self] (isSelected: Bool) in
             guard let self = self else { return }
             self.allMembers[indexPath.item].isAvailable = isSelected
