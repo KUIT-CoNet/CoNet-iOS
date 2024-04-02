@@ -112,7 +112,7 @@ class UserInfoViewController: UIViewController, UINavigationControllerDelegate, 
     // show ChangeNameVC
     func didExecuteFunction() {
         let nextVC = ChangeNameViewController()
-        nextVC.nameTextField.text = self.name
+        nextVC.userName = name
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
@@ -127,6 +127,7 @@ class UserInfoViewController: UIViewController, UINavigationControllerDelegate, 
         MyPageAPI().getUser { username, imageUrl, email, social in
             // 이름 설정
             self.changeNameView.setTitle(username)
+            self.name = username
             
             // 이미지 설정
             guard let url = URL(string: imageUrl) else { return }

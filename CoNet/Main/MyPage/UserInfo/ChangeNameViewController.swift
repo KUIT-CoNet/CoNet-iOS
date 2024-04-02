@@ -10,6 +10,8 @@ import Then
 import UIKit
 
 class ChangeNameViewController: UIViewController {
+    var userName: String = ""
+    
     // label: 이름
     let nameLabel = UILabel().then {
         $0.text = "이름"
@@ -53,12 +55,8 @@ class ChangeNameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.isHidden = false
-        navigationItem.title = "이름변경"
         
-        // background color를 white로 설정 (default: black)
-        view.backgroundColor = .white
-        
+        viewSetting()
         addView()
         layoutConstraints()
         buttonActions()
@@ -72,6 +70,16 @@ class ChangeNameViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.navigationBar.isHidden = true
+    }
+    
+    private func viewSetting() {
+        // navigation setting
+        navigationController?.navigationBar.isHidden = false
+        navigationItem.title = "이름변경"
+        
+        // background color를 white로 설정 (default: black)
+        view.backgroundColor = .white
+        nameTextField.text = userName
     }
 
     private func buttonActions() {
