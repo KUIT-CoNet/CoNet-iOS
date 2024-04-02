@@ -149,8 +149,11 @@ class ChangeNameViewController: UIViewController {
     
     // 이름 입력 텍스트필드의 클리어 버튼을 클릭했을 때 입력된 텍스트를 지웁니다.
     @objc func didClickClearButton() {
-        nameTextField.text = ""
-        nextButtonEnable(false)
+        // clear button 일때만 text clear
+        if clearButton.currentImage == UIImage(named: "clearBtn") {
+            nameTextField.text = ""
+            nextButtonEnable(false)
+        }
     }
     
     // 텍스트필드 외의 공간 클릭시 키보드가 내려갑니다.
