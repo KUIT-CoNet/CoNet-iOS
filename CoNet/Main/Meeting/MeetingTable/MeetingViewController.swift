@@ -119,14 +119,14 @@ class MeetingViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = true
         navigationItem.title = ""
         
-        // 초기화면
-        UIView.animate(withDuration: 0.3) {
-            self.participateButton.alpha = 0
-            self.addButton.alpha = 0
-            self.joinLabel.alpha = 0
-            self.addLabel.alpha = 0
-            self.overlayView.alpha = 0
-        }
+//        // 초기화면
+//        UIView.animate(withDuration: 0.3) {
+//            self.participateButton.alpha = 0
+//            self.addButton.alpha = 0
+//            self.joinLabel.alpha = 0
+//            self.addLabel.alpha = 0
+//            self.overlayView.alpha = 0
+//        }
         
         addView()
         layoutConstriants()

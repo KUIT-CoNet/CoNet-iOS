@@ -195,6 +195,7 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         memberCollectionView.delegate = self
         memberCollectionView.dataSource = self
         memberCollectionView.register(EditMemberCollectionViewCell.self, forCellWithReuseIdentifier: EditMemberCollectionViewCell.cellId)
+        memberCollectionView.isScrollEnabled = true
     }
     
     private func setupTextField() {
@@ -289,12 +290,16 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
 extension PlanInfoEditViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     // 각 셀을 클릭했을 때 이벤트 처리
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Selected cell at indexPath: \(indexPath)")
+        if indexPath.item == 0 {
+            didTapmemberAddButton(self)
+        } else {
+            print("Selected cell at indexPath: \(indexPath)")
+        }
     }
     
     // 셀 개수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return members.count
+        return members.count + 1
     }
     
     // 셀
@@ -303,24 +308,40 @@ extension PlanInfoEditViewController: UICollectionViewDelegate, UICollectionView
             return UICollectionViewCell()
         }
         
-        cell.name.text = members[indexPath.item].name
-        if let url = URL(string: members[indexPath.item].image) {
-            cell.profileImage.kf.setImage(with: url, placeholder: UIImage(named: "defaultProfile"))
-        }
-        
-        cell.onDelete = { [weak self] in
-            guard let strongSelf = self else { return }
+        if indexPath.item == 0 {
+            cell.profileImage.image = UIImage(named: "addPeople")
+            cell.name.text = "추가하기"
+            cell.name.textColor = UIColor.textDisabled
+            cell.delete.isHidden = true
+        } else {
+            let member = members[indexPath.item - 1]
             
-            // 삭제할 멤버의 ID를 구하고
-            let memberIdToDelete = strongSelf.members[indexPath.item].id
+            cell.name.text = member.name
+            cell.name.textColor = UIColor.black
+            if let url = URL(string: member.image) {
+                cell.profileImage.kf.setImage(with: url, placeholder: UIImage(named: "defaultProfile"))
+            }
             
-            // 로컬 리스트에서 해당 멤버를 제거
-            strongSelf.members.removeAll { $0.id == memberIdToDelete }
-            
-            // UI를 즉시 업데이트하여 삭제된 멤버를 반영
-            strongSelf.memberCollectionView.performBatchUpdates({
-                strongSelf.memberCollectionView.deleteItems(at: [indexPath])
-            }, completion: nil)
+            cell.onDelete = { [weak self] in
+                guard let strongSelf = self else { return }
+
+                // indexPath.item에서 1을 빼서 실제 멤버 리스트 인덱스에 맞춤
+                let memberIndex = indexPath.item - 1
+                // 삭제할 멤버의 ID를 구함
+                let memberIdToDelete = strongSelf.members[memberIndex].id
+
+                // 로컬 리스트에서 해당 멤버를 제거
+                strongSelf.members.remove(at: memberIndex)
+
+                // UI를 즉시 업데이트하여 삭제된 멤버를 반영
+                strongSelf.memberCollectionView.performBatchUpdates({
+                    strongSelf.memberCollectionView.deleteItems(at: [indexPath])
+                }, completion: { _ in
+                    // 섹션 내의 셀 개수가 바뀌었으므로 레이아웃을 재조정
+                    strongSelf.memberCollectionView.collectionViewLayout.invalidateLayout()
+                })
+            }
+
         }
 
         return cell
@@ -397,8 +418,8 @@ extension PlanInfoEditViewController {
         
         self.view.addSubview(memberLabel)
         self.view.addSubview(memberCollectionView)
-        self.view.addSubview(memberAddButton)
-        self.view.addSubview(memberAddLabel)
+//        self.view.addSubview(memberAddButton)
+//        self.view.addSubview(memberAddLabel)
     }
 
     func layoutConstraints() {
@@ -498,15 +519,15 @@ extension PlanInfoEditViewController {
             make.horizontalEdges.equalTo(safeArea.snp.horizontalEdges).inset(24)
         }
         
-        memberAddButton.snp.makeConstraints { make in
-            make.width.height.equalTo(42)
-            make.top.equalTo(memberCollectionView.snp.bottom).offset(10)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-        }
-        memberAddLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(memberAddButton.snp.centerY)
-            make.leading.equalTo(memberAddButton.snp.trailing).offset(10)
-        }
+//        memberAddButton.snp.makeConstraints { make in
+//            make.width.height.equalTo(42)
+//            make.top.equalTo(memberCollectionView.snp.bottom).offset(10)
+//            make.leading.equalTo(safeArea.snp.leading).offset(24)
+//        }
+//        memberAddLabel.snp.makeConstraints { make in
+//            make.centerY.equalTo(memberAddButton.snp.centerY)
+//            make.leading.equalTo(memberAddButton.snp.trailing).offset(10)
+//        }
     }
 }
 
