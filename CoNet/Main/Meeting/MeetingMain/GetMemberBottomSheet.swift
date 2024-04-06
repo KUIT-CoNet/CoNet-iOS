@@ -38,8 +38,17 @@ class GetMemberBottomSheet: UIViewController {
         
         addView()
         layoutContraints()
+        buttonActions()
     }
     
+    func buttonActions() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopUp))
+        background.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func dismissPopUp() {
+        dismiss(animated: true, completion: nil)
+    }
 }
 
 extension GetMemberBottomSheet {
