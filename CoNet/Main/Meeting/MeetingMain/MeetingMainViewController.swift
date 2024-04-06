@@ -16,6 +16,7 @@ class MeetingMainViewController: UIViewController {
         $0.backgroundColor = .clear
         $0.showsVerticalScrollIndicator = false
     }
+
     let contentView = UIView().then { $0.backgroundColor = .clear }
     
     // 사이드바 버튼
@@ -112,7 +113,7 @@ class MeetingMainViewController: UIViewController {
         
         buttonActions()
         
-        // 모임 정보 조회 api 
+        // 모임 정보 조회 api
         getMeetingInfo()
         
         // view height 동적 설정
@@ -206,7 +207,7 @@ class MeetingMainViewController: UIViewController {
         for collectionView in [dayPlanCollectionView] {
             collectionView.layoutIfNeeded()
             if collectionView == dayPlanCollectionView {
-                dayCollectionHeight += collectionView.contentSize.height+10
+                dayCollectionHeight += collectionView.contentSize.height + 10
             }
             contentHeight += collectionView.contentSize.height
         }
@@ -279,8 +280,16 @@ class MeetingMainViewController: UIViewController {
     // 구성원 조회 bottom sheet 띄우기
     @objc private func getMemberOfMeeting() {
         let getMemberBottomSheet = GetMemberBottomSheet()
-        getMemberBottomSheet.modalPresentationStyle = .overFullScreen
-        getMemberBottomSheet.modalTransitionStyle = .crossDissolve
+        getMemberBottomSheet.modalPresentationStyle = .pageSheet
+        
+        if let bottomSheet = getMemberBottomSheet.presentationController as? UISheetPresentationController {
+            // 바텀 시트의 높이를 사용자가 조절할 수 있도록 두 가지 단계(중간 및 큰 사이즈)를 설정
+            // 기본은 medium, 위로 스크롤 시 large
+            bottomSheet.detents = [.medium(), .large()]
+                    
+            // 위로 드래그할 때 바텀 시트의 코너가 둥근 모서리를 유지하도록 설정
+            bottomSheet.prefersGrabberVisible = true
+        }
         
         present(getMemberBottomSheet, animated: true, completion: nil)
     }
@@ -417,7 +426,6 @@ extension MeetingMainViewController: UICollectionViewDelegate, UICollectionViewD
 
 // layout
 extension MeetingMainViewController {
-    
     private func addView() {
         view.addSubview(scrollview)
         scrollview.addSubview(contentView)
