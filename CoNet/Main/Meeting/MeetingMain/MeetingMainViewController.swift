@@ -276,8 +276,13 @@ class MeetingMainViewController: UIViewController {
         }
     }
     
+    // 구성원 조회 bottom sheet 띄우기
     @objc private func getMemberOfMeeting() {
+        let getMemberBottomSheet = GetMemberBottomSheet()
+        getMemberBottomSheet.modalPresentationStyle = .overFullScreen
+        getMemberBottomSheet.modalTransitionStyle = .crossDissolve
         
+        present(getMemberBottomSheet, animated: true, completion: nil)
     }
 }
 

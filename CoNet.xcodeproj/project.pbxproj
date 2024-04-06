@@ -28,6 +28,7 @@
 		231E97CF2A6BCA04000BB2AD /* MonthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231E97CE2A6BCA04000BB2AD /* MonthViewController.swift */; };
 		231E97D12A6BD3F8000BB2AD /* MonthCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231E97D02A6BD3F8000BB2AD /* MonthCollectionViewCell.swift */; };
 		231EA9D02A587DE700138628 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 231EA9CF2A587DE700138628 /* Then */; };
+		233C0C6A2BC1B31700FE9F58 /* GetMemberBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233C0C692BC1B31700FE9F58 /* GetMemberBottomSheet.swift */; };
 		234428702A5E99BE006A4D66 /* BaseResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2344286F2A5E99BE006A4D66 /* BaseResponse.swift */; };
 		234428762A5EF81D006A4D66 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234428752A5EF81D006A4D66 /* Login.swift */; };
 		235F5B732A69893F00ADC0D6 /* CalendarDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235F5B722A69893F00ADC0D6 /* CalendarDateFormatter.swift */; };
@@ -135,6 +136,7 @@
 		1AF858072B381E63005D058B /* MeetingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingCollectionViewCell.swift; sourceTree = "<group>"; };
 		231E97CE2A6BCA04000BB2AD /* MonthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthViewController.swift; sourceTree = "<group>"; };
 		231E97D02A6BD3F8000BB2AD /* MonthCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthCollectionViewCell.swift; sourceTree = "<group>"; };
+		233C0C692BC1B31700FE9F58 /* GetMemberBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMemberBottomSheet.swift; sourceTree = "<group>"; };
 		2344286F2A5E99BE006A4D66 /* BaseResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseResponse.swift; sourceTree = "<group>"; };
 		234428752A5EF81D006A4D66 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		235F5B722A69893F00ADC0D6 /* CalendarDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDateFormatter.swift; sourceTree = "<group>"; };
@@ -483,6 +485,7 @@
 			children = (
 				519FC3582A700FED002EF91C /* MeetingMainViewController.swift */,
 				519FC35A2A7016AE002EF91C /* WhiteGradientView.swift */,
+				233C0C692BC1B31700FE9F58 /* GetMemberBottomSheet.swift */,
 			);
 			path = MeetingMain;
 			sourceTree = "<group>";
@@ -773,6 +776,7 @@
 				1ADA54962A65161F00609041 /* MeetingAddViewController.swift in Sources */,
 				23FE4ECC2A55B0E300BBF17E /* EnterNameViewController.swift in Sources */,
 				514D73D22A59B42A00404E64 /* UserInfoViewController.swift in Sources */,
+				233C0C6A2BC1B31700FE9F58 /* GetMemberBottomSheet.swift in Sources */,
 				519FC35B2A7016AE002EF91C /* WhiteGradientView.swift in Sources */,
 				51F2A4712A5497A500D134CC /* AuthAPI.swift in Sources */,
 				51B526C42A6C2F76009DBFB4 /* SideBarList.swift in Sources */,
