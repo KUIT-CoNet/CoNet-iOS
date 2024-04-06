@@ -59,10 +59,10 @@ class MeetingMainViewController: UIViewController {
     }
     
     // 멤버 수
-    let memberNum = UILabel().then {
-        $0.text = "n명"
-        $0.textColor = UIColor.textMedium
-        $0.font = UIFont.body1Medium
+    let memberNum = UIButton().then {
+        $0.setTitle("n명", for: .normal)
+        $0.setTitleColor(UIColor.textMedium, for: .normal)
+        $0.titleLabel?.font = UIFont.body1Medium
     }
     
     // 캘린더뷰
@@ -156,13 +156,14 @@ class MeetingMainViewController: UIViewController {
         starButton.addTarget(self, action: #selector(starButtonTapped), for: .touchUpInside)
         sidebarButton.addTarget(self, action: #selector(sidebarButtonTapped), for: .touchUpInside)
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        memberNum.addTarget(self, action: #selector(getMemberOfMeeting), for: .touchUpInside)
     }
     
     // 모임 정보 조회 api
     func getMeetingInfo() {
         MeetingAPI().getMeetingDetailInfo(teamId: meetingId) { meeting in
             self.meetingName.text = meeting.name
-            self.memberNum.text = "\(meeting.memberCount)명"
+            self.memberNum.setTitle("\(meeting.memberCount)명", for: .normal)
             self.isBookmarked = meeting.bookmark
             self.starButton.setImage(UIImage(named: meeting.bookmark ? "meetingStarOn" : "meetingStarOff"), for: .normal)
             guard let url = URL(string: meeting.imgUrl) else { return }
@@ -273,6 +274,10 @@ class MeetingMainViewController: UIViewController {
                 self.starButton.setImage(UIImage(named: "meetingStarOff"), for: .normal)
             }
         }
+    }
+    
+    @objc private func getMemberOfMeeting() {
+        
     }
 }
 
