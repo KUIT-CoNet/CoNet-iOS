@@ -86,6 +86,8 @@ class MeetingMainViewController: UIViewController {
         $0.font = UIFont.body3Bold
     }
     
+    var overlayView = UIView()
+    
     // 오늘 약속 collectionView
     private lazy var dayPlanCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
         $0.isScrollEnabled = false
@@ -290,6 +292,14 @@ class MeetingMainViewController: UIViewController {
             // 위로 드래그할 때 바텀 시트의 코너가 둥근 모서리를 유지하도록 설정
             bottomSheet.prefersGrabberVisible = true
         }
+        
+        // 배경 불투명 뷰 설정
+        overlayView.backgroundColor = UIColor.black.withAlphaComponent(0.5) // 반투명 검정
+        overlayView.frame = view.bounds
+        view.addSubview(overlayView)
+                
+        // 바텀 시트가 닫힐 때 overlayView를 제거하기 위한 콜백 설정
+        getMemberBottomSheet.presentationController?.delegate = self
         
         present(getMemberBottomSheet, animated: true, completion: nil)
     }
@@ -554,5 +564,13 @@ extension MeetingMainViewController {
             make.leading.trailing.equalToSuperview().inset(12)
             make.height.equalTo(dayPlanData.count * 92 - 10)
         }
+    }
+}
+
+// UIAdaptivePresentationControllerDelegate 프로토콜 채택
+extension MeetingMainViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        // 바텀 시트가 닫히면 overlayView 제거
+        overlayView.removeFromSuperview()
     }
 }
