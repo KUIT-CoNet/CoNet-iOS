@@ -50,7 +50,7 @@ struct PostCreateMeetingResponse: Codable {
     let inviteCode: String
 }
 
-struct TeamMember: Codable {
+struct MeetingMember: Codable {
     let userId: Int
     let name: String
     let userImgUrl: String

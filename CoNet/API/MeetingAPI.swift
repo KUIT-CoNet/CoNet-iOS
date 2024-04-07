@@ -245,7 +245,7 @@ class MeetingAPI {
     }
     
     // 모임 구성원 조회
-    func getTeamMembers(teamId: Int, completion: @escaping (_ members: [TeamMember]?) -> Void) {
+    func getTeamMembers(teamId: Int, completion: @escaping (_ members: [MeetingMember]?) -> Void) {
         let url = "\(baseUrl)/team/\(teamId)/members"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
@@ -253,9 +253,10 @@ class MeetingAPI {
         ]
         
         AF.request(url, method: .get, headers: headers)
-            .responseDecodable(of: BaseResponse<[TeamMember]>.self) { response in
+            .responseDecodable(of: BaseResponse<[MeetingMember]>.self) { response in
                 switch response.result {
                 case .success(let response):
+                    print("DEBUG(모임 구성원 조회 api) success: \(response.message)")
                     if response.code == 1000, let members = response.result {
                         completion(members)
                     } else {

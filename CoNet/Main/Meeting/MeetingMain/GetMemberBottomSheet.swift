@@ -10,6 +10,8 @@ import Then
 import UIKit
 
 class GetMemberBottomSheet: UIViewController {
+    var meetingId: Int = 0
+    
     let memberLabel = UILabel().then {
         $0.text = "구성원"
         $0.font = UIFont.headline2Bold
@@ -19,7 +21,7 @@ class GetMemberBottomSheet: UIViewController {
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
 
-    var memberList: [TeamMember] = []
+    var memberList: [MeetingMember] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,12 +30,21 @@ class GetMemberBottomSheet: UIViewController {
         addView()
         layoutContraints()
         setupCollectionView()
+        
+        getMemberAPI()
     }
     
     private func setupCollectionView() {
         memberCollectionView.delegate = self
         memberCollectionView.dataSource = self
         memberCollectionView.register(MemberCell.self, forCellWithReuseIdentifier: MemberCell.registerId)
+    }
+    
+    private func getMemberAPI() {
+        MeetingAPI().getTeamMembers(teamId: meetingId) { members in
+            self.memberList = members ?? []
+            self.memberCollectionView.reloadData()
+        }
     }
 }
 

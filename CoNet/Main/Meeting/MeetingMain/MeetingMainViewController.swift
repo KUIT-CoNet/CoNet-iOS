@@ -283,6 +283,7 @@ class MeetingMainViewController: UIViewController {
     @objc private func getMemberOfMeeting() {
         let getMemberBottomSheet = GetMemberBottomSheet()
         getMemberBottomSheet.modalPresentationStyle = .pageSheet
+        getMemberBottomSheet.meetingId = meetingId
         
         if let bottomSheet = getMemberBottomSheet.presentationController as? UISheetPresentationController {
             // 바텀 시트의 높이를 사용자가 조절할 수 있도록 두 가지 단계(중간 및 큰 사이즈)를 설정
