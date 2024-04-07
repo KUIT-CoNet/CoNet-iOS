@@ -195,6 +195,7 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         memberCollectionView.delegate = self
         memberCollectionView.dataSource = self
         memberCollectionView.register(EditMemberCollectionViewCell.self, forCellWithReuseIdentifier: EditMemberCollectionViewCell.cellId)
+        memberCollectionView.isScrollEnabled = true
     }
     
     private func setupTextField() {
@@ -236,7 +237,6 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         // api 호출
         PlanAPI().updatePlan(planId: planId, planName: planNameTextField.text ?? "", date: date, time: planTimeTextField.text ?? "", members: userIds) { isSuccess in
             if isSuccess {
-                // 화면 끄기
                 self.dismiss(animated: true, completion: nil)
             }
         }
@@ -250,10 +250,11 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
     @objc func didTapmemberAddButton(_ sender: Any) {
         let addVC = PlanMemberBottomSheetViewController()
         addVC.planId = self.planId
+        addVC.selectedMembers = self.members.map { $0.id }
         addVC.members = members
-        addVC.modalPresentationStyle = .overFullScreen
-        addVC.modalTransitionStyle = .crossDissolve
-        present(addVC, animated: false, completion: nil)
+        addVC.delegate = self
+        
+        presentViewController(addVC)
     }
     
     @objc func didTapcalendarButton(_ sender: Any) {
@@ -262,12 +263,10 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         grayLine2.backgroundColor = UIColor.purpleMain
         
         let addVC = PlanDateButtonSheetViewController()
-        addVC.modalPresentationStyle = .overFullScreen
-        addVC.modalTransitionStyle = .crossDissolve
         addVC.onDismiss = { [weak self] in
             self?.grayLine2.backgroundColor = UIColor.iconDisabled
         }
-        present(addVC, animated: false, completion: nil)
+        presentViewController(addVC)
     }
     
     @objc func didTapclockButton(_ sender: Any) {
@@ -275,24 +274,32 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         grayLine3.backgroundColor = UIColor.purpleMain
         
         let addVC = PlanTimePickerViewController()
-        addVC.modalPresentationStyle = .overFullScreen
-        addVC.modalTransitionStyle = .crossDissolve
         addVC.onDismiss = { [weak self] in
             self?.grayLine3.backgroundColor = UIColor.iconDisabled
         }
-        present(addVC, animated: false, completion: nil)
+        presentViewController(addVC)
+    }
+    
+    func presentViewController(_ viewController: UIViewController) {
+        viewController.modalPresentationStyle = .overFullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        present(viewController, animated: false, completion: nil)
     }
 }
 
 extension PlanInfoEditViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     // 각 셀을 클릭했을 때 이벤트 처리
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Selected cell at indexPath: \(indexPath)")
+        if indexPath.item == 0 {
+            didTapmemberAddButton(self)
+        } else {
+            print("Selected cell at indexPath: \(indexPath)")
+        }
     }
     
     // 셀 개수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return members.count
+        return members.count + 1
     }
     
     // 셀
@@ -301,11 +308,42 @@ extension PlanInfoEditViewController: UICollectionViewDelegate, UICollectionView
             return UICollectionViewCell()
         }
         
-        cell.name.text = members[indexPath.item].name
-        if let url = URL(string: members[indexPath.item].image) {
-            cell.profileImage.kf.setImage(with: url, placeholder: UIImage(named: "defaultProfile"))
+        if indexPath.item == 0 {
+            cell.profileImage.image = UIImage(named: "addPeople")
+            cell.name.text = "추가하기"
+            cell.name.textColor = UIColor.textDisabled
+            cell.delete.isHidden = true
+        } else {
+            let member = members[indexPath.item - 1]
+            
+            cell.name.text = member.name
+            cell.name.textColor = UIColor.black
+            if let url = URL(string: member.image) {
+                cell.profileImage.kf.setImage(with: url, placeholder: UIImage(named: "defaultProfile"))
+            }
+            
+            cell.onDelete = { [weak self] in
+                guard let strongSelf = self else { return }
+
+                // indexPath.item에서 1을 빼서 실제 멤버 리스트 인덱스에 맞춤
+                let memberIndex = indexPath.item - 1
+                // 삭제할 멤버의 ID를 구함
+                let memberIdToDelete = strongSelf.members[memberIndex].id
+
+                // 로컬 리스트에서 해당 멤버를 제거
+                strongSelf.members.remove(at: memberIndex)
+
+                // UI를 즉시 업데이트하여 삭제된 멤버를 반영
+                strongSelf.memberCollectionView.performBatchUpdates({
+                    strongSelf.memberCollectionView.deleteItems(at: [indexPath])
+                }, completion: { _ in
+                    // 섹션 내의 셀 개수가 바뀌었으므로 레이아웃을 재조정
+                    strongSelf.memberCollectionView.collectionViewLayout.invalidateLayout()
+                })
+            }
+
         }
-        
+
         return cell
     }
     
@@ -362,10 +400,6 @@ extension PlanInfoEditViewController {
 // addView, layout
 extension PlanInfoEditViewController {
     func addView() {
-//        self.view.addSubview(backButton)
-//        self.view.addSubview(planInfoLabel)
-//        self.view.addSubview(completionButton)
-        
         self.view.addSubview(planNameLabel)
         self.view.addSubview(planNameTextField)
         self.view.addSubview(xNameButton)
@@ -384,34 +418,14 @@ extension PlanInfoEditViewController {
         
         self.view.addSubview(memberLabel)
         self.view.addSubview(memberCollectionView)
-        self.view.addSubview(memberAddButton)
-        self.view.addSubview(memberAddLabel)
     }
 
     func layoutConstraints() {
-//        applyConstraintsToTopSection()
         applyConstraintsToPlanName()
         applyConstraintsToPlanDate()
         applyConstraintsToPlanTime()
         applyConstraintsToPlanMember()
     }
-    
-//    func applyConstraintsToTopSection() {
-//        let safeArea = view.safeAreaLayoutGuide
-//        planInfoLabel.snp.makeConstraints { make in
-//            make.top.equalTo(safeArea.snp.top).offset(6)
-//            make.leading.equalTo(backButton.snp.trailing).offset(116)
-//        }
-//        backButton.snp.makeConstraints { make in
-//            make.width.height.equalTo(24)
-//            make.centerY.equalTo(planInfoLabel.snp.centerY)
-//            make.leading.equalTo(safeArea.snp.leading).offset(17)
-//        }
-//        completionButton.snp.makeConstraints { make in
-//            make.centerY.equalTo(planInfoLabel.snp.centerY)
-//            make.trailing.equalTo(safeArea.snp.trailing).offset(-24)
-//        }
-//    }
     
     func applyConstraintsToPlanName() {
         let safeArea = view.safeAreaLayoutGuide
@@ -502,15 +516,12 @@ extension PlanInfoEditViewController {
             make.top.equalTo(memberLabel.snp.bottom).offset(14)
             make.horizontalEdges.equalTo(safeArea.snp.horizontalEdges).inset(24)
         }
-        
-        memberAddButton.snp.makeConstraints { make in
-            make.width.height.equalTo(42)
-            make.top.equalTo(memberCollectionView.snp.bottom).offset(10)
-            make.leading.equalTo(safeArea.snp.leading).offset(24)
-        }
-        memberAddLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(memberAddButton.snp.centerY)
-            make.leading.equalTo(memberAddButton.snp.trailing).offset(10)
-        }
+    }
+}
+
+extension PlanInfoEditViewController: PlanMemberBottomSheetViewControllerDelegate {
+    func didUpdateMembers(members: [PlanDetailMember]) {
+        self.members = members
+        self.memberCollectionView.reloadData()
     }
 }
