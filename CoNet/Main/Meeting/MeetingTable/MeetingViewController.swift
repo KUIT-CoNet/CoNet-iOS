@@ -115,7 +115,6 @@ class MeetingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
               
         viewSetting()
         addView()
@@ -143,6 +142,7 @@ class MeetingViewController: UIViewController {
     }
     
     func viewSetting() {
+        self.view.backgroundColor = .white
         self.navigationController?.navigationBar.isHidden = true
         navigationItem.title = ""
         self.participateButton.alpha = 0
