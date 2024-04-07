@@ -10,11 +10,16 @@ import Then
 import UIKit
 
 class GetMemberBottomSheet: UIViewController {
-    
     let memberLabel = UILabel().then {
         $0.text = "구성원"
         $0.font = UIFont.headline2Bold
     }
+    
+    let memberCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
+
+    var memberList: [TeamMember] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,12 +27,31 @@ class GetMemberBottomSheet: UIViewController {
         
         addView()
         layoutContraints()
+        setupCollectionView()
     }
     
+    private func setupCollectionView() {
+        memberCollectionView.delegate = self
+        memberCollectionView.dataSource = self
+        memberCollectionView.register(MemberCell.self, forCellWithReuseIdentifier: MemberCell.registerId)
+    }
+}
+
+extension GetMemberBottomSheet: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return memberList.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MemberCell.registerId, for: indexPath) as? MemberCell else {
+            return UICollectionViewCell()
+        }
+        
+        return cell
+    }
 }
 
 extension GetMemberBottomSheet {
-    
     func addView() {
         view.addSubview(memberLabel)
     }
@@ -40,7 +64,9 @@ extension GetMemberBottomSheet {
     }
 }
 
-class memberView: UIView {
+class MemberCell: UICollectionViewCell {
+    static let registerId = "\(MemberCell.self)"
+    
     let userProfileImage = UIImageView().then {
         $0.image = UIImage(named: "defaultProfile")
     }
@@ -63,9 +89,9 @@ class memberView: UIView {
     
     private func viewSetting() {
         // border 설정
-        self.layer.cornerRadius = 50
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.mainSub2?.cgColor
+        layer.cornerRadius = 50
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.mainSub2?.cgColor
         
         addView()
         layoutConstraints()
@@ -77,7 +103,7 @@ class memberView: UIView {
     }
     
     private func layoutConstraints() {
-        self.snp.makeConstraints { make in
+        snp.makeConstraints { make in
             make.height.equalTo(42)
             make.width.equalTo(164)
         }
