@@ -254,9 +254,7 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         addVC.members = members
         addVC.delegate = self
         
-        addVC.modalPresentationStyle = .overFullScreen
-        addVC.modalTransitionStyle = .crossDissolve
-        present(addVC, animated: false, completion: nil)
+        presentViewController(addVC)
     }
     
     @objc func didTapcalendarButton(_ sender: Any) {
@@ -265,12 +263,10 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         grayLine2.backgroundColor = UIColor.purpleMain
         
         let addVC = PlanDateButtonSheetViewController()
-        addVC.modalPresentationStyle = .overFullScreen
-        addVC.modalTransitionStyle = .crossDissolve
         addVC.onDismiss = { [weak self] in
             self?.grayLine2.backgroundColor = UIColor.iconDisabled
         }
-        present(addVC, animated: false, completion: nil)
+        presentViewController(addVC)
     }
     
     @objc func didTapclockButton(_ sender: Any) {
@@ -278,12 +274,16 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         grayLine3.backgroundColor = UIColor.purpleMain
         
         let addVC = PlanTimePickerViewController()
-        addVC.modalPresentationStyle = .overFullScreen
-        addVC.modalTransitionStyle = .crossDissolve
         addVC.onDismiss = { [weak self] in
             self?.grayLine3.backgroundColor = UIColor.iconDisabled
         }
-        present(addVC, animated: false, completion: nil)
+        presentViewController(addVC)
+    }
+    
+    func presentViewController(_ viewController: UIViewController) {
+        viewController.modalPresentationStyle = .overFullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        present(viewController, animated: false, completion: nil)
     }
 }
 
@@ -418,8 +418,6 @@ extension PlanInfoEditViewController {
         
         self.view.addSubview(memberLabel)
         self.view.addSubview(memberCollectionView)
-//        self.view.addSubview(memberAddButton)
-//        self.view.addSubview(memberAddLabel)
     }
 
     func layoutConstraints() {
@@ -518,16 +516,6 @@ extension PlanInfoEditViewController {
             make.top.equalTo(memberLabel.snp.bottom).offset(14)
             make.horizontalEdges.equalTo(safeArea.snp.horizontalEdges).inset(24)
         }
-        
-//        memberAddButton.snp.makeConstraints { make in
-//            make.width.height.equalTo(42)
-//            make.top.equalTo(memberCollectionView.snp.bottom).offset(10)
-//            make.leading.equalTo(safeArea.snp.leading).offset(24)
-//        }
-//        memberAddLabel.snp.makeConstraints { make in
-//            make.centerY.equalTo(memberAddButton.snp.centerY)
-//            make.leading.equalTo(memberAddButton.snp.trailing).offset(10)
-//        }
     }
 }
 

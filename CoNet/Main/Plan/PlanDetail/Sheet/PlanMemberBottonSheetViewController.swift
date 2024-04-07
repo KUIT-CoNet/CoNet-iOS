@@ -58,17 +58,7 @@ class PlanMemberBottomSheetViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        PlanAPI().getPlanMemberIsAvailable(planId: planId) { members in
-            self.allMembers = members.map { member in
-                var member = member
-                if self.selectedMembers.contains(member.id) {
-                    member.isAvailable = true
-                }
-                return member
-            }
-            self.memberCollectionView.reloadData()
-            self.layoutConstraints()
-        }
+        updateAvailableMembers()
     }
     
     private func setupCollectionView() {
@@ -104,6 +94,20 @@ class PlanMemberBottomSheetViewController: UIViewController {
     func updateAddButtonBackgroundColor() {
         let isSelectedMemberExists = allMembers.contains { $0.isAvailable }
         addButton.backgroundColor = isSelectedMemberExists ? .purpleMain : UIColor.iconDisabled
+    }
+    
+    func updateAvailableMembers() {
+        PlanAPI().getPlanMemberIsAvailable(planId: planId) { members in
+            self.allMembers = members.map { member in
+                var member = member
+                if self.selectedMembers.contains(member.id) {
+                    member.isAvailable = true
+                }
+                return member
+            }
+            self.memberCollectionView.reloadData()
+            self.layoutConstraints()
+        }
     }
 }
 

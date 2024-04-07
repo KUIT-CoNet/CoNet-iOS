@@ -116,14 +116,8 @@ class MeetingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        self.navigationController?.navigationBar.isHidden = true
-        navigationItem.title = ""
-        self.participateButton.alpha = 0
-        self.addButton.alpha = 0
-        self.joinLabel.alpha = 0
-        self.addLabel.alpha = 0
-        self.overlayView.alpha = 0
-                
+              
+        viewSetting()
         addView()
         layoutConstriants()
         buttonClicks()
@@ -146,6 +140,16 @@ class MeetingViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         getAllMeetings()
+    }
+    
+    func viewSetting() {
+        self.navigationController?.navigationBar.isHidden = true
+        navigationItem.title = ""
+        self.participateButton.alpha = 0
+        self.addButton.alpha = 0
+        self.joinLabel.alpha = 0
+        self.addLabel.alpha = 0
+        self.overlayView.alpha = 0
     }
     
     func addView() {
