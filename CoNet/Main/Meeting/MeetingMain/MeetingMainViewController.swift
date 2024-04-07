@@ -285,10 +285,14 @@ class MeetingMainViewController: UIViewController {
         getMemberBottomSheet.modalPresentationStyle = .pageSheet
         getMemberBottomSheet.meetingId = meetingId
         
+        let customDetent = UISheetPresentationController.Detent.custom(identifier: .init("customDetent")) { _ in
+            400
+        }
+        
         if let bottomSheet = getMemberBottomSheet.presentationController as? UISheetPresentationController {
             // 바텀 시트의 높이를 사용자가 조절할 수 있도록 두 가지 단계(중간 및 큰 사이즈)를 설정
-            // 기본은 medium, 위로 스크롤 시 large
-            bottomSheet.detents = [.medium(), .large()]
+            // 기본은 customDetent(400), 위로 스크롤 시 large
+            bottomSheet.detents = [customDetent, .large()]
                     
             // 위로 드래그할 때 바텀 시트의 코너가 둥근 모서리를 유지하도록 설정
             bottomSheet.prefersGrabberVisible = true
