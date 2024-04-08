@@ -51,7 +51,7 @@ struct PostCreateMeetingResponse: Codable {
 }
 
 struct MeetingMember: Codable {
-    let userId: Int
-    let name: String
-    let userImgUrl: String
+    let memberId: Int
+    let name: String?
+    let memberImgUrl: String
 }

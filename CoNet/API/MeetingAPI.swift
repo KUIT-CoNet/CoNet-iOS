@@ -256,7 +256,7 @@ class MeetingAPI {
             .responseDecodable(of: BaseResponse<[MeetingMember]>.self) { response in
                 switch response.result {
                 case .success(let response):
-                    print("DEBUG(모임 구성원 조회 api) success: \(response.message)")
+                    print("DEBUG(모임 구성원 조회 api) success: \(response.result)")
                     if response.code == 1000, let members = response.result {
                         completion(members)
                     } else {
