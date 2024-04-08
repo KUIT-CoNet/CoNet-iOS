@@ -142,7 +142,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         addView()
         layoutConstraints()
         timeTableSetting()
-        
+        getMemberPossibleTimeAPI()
         buttonActions()
     }
     
@@ -198,7 +198,6 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
             
             // 날짜 배열 update
             self.updateDateArray(planStartPeriod: planStartPeriod, planEndPeriod: planEndPeriod, memberTime: possibleMemberDateTime)
-            self.timeTable.timeTableCollectionView.reloadData()
             
             // 인원 수 별 셀 색 예시 인원
             self.sectionMemberCount[1] = "1"
@@ -218,6 +217,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
                 }
             }
         }
+        btnVisible()
     }
     
     // 날짜 배열 update
