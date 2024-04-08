@@ -73,15 +73,15 @@ extension GetMemberBottomSheet: UICollectionViewDelegate, UICollectionViewDataSo
         return CGSize(width: halfWidth, height: 42)
     }
     
-    // 셀 사이의 위아래 간격
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 15
-    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+            return UIEdgeInsets(top: 10, left: 15, bottom: 10, right: 15)
+        }
 }
 
 extension GetMemberBottomSheet {
     func addView() {
         view.addSubview(memberLabel)
+        view.addSubview(memberCollectionView)
     }
     
     func layoutContraints() {
@@ -89,11 +89,22 @@ extension GetMemberBottomSheet {
             make.top.equalTo(view.snp.top).offset(40)
             make.centerX.equalTo(view.snp.centerX)
         }
+        memberCollectionView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.top.equalTo(memberLabel.snp.bottom).offset(25)
+            make.bottom.equalToSuperview().inset(20)
+        }
     }
 }
 
 class MemberCell: UICollectionViewCell {
     static let registerId = "\(MemberCell.self)"
+    
+    let background = UIView().then {
+        $0.layer.cornerRadius = 22
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.mainSub2?.cgColor
+    }
     
     var userProfileImage = UIImageView().then {
         $0.image = UIImage(named: "defaultProfile")
@@ -103,6 +114,7 @@ class MemberCell: UICollectionViewCell {
         $0.font = UIFont.body1Medium
         $0.textColor = .textHigh
         $0.lineBreakMode = .byTruncatingTail
+        $0.numberOfLines = 1
     }
     
     override init(frame: CGRect) {
@@ -116,36 +128,31 @@ class MemberCell: UICollectionViewCell {
     }
     
     private func viewSetting() {
-        // border 설정
-        layer.cornerRadius = 50
-        layer.borderWidth = 1
-        layer.borderColor = UIColor.mainSub2?.cgColor
-        
         addView()
         layoutConstraints()
     }
     
     private func addView() {
-        addSubview(userProfileImage)
-        addSubview(userNickname)
+        addSubview(background)
+        background.addSubview(userProfileImage)
+        background.addSubview(userNickname)
     }
     
     private func layoutConstraints() {
-        snp.makeConstraints { make in
-            make.height.equalTo(42)
-            make.width.equalTo(164)
+        background.snp.makeConstraints { make in
+            make.height.width.equalToSuperview()
         }
         
         userProfileImage.snp.makeConstraints { make in
             make.width.height.equalTo(30)
             make.leading.equalToSuperview().offset(8)
-            make.centerY.equalTo(self.snp.centerY)
+            make.centerY.equalTo(background.snp.centerY)
         }
         
         userNickname.snp.makeConstraints { make in
-            make.width.equalTo(70)
+            make.width.equalTo(82)
             make.leading.equalTo(userProfileImage.snp.trailing).offset(12)
-            make.centerY.equalTo(self.snp.centerY)
+            make.centerY.equalTo(background.snp.centerY)
         }
     }
 }
