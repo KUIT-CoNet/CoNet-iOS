@@ -67,55 +67,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         $0.layer.cornerRadius = 12
     }
     
-    // 인원 수 별 색 예시 4개
-    let purpleEx1 = UIView().then {
-        $0.backgroundColor = .white
-        $0.layer.borderColor = UIColor.gray100?.cgColor
-        $0.layer.borderWidth = 1
-    }
-    
-    let purpleEx2 = UIView().then {
-        $0.layer.backgroundColor = UIColor.mainSub1?.withAlphaComponent(0.2).cgColor
-        $0.layer.borderColor = UIColor.gray100?.cgColor
-        $0.layer.borderWidth = 1
-    }
-    
-    let purpleEx3 = UIView().then {
-        $0.layer.backgroundColor = UIColor.mainSub1?.withAlphaComponent(0.5).cgColor
-        $0.layer.borderColor = UIColor.gray100?.cgColor
-        $0.layer.borderWidth = 1
-    }
-    
-    let purpleEx4 = UIView().then {
-        $0.layer.backgroundColor = UIColor.mainSub1?.withAlphaComponent(0.8).cgColor
-        $0.layer.borderColor = UIColor.gray100?.cgColor
-        $0.layer.borderWidth = 1
-    }
-    
-    // label: 인원 수 4개
-    let peopleNum1 = UILabel().then {
-        $0.text = "0"
-        $0.textColor = UIColor.textMedium
-        $0.font = UIFont.overline
-    }
-    
-    let peopleNum2 = UILabel().then {
-        $0.text = "1-3"
-        $0.textColor = UIColor.textMedium
-        $0.font = UIFont.overline
-    }
-    
-    let peopleNum3 = UILabel().then {
-        $0.text = "4-6"
-        $0.textColor = UIColor.textMedium
-        $0.font = UIFont.overline
-    }
-    
-    let peopleNum4 = UILabel().then {
-        $0.text = "7-9"
-        $0.textColor = UIColor.textMedium
-        $0.font = UIFont.overline
-    }
+    let colorExampleView = TimeColorExView()
     
     var page: Int = 0
     
@@ -279,10 +231,10 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     
     // 셀 색 예시 - 멤버 수 update
     func memberCountUpdate() {
-        peopleNum1.text = sectionMemberCount[0]
-        peopleNum2.text = sectionMemberCount[1]
-        peopleNum3.text = sectionMemberCount[2]
-        peopleNum4.text = sectionMemberCount[3]
+        colorExampleView.color1.peopleNum.text = sectionMemberCount[0]
+        colorExampleView.color2.peopleNum.text = sectionMemberCount[1]
+        colorExampleView.color3.peopleNum.text = sectionMemberCount[2]
+        colorExampleView.color4.peopleNum.text = sectionMemberCount[3]
     }
     
     @objc private func xButtonTapped() {
@@ -446,23 +398,11 @@ extension TimeShareViewController {
         view.addSubview(nextBtn)
         view.addSubview(timeTable)
         view.addSubview(inputTimeButton)
-        view.addSubview(purpleEx1)
-        view.addSubview(purpleEx2)
-        view.addSubview(purpleEx3)
-        view.addSubview(purpleEx4)
-        view.addSubview(peopleNum1)
-        view.addSubview(peopleNum2)
-        view.addSubview(peopleNum3)
-        view.addSubview(peopleNum4)
-    }
-    
-    func layoutConstraints() {
-        timetableConstraints()
-        colorExample() // 타임테이블 옆 색 예시
+        view.addSubview(colorExampleView)
     }
 
     // time table
-    func timetableConstraints() {
+    func layoutConstraints() {
         let safeArea = view.safeAreaLayoutGuide
         
         // 이전 날짜로 이동 버튼
@@ -510,65 +450,12 @@ extension TimeShareViewController {
             make.top.equalTo(prevBtn.snp.bottom).offset(7)
             make.bottom.equalTo(inputTimeButton.snp.top).offset(-10)
         }
-    }
-    
-    // 타임테이블 옆 색 예시
-    func colorExample() {
-        // 색 view
-        purpleEx1.snp.makeConstraints { make in
-            make.width.equalTo(24)
-            make.height.equalTo(33)
+        
+        colorExampleView.snp.makeConstraints { make in
             make.leading.equalTo(timeTable.snp.trailing).offset(10)
-            make.top.equalTo(nextBtn.snp.bottom).offset(13)
-        }
-        
-        purpleEx2.snp.makeConstraints { make in
-            make.width.equalTo(24)
-            make.height.equalTo(33)
-            make.leading.equalTo(timeTable.snp.trailing).offset(10)
-            make.top.equalTo(purpleEx1.snp.bottom).offset(-1)
-        }
-        
-        purpleEx3.snp.makeConstraints { make in
-            make.width.equalTo(24)
-            make.height.equalTo(33)
-            make.leading.equalTo(timeTable.snp.trailing).offset(10)
-            make.top.equalTo(purpleEx2.snp.bottom).offset(-1)
-        }
-        
-        purpleEx4.snp.makeConstraints { make in
-            make.width.equalTo(24)
-            make.height.equalTo(33)
-            make.leading.equalTo(timeTable.snp.trailing).offset(10)
-            make.top.equalTo(purpleEx3.snp.bottom).offset(-1)
-        }
-        
-        // 인원 수 label
-        peopleNum1.snp.makeConstraints { make in
-            make.height.equalTo(12)
-            make.leading.equalTo(purpleEx1.snp.trailing).offset(6)
-            make.bottom.equalTo(purpleEx1.snp.bottom)
-        }
-        
-        peopleNum2.snp.makeConstraints { make in
-            make.height.equalTo(12)
-            make.leading.equalTo(purpleEx1.snp.trailing).offset(6)
-            make.bottom.equalTo(purpleEx2.snp.bottom)
-        }
-        
-        peopleNum3.snp.makeConstraints { make in
-            make.height.equalTo(12)
-            make.leading.equalTo(purpleEx1.snp.trailing).offset(6)
-            make.bottom.equalTo(purpleEx3.snp.bottom)
-        }
-        
-        peopleNum4.snp.makeConstraints { make in
-            make.height.equalTo(12)
-            make.leading.equalTo(purpleEx1.snp.trailing).offset(6)
-            make.bottom.equalTo(purpleEx4.snp.bottom)
+            make.top.equalTo(timeTable.snp.top).offset(7)
         }
     }
-
 }
 
 protocol TimeShareProtocol {
