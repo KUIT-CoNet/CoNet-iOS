@@ -245,7 +245,7 @@ class MeetingAPI {
     }
     
     // 모임 구성원 조회
-    func getTeamMembers(teamId: Int, completion: @escaping (_ members: [MeetingMember]?) -> Void) {
+    func getMeetingMembers(teamId: Int, completion: @escaping (_ members: [MeetingMember]?) -> Void) {
         let url = "\(baseUrl)/team/\(teamId)/members"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",

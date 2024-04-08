@@ -41,14 +41,14 @@ class GetMemberBottomSheet: UIViewController {
     }
     
     private func getMemberAPI() {
-        MeetingAPI().getTeamMembers(teamId: meetingId) { members in
+        MeetingAPI().getMeetingMembers(teamId: meetingId) { members in
             self.memberList = members ?? []
             self.memberCollectionView.reloadData()
         }
     }
 }
 
-extension GetMemberBottomSheet: UICollectionViewDelegate, UICollectionViewDataSource {
+extension GetMemberBottomSheet: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return memberList.count
     }
@@ -58,7 +58,24 @@ extension GetMemberBottomSheet: UICollectionViewDelegate, UICollectionViewDataSo
             return UICollectionViewCell()
         }
         
+        cell.userNickname.text = memberList[indexPath.item].name
+        if let url = URL(string: memberList[indexPath.item].memberImgUrl) {
+            cell.userProfileImage.kf.setImage(with: url, placeholder: UIImage(named: "defaultProfile"))
+        }
+        
         return cell
+    }
+    
+    // 셀 크기
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = collectionView.frame.width
+        let halfWidth = (width - 48) / 2
+        return CGSize(width: halfWidth, height: 42)
+    }
+    
+    // 셀 사이의 위아래 간격
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 15
     }
 }
 
@@ -78,11 +95,11 @@ extension GetMemberBottomSheet {
 class MemberCell: UICollectionViewCell {
     static let registerId = "\(MemberCell.self)"
     
-    let userProfileImage = UIImageView().then {
+    var userProfileImage = UIImageView().then {
         $0.image = UIImage(named: "defaultProfile")
     }
     
-    let userNickname = UILabel().then {
+    var userNickname = UILabel().then {
         $0.font = UIFont.body1Medium
         $0.textColor = .textHigh
         $0.lineBreakMode = .byTruncatingTail
