@@ -16,6 +16,7 @@ class MeetingMainViewController: UIViewController {
         $0.backgroundColor = .clear
         $0.showsVerticalScrollIndicator = false
     }
+
     let contentView = UIView().then { $0.backgroundColor = .clear }
     
     // 사이드바 버튼
@@ -59,10 +60,10 @@ class MeetingMainViewController: UIViewController {
     }
     
     // 멤버 수
-    let memberNum = UILabel().then {
-        $0.text = "n명"
-        $0.textColor = UIColor.textMedium
-        $0.font = UIFont.body1Medium
+    let memberNum = UIButton().then {
+        $0.setTitle("n명", for: .normal)
+        $0.setTitleColor(UIColor.textMedium, for: .normal)
+        $0.titleLabel?.font = UIFont.body1Medium
     }
     
     // 캘린더뷰
@@ -84,6 +85,8 @@ class MeetingMainViewController: UIViewController {
         $0.textColor = UIColor.purpleMain
         $0.font = UIFont.body3Bold
     }
+    
+    var overlayView = UIView()
     
     // 오늘 약속 collectionView
     private lazy var dayPlanCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
@@ -112,7 +115,7 @@ class MeetingMainViewController: UIViewController {
         
         buttonActions()
         
-        // 모임 정보 조회 api 
+        // 모임 정보 조회 api
         getMeetingInfo()
         
         // view height 동적 설정
@@ -156,13 +159,14 @@ class MeetingMainViewController: UIViewController {
         starButton.addTarget(self, action: #selector(starButtonTapped), for: .touchUpInside)
         sidebarButton.addTarget(self, action: #selector(sidebarButtonTapped), for: .touchUpInside)
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        memberNum.addTarget(self, action: #selector(getMemberOfMeeting), for: .touchUpInside)
     }
     
     // 모임 정보 조회 api
     func getMeetingInfo() {
         MeetingAPI().getMeetingDetailInfo(teamId: meetingId) { meeting in
             self.meetingName.text = meeting.name
-            self.memberNum.text = "\(meeting.memberCount)명"
+            self.memberNum.setTitle("\(meeting.memberCount)명", for: .normal)
             self.isBookmarked = meeting.bookmark
             self.starButton.setImage(UIImage(named: meeting.bookmark ? "meetingStarOn" : "meetingStarOff"), for: .normal)
             guard let url = URL(string: meeting.imgUrl) else { return }
@@ -205,7 +209,7 @@ class MeetingMainViewController: UIViewController {
         for collectionView in [dayPlanCollectionView] {
             collectionView.layoutIfNeeded()
             if collectionView == dayPlanCollectionView {
-                dayCollectionHeight += collectionView.contentSize.height+10
+                dayCollectionHeight += collectionView.contentSize.height + 10
             }
             contentHeight += collectionView.contentSize.height
         }
@@ -273,6 +277,36 @@ class MeetingMainViewController: UIViewController {
                 self.starButton.setImage(UIImage(named: "meetingStarOff"), for: .normal)
             }
         }
+    }
+    
+    // 구성원 조회 bottom sheet 띄우기
+    @objc private func getMemberOfMeeting() {
+        let getMemberBottomSheet = GetMemberBottomSheet()
+        getMemberBottomSheet.modalPresentationStyle = .pageSheet
+        getMemberBottomSheet.meetingId = meetingId
+        
+        let customDetent = UISheetPresentationController.Detent.custom(identifier: .init("customDetent")) { _ in
+            400
+        }
+        
+        if let bottomSheet = getMemberBottomSheet.presentationController as? UISheetPresentationController {
+            // 바텀 시트의 높이를 사용자가 조절할 수 있도록 두 가지 단계(중간 및 큰 사이즈)를 설정
+            // 기본은 customDetent(400), 위로 스크롤 시 large
+            bottomSheet.detents = [customDetent, .large()]
+                    
+            // 위로 드래그할 때 바텀 시트의 코너가 둥근 모서리를 유지하도록 설정
+            bottomSheet.prefersGrabberVisible = true
+        }
+        
+        // 배경 불투명 뷰 설정
+        overlayView.backgroundColor = UIColor.black.withAlphaComponent(0.5) // 반투명 검정
+        overlayView.frame = view.bounds
+        view.addSubview(overlayView)
+                
+        // 바텀 시트가 닫힐 때 overlayView를 제거하기 위한 콜백 설정
+        getMemberBottomSheet.presentationController?.delegate = self
+        
+        present(getMemberBottomSheet, animated: true, completion: nil)
     }
 }
 
@@ -407,7 +441,6 @@ extension MeetingMainViewController: UICollectionViewDelegate, UICollectionViewD
 
 // layout
 extension MeetingMainViewController {
-    
     private func addView() {
         view.addSubview(scrollview)
         scrollview.addSubview(contentView)
@@ -536,5 +569,13 @@ extension MeetingMainViewController {
             make.leading.trailing.equalToSuperview().inset(12)
             make.height.equalTo(dayPlanData.count * 92 - 10)
         }
+    }
+}
+
+// UIAdaptivePresentationControllerDelegate 프로토콜 채택
+extension MeetingMainViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        // 바텀 시트가 닫히면 overlayView 제거
+        overlayView.removeFromSuperview()
     }
 }
