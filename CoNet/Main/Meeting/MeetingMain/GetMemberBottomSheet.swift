@@ -108,6 +108,9 @@ class MemberCell: UICollectionViewCell {
     
     var userProfileImage = UIImageView().then {
         $0.image = UIImage(named: "defaultProfile")
+        $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 15
     }
     
     var userNickname = UILabel().then {
