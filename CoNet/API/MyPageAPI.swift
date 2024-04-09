@@ -48,7 +48,12 @@ class MyPageAPI {
             "Content-Type": "multipart/form-data",
             "Authorization": "Bearer \(keychain.get("accessToken") ?? "")"
         ]
-        guard let image = image.pngData() else { return }
+        
+        let resizedImage = image.resize(newSize: 150)
+        guard let image = resizedImage.pngData() else {
+            print("image png 처리 실패")
+            return
+        }
         
         // Multipart Form 데이터 생성
         AF.upload(multipartFormData: { multipartFormData in
