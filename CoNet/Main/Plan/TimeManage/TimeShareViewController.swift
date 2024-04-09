@@ -169,7 +169,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
                 }
             }
         }
-        btnVisible()
+        showDateMoveButton()
     }
     
     // 날짜 배열 update
@@ -200,7 +200,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     }
     
     // 이전, 다음 버튼 ishidden 속성
-    func btnVisible() {
+    func showDateMoveButton() {
         if page == 0 {
             prevBtn.isHidden = true
             nextBtn.isHidden = false
@@ -253,12 +253,12 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     
     @objc func didClickPrevButton() {
         page -= 1
-        btnVisible()
+        showDateMoveButton()
     }
     
     @objc func didClickNextButton() {
         page += 1
-        btnVisible()
+        showDateMoveButton()
     }
     
     @objc func didClickDots() {
