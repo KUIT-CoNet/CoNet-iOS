@@ -57,15 +57,18 @@ class MonthViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        monthCollectionView.dataSource = self
-        monthCollectionView.delegate = self
-        
+        addView()
         layoutConstraints()
-        
-        btnEvents()
+        setUpCollectionView()
+        buttonActions()
     }
     
-    func btnEvents() {
+    func setUpCollectionView() {
+        monthCollectionView.dataSource = self
+        monthCollectionView.delegate = self
+    }
+    
+    func buttonActions() {
         // 배경 탭
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopUp))
         background.addGestureRecognizer(tapGesture)
@@ -89,55 +92,7 @@ class MonthViewController: UIViewController {
         year.text = String((Int(year.text!) ?? 0) + 1)
     }
     
-    func layoutConstraints() {
-        let safeArea = view.safeAreaLayoutGuide
-        
-        view.addSubview(background)
-        background.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(0)
-        }
-        
-        view.addSubview(popUpView)
-        popUpView.snp.makeConstraints { make in
-            make.top.equalTo(safeArea.snp.top).offset(79)
-            make.leading.trailing.equalTo(safeArea).inset(24)
-            make.height.equalTo(286)
-        }
-        
-        // 이전 해로 이동 버튼
-        popUpView.addSubview(prevBtn)
-        prevBtn.snp.makeConstraints { make in
-            make.width.equalTo(24)
-            make.height.equalTo(24)
-            make.top.equalTo(popUpView.snp.top).offset(32)
-            make.leading.equalTo(popUpView.snp.leading).offset(20)
-        }
-        
-        // label: 해
-        popUpView.addSubview(year)
-        year.snp.makeConstraints { make in
-            make.height.equalTo(26)
-            make.top.equalTo(popUpView.snp.top).offset(31)
-            make.centerX.equalTo(popUpView.snp.centerX)
-        }
-        
-        // 다음 해로 이동 버튼
-        popUpView.addSubview(nextBtn)
-        nextBtn.snp.makeConstraints { make in
-            make.width.equalTo(24)
-            make.height.equalTo(24)
-            make.top.equalTo(popUpView.snp.top).offset(32)
-            make.trailing.equalTo(popUpView.snp.trailing).offset(-20)
-        }
-        
-        // month
-        popUpView.addSubview(monthCollectionView)
-        monthCollectionView.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(popUpView).inset(18)
-            make.top.equalTo(year.snp.bottom).offset(30)
-            make.bottom.equalTo(popUpView.snp.bottom).offset(-30)
-        }
-    }
+    
 }
 
 extension MonthViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -178,5 +133,60 @@ extension MonthViewController: UICollectionViewDataSource, UICollectionViewDeleg
         cell.configureMonth(month: indexPath.item)
         
         return cell
+    }
+}
+
+extension MonthViewController {
+    func addView() {
+        view.addSubview(background)
+        view.addSubview(popUpView)
+        popUpView.addSubview(prevBtn)
+        popUpView.addSubview(year)
+        popUpView.addSubview(nextBtn)
+        popUpView.addSubview(monthCollectionView)
+    }
+    
+    func layoutConstraints() {
+        let safeArea = view.safeAreaLayoutGuide
+        
+        background.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(0)
+        }
+        
+        popUpView.snp.makeConstraints { make in
+            make.top.equalTo(safeArea.snp.top).offset(79)
+            make.leading.trailing.equalTo(safeArea).inset(24)
+            make.height.equalTo(286)
+        }
+        
+        // 이전 해로 이동 버튼
+        prevBtn.snp.makeConstraints { make in
+            make.width.equalTo(24)
+            make.height.equalTo(24)
+            make.top.equalTo(popUpView.snp.top).offset(32)
+            make.leading.equalTo(popUpView.snp.leading).offset(20)
+        }
+        
+        // label: 해
+        year.snp.makeConstraints { make in
+            make.height.equalTo(26)
+            make.top.equalTo(popUpView.snp.top).offset(31)
+            make.centerX.equalTo(popUpView.snp.centerX)
+        }
+        
+        // 다음 해로 이동 버튼
+        nextBtn.snp.makeConstraints { make in
+            make.width.equalTo(24)
+            make.height.equalTo(24)
+            make.top.equalTo(popUpView.snp.top).offset(32)
+            make.trailing.equalTo(popUpView.snp.trailing).offset(-20)
+        }
+        
+        // month
+        monthCollectionView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(popUpView).inset(18)
+            make.top.equalTo(year.snp.bottom).offset(30)
+            make.bottom.equalTo(popUpView.snp.bottom).offset(-30)
+        }
     }
 }
