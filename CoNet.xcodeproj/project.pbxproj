@@ -28,6 +28,7 @@
 		231E97CF2A6BCA04000BB2AD /* MonthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231E97CE2A6BCA04000BB2AD /* MonthViewController.swift */; };
 		231E97D12A6BD3F8000BB2AD /* MonthCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231E97D02A6BD3F8000BB2AD /* MonthCollectionViewCell.swift */; };
 		231EA9D02A587DE700138628 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 231EA9CF2A587DE700138628 /* Then */; };
+		232455522BC439130053EAD7 /* TimeColorExView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232455512BC439130053EAD7 /* TimeColorExView.swift */; };
 		233C0C6A2BC1B31700FE9F58 /* GetMemberBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233C0C692BC1B31700FE9F58 /* GetMemberBottomSheet.swift */; };
 		234428702A5E99BE006A4D66 /* BaseResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2344286F2A5E99BE006A4D66 /* BaseResponse.swift */; };
 		234428762A5EF81D006A4D66 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234428752A5EF81D006A4D66 /* Login.swift */; };
@@ -136,6 +137,7 @@
 		1AF858072B381E63005D058B /* MeetingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingCollectionViewCell.swift; sourceTree = "<group>"; };
 		231E97CE2A6BCA04000BB2AD /* MonthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthViewController.swift; sourceTree = "<group>"; };
 		231E97D02A6BD3F8000BB2AD /* MonthCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthCollectionViewCell.swift; sourceTree = "<group>"; };
+		232455512BC439130053EAD7 /* TimeColorExView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeColorExView.swift; sourceTree = "<group>"; };
 		233C0C692BC1B31700FE9F58 /* GetMemberBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMemberBottomSheet.swift; sourceTree = "<group>"; };
 		2344286F2A5E99BE006A4D66 /* BaseResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseResponse.swift; sourceTree = "<group>"; };
 		234428752A5EF81D006A4D66 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
@@ -313,6 +315,7 @@
 				239B625C2A738CEE00C48CBE /* TimeInputViewController.swift */,
 				23DE37C02A7287BD00F1DFE0 /* TimeShareViewController.swift */,
 				23F6F9052A6FE9A300772AFF /* TimeShareBottomSheetViewController.swift */,
+				232455512BC439130053EAD7 /* TimeColorExView.swift */,
 			);
 			path = TimeManage;
 			sourceTree = "<group>";
@@ -808,6 +811,7 @@
 				514D73D42A59D19A00404E64 /* NoticeViewController.swift in Sources */,
 				23C9BF712A7C126A00B3D9C9 /* CalendarViewController.swift in Sources */,
 				51B526C62A6C324D009DBFB4 /* SideBarMenu.swift in Sources */,
+				232455522BC439130053EAD7 /* TimeColorExView.swift in Sources */,
 				235F5B732A69893F00ADC0D6 /* CalendarDateFormatter.swift in Sources */,
 				512856392A81678200C1FBA7 /* FixPlanPopUpView.swift in Sources */,
 				51046AAB2A62F60200AD543D /* PreviewExtension.swift in Sources */,

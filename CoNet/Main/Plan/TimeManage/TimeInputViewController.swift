@@ -158,7 +158,7 @@ class TimeInputViewController: UIViewController {
     }
     
     // 이전, 다음 버튼 ishidden 속성
-    func btnVisible() {
+    func showDateMoveButton() {
         if page == 0 {
             prevDayBtn.isHidden = true
             nextDayBtn.isHidden = false
@@ -232,13 +232,13 @@ class TimeInputViewController: UIViewController {
     // 날짜 이전 버튼 클릭
     @objc func didClickPrevDayButton() {
         page -= 1
-        btnVisible()
+        showDateMoveButton()
     }
     
     // 날짜 다음 버튼 클릭
     @objc func didClickNextDayButton() {
         page += 1
-        btnVisible()
+        showDateMoveButton()
     }
     
     @objc func didClickSaveButton() {
