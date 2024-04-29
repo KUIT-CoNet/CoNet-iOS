@@ -347,7 +347,7 @@ extension HomeViewController {
         waitingPlanCollectionView.snp.makeConstraints { make in
             make.top.equalTo(waitingPlanLabel.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
-            make.height.equalTo(waitingPlanData.count*100 - 10)
+            make.height.equalTo(waitingPlanData.count*100 - 1)
         }
     }
 }

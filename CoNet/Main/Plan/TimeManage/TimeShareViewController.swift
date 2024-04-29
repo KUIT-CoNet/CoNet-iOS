@@ -168,8 +168,8 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
                     self.sectionMemberCount[3] += "-\(sectionMemberCounts.section3)"
                 }
             }
+            self.showDateMoveButton()
         }
-        showDateMoveButton()
     }
     
     // 날짜 배열 update

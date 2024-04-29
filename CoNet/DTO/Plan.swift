@@ -44,7 +44,8 @@ struct PlanDetailMember: Codable {
 
 struct EditPlanMember: Codable {
     let id: Int
-    let name, image: String
+    let name: String?
+    let image: String
     var isAvailable: Bool
     
     private enum CodingKeys: String, CodingKey {

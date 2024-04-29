@@ -81,7 +81,7 @@ class PlanMemberBottomSheetViewController: UIViewController {
     @objc func addButtonTapped() {
         var newMembers: [PlanDetailMember] = []
         for member in allMembers where member.isAvailable {
-            let newMember = PlanDetailMember(id: member.id, name: member.name, image: member.image)
+            let newMember = PlanDetailMember(id: member.id, name: member.name ?? "", image: member.image)
             newMembers.append(newMember)
         }
         self.members = newMembers
