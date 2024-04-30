@@ -149,6 +149,7 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         self.navigationController?.navigationBar.isHidden = false
         setupNavigationBar()
         getPlanDetailAPI()
+        updateMemberCollectionViewSize()
     }
     
     func getPlanDetailAPI() {
@@ -284,6 +285,12 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
         present(viewController, animated: false, completion: nil)
+    }
+    
+    func updateMemberCollectionViewSize() {
+        let memberRow = ceil(Double(members.count) / 2.0)
+        let height = (memberRow * 42) + ((memberRow - 1) * 10)
+        memberCollectionView.frame.size.height = height
     }
 }
 
@@ -508,11 +515,7 @@ extension PlanInfoEditViewController {
         
         memberCollectionView.snp.makeConstraints { make in
             make.width.equalToSuperview().offset(-48)
-            
-            let memberRow = ceil(Double(members.count) / 2.0)
-            let height = (memberRow * 42) + ((memberRow - 1) * 10)
-            make.height.equalTo(height)
-            
+            make.height.equalTo(200)
             make.top.equalTo(memberLabel.snp.bottom).offset(14)
             make.horizontalEdges.equalTo(safeArea.snp.horizontalEdges).inset(24)
         }
