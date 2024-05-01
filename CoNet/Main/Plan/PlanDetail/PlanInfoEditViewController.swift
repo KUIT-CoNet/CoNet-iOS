@@ -238,11 +238,12 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         // api 호출
         PlanAPI().updatePlan(planId: planId, planName: planNameTextField.text ?? "", date: date, time: planTimeTextField.text ?? "", members: userIds) { isSuccess in
             if isSuccess {
+                NotificationCenter.default.post(name: NSNotification.Name("PlanInfoUpdated"), object: nil, userInfo: ["planName": self.planNameTextField.text ?? "", "date": self.date, "time": self.planTimeTextField.text ?? "", "members": self.members])
                 self.dismiss(animated: true, completion: nil)
             }
         }
     }
-    
+
     @objc private func xNameButtonTapped() {
         planNameTextField.text = ""
         planNameTextField.sendActions(for: .editingChanged)
