@@ -78,7 +78,7 @@ class DecidedPlanInfoViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = false
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(updatePlanInfo(notification:)), name: NSNotification.Name("PlanInfoUpdated"), object: nil)
         getPlanDetailAPI()
     }
     
@@ -134,6 +134,17 @@ class DecidedPlanInfoViewController: UIViewController {
     
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func updatePlanInfo(notification: Notification) {
+        guard let userInfo = notification.userInfo else { return }
+        
+        nameRow.setText(userInfo["planName"] as? String ?? "")
+        dateRow.setText(userInfo["date"] as? String ?? "")
+        timeRow.setText(userInfo["time"] as? String ?? "")
+        members = userInfo["members"] as? [PlanDetailMember] ?? []
+        
+        memberCollectionView.reloadData()
     }
 }
 

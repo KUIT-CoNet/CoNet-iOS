@@ -238,11 +238,12 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         // api 호출
         PlanAPI().updatePlan(planId: planId, planName: planNameTextField.text ?? "", date: date, time: planTimeTextField.text ?? "", members: userIds) { isSuccess in
             if isSuccess {
+                NotificationCenter.default.post(name: NSNotification.Name("PlanInfoUpdated"), object: nil, userInfo: ["planName": self.planNameTextField.text ?? "", "date": self.date, "time": self.planTimeTextField.text ?? "", "members": self.members])
                 self.dismiss(animated: true, completion: nil)
             }
         }
     }
-    
+
     @objc private func xNameButtonTapped() {
         planNameTextField.text = ""
         planNameTextField.sendActions(for: .editingChanged)
@@ -314,46 +315,33 @@ extension PlanInfoEditViewController: UICollectionViewDelegate, UICollectionView
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EditMemberCollectionViewCell.cellId, for: indexPath) as? EditMemberCollectionViewCell else {
             return UICollectionViewCell()
         }
-        
+
         if indexPath.item == 0 {
+            // 첫번째 셀 (추가하기 버튼)
             cell.profileImage.image = UIImage(named: "addPeople")
             cell.name.text = "추가하기"
             cell.name.textColor = UIColor.textDisabled
             cell.delete.isHidden = true
+            return cell
         } else {
+            // 나머지 셀 (구성원)
             let member = members[indexPath.item - 1]
-            
+            cell.profileImage.kf.setImage(with: URL(string: member.image))
             cell.name.text = member.name
             cell.name.textColor = UIColor.black
-            if let url = URL(string: member.image) {
-                cell.profileImage.kf.setImage(with: url, placeholder: UIImage(named: "defaultProfile"))
-            }
-            
-            cell.onDelete = { [weak self] in
+            cell.delete.isHidden = false
+
+            cell.configureCell(with: member) { [weak self] in
                 guard let strongSelf = self else { return }
-
-                // indexPath.item에서 1을 빼서 실제 멤버 리스트 인덱스에 맞춤
-                let memberIndex = indexPath.item - 1
-                // 삭제할 멤버의 ID를 구함
-                let memberIdToDelete = strongSelf.members[memberIndex].id
-
-                // 로컬 리스트에서 해당 멤버를 제거
-                strongSelf.members.remove(at: memberIndex)
-
-                // UI를 즉시 업데이트하여 삭제된 멤버를 반영
-                strongSelf.memberCollectionView.performBatchUpdates({
-                    strongSelf.memberCollectionView.deleteItems(at: [indexPath])
-                }, completion: { _ in
-                    // 섹션 내의 셀 개수가 바뀌었으므로 레이아웃을 재조정
-                    strongSelf.memberCollectionView.collectionViewLayout.invalidateLayout()
-                })
+                if let currentIndex = strongSelf.memberCollectionView.indexPath(for: cell) {
+                    strongSelf.members.remove(at: currentIndex.item - 1)
+                    strongSelf.memberCollectionView.deleteItems(at: [currentIndex])
+                }
             }
-
+            return cell
         }
-
-        return cell
     }
-    
+
     // 셀 크기
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width
@@ -525,6 +513,7 @@ extension PlanInfoEditViewController {
 extension PlanInfoEditViewController: PlanMemberBottomSheetViewControllerDelegate {
     func didUpdateMembers(members: [PlanDetailMember]) {
         self.members = members
+        self.updateUserId()
         self.memberCollectionView.reloadData()
     }
 }

@@ -73,4 +73,8 @@ class EditMemberCollectionViewCell: UICollectionViewCell {
     @objc func deleteMember() {
         onDelete?()
     }
+    
+    func configureCell(with member: PlanDetailMember, onDelete: @escaping () -> Void) {
+        self.onDelete = onDelete
+    }
 }
