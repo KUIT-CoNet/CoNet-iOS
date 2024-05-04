@@ -425,7 +425,7 @@ extension MeetingMainViewController: UICollectionViewDelegate, UICollectionViewD
     // 셀 크기
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width - 24
-        return CGSize(width: width, height: 82)
+        return CGSize(width: width, height: 66)
     }
     
     // 셀 사이의 위아래 간격
@@ -567,7 +567,7 @@ extension MeetingMainViewController {
         dayPlanCollectionView.snp.makeConstraints { make in
             make.top.equalTo(dayPlanLabel.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
-            make.height.equalTo(dayPlanData.count * 92 - 10)
+            make.height.equalTo(dayPlanData.count * 80 - 1)
         }
     }
 }
