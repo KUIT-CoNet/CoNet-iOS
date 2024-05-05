@@ -62,7 +62,6 @@ class MeetingCodeViewController: UIViewController {
     
     // 참여하기 버튼
     let participateButton = UIButton().then {
-        $0.frame = CGRect(x: 0, y: 0, width: 191, height: 54)
         $0.backgroundColor = UIColor.gray200
         $0.setTitleColor(.white, for: .normal)
         $0.setTitle("참여하기", for: .normal)
@@ -221,14 +220,12 @@ extension MeetingCodeViewController {
         }
         codeTextField.snp.makeConstraints { make in
             make.top.equalTo(inviteLabel.snp.bottom).offset(66)
-            make.leading.equalTo(popUpView.snp.leading).offset(33)
-            make.trailing.equalTo(popUpView.snp.trailing).offset(-33)
+            make.horizontalEdges.equalTo(popUpView.snp.horizontalEdges).inset(33)
         }
         grayLine.snp.makeConstraints { make in
             make.height.equalTo(1)
             make.top.equalTo(inviteLabel.snp.bottom).offset(96)
-            make.leading.equalTo(popUpView.snp.leading).offset(33)
-            make.trailing.equalTo(popUpView.snp.trailing).offset(-33)
+            make.horizontalEdges.equalTo(popUpView.snp.horizontalEdges).inset(33)
         }
         infoView.snp.makeConstraints { make in
             make.width.height.equalTo(8)
@@ -237,15 +234,16 @@ extension MeetingCodeViewController {
             make.centerY.equalTo(infoLabel)
         }
         infoLabel.snp.makeConstraints { make in
-            make.top.equalTo(infoView)
-            make.leading.equalTo(popUpView.snp.leading).offset(45)
+            make.height.equalTo(12)
+            make.leading.equalTo(infoView.snp.trailing).offset(4)
+            make.trailing.equalTo(popUpView.snp.trailing).offset(-33)
+            make.bottom.equalTo(participateButton.snp.top).offset(-16)
         }
         participateButton.snp.makeConstraints { make in
             make.height.equalTo(54)
-            make.top.equalTo(grayLine.snp.bottom).offset(32)
+            make.width.equalTo(191)
             make.bottom.equalTo(popUpView.snp.bottom).offset(-32)
-            make.leading.equalTo(popUpView.snp.leading).offset(33)
-            make.trailing.equalTo(popUpView.snp.trailing).offset(-32)
+            make.horizontalEdges.equalTo(popUpView.snp.horizontalEdges).inset(33)
         }
     }
 }
