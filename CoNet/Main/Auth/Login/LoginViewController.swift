@@ -10,17 +10,17 @@ import Then
 import UIKit
 
 class LoginViewController: UIViewController {
-    // 임시 버튼
-    let showSignUpButton = UIButton().then {
-        $0.setTitle("회원가입(이용약관) 페이지로", for: .normal)
-        $0.setTitleColor(UIColor.purpleMain, for: .normal)
-    }
-    
-    // 임시 버튼
-    let showMainButton = UIButton().then {
-        $0.setTitle("메인 페이지로", for: .normal)
-        $0.setTitleColor(UIColor.purpleMain, for: .normal)
-    }
+//    // 임시 버튼
+//    let showSignUpButton = UIButton().then {
+//        $0.setTitle("회원가입(이용약관) 페이지로", for: .normal)
+//        $0.setTitleColor(UIColor.purpleMain, for: .normal)
+//    }
+//    
+//    // 임시 버튼
+//    let showMainButton = UIButton().then {
+//        $0.setTitle("메인 페이지로", for: .normal)
+//        $0.setTitleColor(UIColor.purpleMain, for: .normal)
+//    }
     
     let sloganLabel = UILabel().then {
         $0.text = "맞춰가는 시간, 만들어가는 추억"
@@ -46,30 +46,30 @@ class LoginViewController: UIViewController {
         addView()
         layoutConstraints()
         
-        tempButton()
+//        tempButton()
     }
 }
 
 // 임시 버튼
 extension LoginViewController {
-    private func tempButton() {
-        let safeArea = view.safeAreaLayoutGuide
-        
-        view.addSubview(showSignUpButton)
-        showSignUpButton.snp.makeConstraints { make in
-            make.centerX.equalTo(safeArea.snp.centerX)
-            make.bottom.equalTo(safeArea.snp.bottom).offset(-40)
-        }
-        
-        view.addSubview(showMainButton)
-        showMainButton.snp.makeConstraints { make in
-            make.centerX.equalTo(safeArea.snp.centerX)
-            make.bottom.equalTo(safeArea.snp.bottom).offset(-10)
-        }
-        
-        showSignUpButton.addTarget(self, action: #selector(showSignUp(_:)), for: .touchUpInside)
-        showMainButton.addTarget(self, action: #selector(showMain(_:)), for: .touchUpInside)
-    }
+//    private func tempButton() {
+//        let safeArea = view.safeAreaLayoutGuide
+//        
+//        view.addSubview(showSignUpButton)
+//        showSignUpButton.snp.makeConstraints { make in
+//            make.centerX.equalTo(safeArea.snp.centerX)
+//            make.bottom.equalTo(safeArea.snp.bottom).offset(-40)
+//        }
+//        
+//        view.addSubview(showMainButton)
+//        showMainButton.snp.makeConstraints { make in
+//            make.centerX.equalTo(safeArea.snp.centerX)
+//            make.bottom.equalTo(safeArea.snp.bottom).offset(-10)
+//        }
+//        
+//        showSignUpButton.addTarget(self, action: #selector(showSignUp(_:)), for: .touchUpInside)
+//        showMainButton.addTarget(self, action: #selector(showMain(_:)), for: .touchUpInside)
+//    }
     
     @objc func showSignUp(_ sender: UIView) {
         let nextVC = TermsOfUseViewController()
