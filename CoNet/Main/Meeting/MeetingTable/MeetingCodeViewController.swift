@@ -204,7 +204,7 @@ extension MeetingCodeViewController {
         
         popUpView.snp.makeConstraints { make in
             make.width.equalTo(screenWidth*0.6)
-            make.height.equalTo(screenHeight*0.5)
+            make.height.equalTo(screenHeight*0.4)
             make.center.equalTo(view.snp.center)
         }
         xButton.snp.makeConstraints { make in
@@ -231,19 +231,17 @@ extension MeetingCodeViewController {
             make.width.height.equalTo(8)
             make.top.equalTo(grayLine.snp.bottom).offset(6)
             make.leading.equalTo(popUpView.snp.leading).offset(33)
-            make.centerY.equalTo(infoLabel)
         }
         infoLabel.snp.makeConstraints { make in
             make.height.equalTo(12)
+            make.centerY.equalTo(infoView)
             make.leading.equalTo(infoView.snp.trailing).offset(4)
-            make.trailing.equalTo(popUpView.snp.trailing).offset(-33)
-            make.bottom.equalTo(participateButton.snp.top).offset(-16)
         }
         participateButton.snp.makeConstraints { make in
             make.height.equalTo(54)
             make.width.equalTo(191)
-            make.bottom.equalTo(popUpView.snp.bottom).offset(-32)
-            make.horizontalEdges.equalTo(popUpView.snp.horizontalEdges).inset(33)
+            make.top.equalTo(infoLabel.snp.bottom).offset(16)
+            make.centerX.equalTo(popUpView.snp.centerX)
         }
     }
 }
