@@ -6,6 +6,7 @@
 //
 
 import KakaoSDKAuth
+import KeychainSwift
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -23,9 +24,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
+        
+        let keychain = KeychainSwift()
         var navigationController: UINavigationController?
         
-        navigationController = UINavigationController(rootViewController: LoginViewController())
+        if let loginInfo = keychain.get("idToken") {
+            navigationController = UINavigationController(rootViewController: TabbarViewController())
+        } else {
+            navigationController = UINavigationController(rootViewController: LoginViewController())
+        }
+        
         navigationController?.navigationBar.isHidden = true
         
         window?.rootViewController = navigationController
