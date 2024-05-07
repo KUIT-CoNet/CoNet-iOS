@@ -62,7 +62,6 @@ class MeetingCodeViewController: UIViewController {
     
     // 참여하기 버튼
     let participateButton = UIButton().then {
-        $0.frame = CGRect(x: 0, y: 0, width: 191, height: 54)
         $0.backgroundColor = UIColor.gray200
         $0.setTitleColor(.white, for: .normal)
         $0.setTitle("참여하기", for: .normal)
@@ -205,7 +204,7 @@ extension MeetingCodeViewController {
         
         popUpView.snp.makeConstraints { make in
             make.width.equalTo(screenWidth*0.6)
-            make.height.equalTo(screenHeight*0.5)
+            make.height.equalTo(screenHeight*0.4)
             make.center.equalTo(view.snp.center)
         }
         xButton.snp.makeConstraints { make in
@@ -221,31 +220,28 @@ extension MeetingCodeViewController {
         }
         codeTextField.snp.makeConstraints { make in
             make.top.equalTo(inviteLabel.snp.bottom).offset(66)
-            make.leading.equalTo(popUpView.snp.leading).offset(33)
-            make.trailing.equalTo(popUpView.snp.trailing).offset(-33)
+            make.horizontalEdges.equalTo(popUpView.snp.horizontalEdges).inset(33)
         }
         grayLine.snp.makeConstraints { make in
             make.height.equalTo(1)
             make.top.equalTo(inviteLabel.snp.bottom).offset(96)
-            make.leading.equalTo(popUpView.snp.leading).offset(33)
-            make.trailing.equalTo(popUpView.snp.trailing).offset(-33)
+            make.horizontalEdges.equalTo(popUpView.snp.horizontalEdges).inset(33)
         }
         infoView.snp.makeConstraints { make in
             make.width.height.equalTo(8)
             make.top.equalTo(grayLine.snp.bottom).offset(6)
             make.leading.equalTo(popUpView.snp.leading).offset(33)
-            make.centerY.equalTo(infoLabel)
         }
         infoLabel.snp.makeConstraints { make in
-            make.top.equalTo(infoView)
-            make.leading.equalTo(popUpView.snp.leading).offset(45)
+            make.height.equalTo(12)
+            make.centerY.equalTo(infoView)
+            make.leading.equalTo(infoView.snp.trailing).offset(4)
         }
         participateButton.snp.makeConstraints { make in
             make.height.equalTo(54)
-            make.top.equalTo(grayLine.snp.bottom).offset(32)
-            make.bottom.equalTo(popUpView.snp.bottom).offset(-32)
-            make.leading.equalTo(popUpView.snp.leading).offset(33)
-            make.trailing.equalTo(popUpView.snp.trailing).offset(-32)
+            make.width.equalTo(191)
+            make.top.equalTo(infoLabel.snp.bottom).offset(16)
+            make.centerX.equalTo(popUpView.snp.centerX)
         }
     }
 }
