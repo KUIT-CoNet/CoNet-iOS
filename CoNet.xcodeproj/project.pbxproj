@@ -886,6 +886,7 @@
 /* Begin XCBuildConfiguration section */
 		513D6B972A4BFCCE00E9ACDA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 51998ACA2A8F01C400F0887B /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -947,6 +948,7 @@
 		};
 		513D6B982A4BFCCE00E9ACDA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 51998ACA2A8F01C400F0887B /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -1008,7 +1010,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CoNet/CoNet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = 99KH3TLG9V;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CoNet/Info.plist;
@@ -1034,12 +1036,13 @@
 		};
 		513D6B9B2A4BFCCE00E9ACDA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 51998ACA2A8F01C400F0887B /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CoNet/CoNet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = 99KH3TLG9V;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CoNet/Info.plist;
