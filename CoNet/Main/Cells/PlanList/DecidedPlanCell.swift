@@ -41,13 +41,13 @@ class DecidedPlanCell: UICollectionViewCell {
     // 남은 날짜
     let leftDateLabel = UILabel().then {
         $0.text = "3일 남았습니다."
-        $0.font = UIFont.body1Medium
+        $0.font = UIFont.body2Medium
         $0.textColor = UIColor.textMedium
     }
     
     // 약속 이름
     let planTitleLabel = UILabel().then {
-        $0.numberOfLines = 0
+        $0.numberOfLines = 2
         $0.text = "제목은 최대 두 줄, 더 늘어나면 말줄임표로"
         $0.font = UIFont.body1Medium
         $0.textColor = UIColor.textHigh
@@ -124,17 +124,16 @@ class DecidedPlanCell: UICollectionViewCell {
     }
     
     private func planTitleConstraints() {
-        leftDateLabel.snp.makeConstraints { make in
-            make.height.equalTo(18)
-            make.top.equalTo(background.snp.top).offset(20)
-            make.leading.equalTo(verticalDivider.snp.trailing).offset(20)
-        }
-        
         planTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(leftDateLabel.snp.bottom).offset(4)
+            make.centerY.equalTo(background.snp.centerY)
             make.leading.equalTo(verticalDivider.snp.trailing).offset(20)
             make.trailing.equalTo(background.snp.trailing).offset(-20)
-            make.bottom.equalTo(background.snp.bottom).offset(-20)
+        }
+        
+        leftDateLabel.snp.makeConstraints { make in
+            make.height.equalTo(18)
+            make.bottom.equalTo(planTitleLabel.snp.top).offset(-4)
+            make.leading.equalTo(planTitleLabel.snp.leading)
         }
     }
 }
