@@ -56,7 +56,7 @@ class SideBarViewController: UIViewController, SideBarListButtonDelegate {
 
     let waitingPlanButton = SideBarList().then { $0.setTitle("대기중인 약속") }
     let decidedPlanButton = SideBarList().then {
-        $0.setTitle("확정된 약속")
+        $0.setTitle("약속")
         $0.setBottomBorder()
     }
     

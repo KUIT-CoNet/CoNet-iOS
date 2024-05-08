@@ -114,12 +114,7 @@ class DecidedPlanListViewController: UIViewController {
             period = "past"
         }
         
-        var status: Bool = false
-        if filterButton.isSelected {
-            status = true
-        } else {
-            status = false
-        }
+        let status = filterButton.isSelected ? true : false
         
         PlanAPI().getDecidedPlansAtMeeting(meetingId: meetingId, period: period, status: status) { count, plans in
             self.plansCount = count
