@@ -253,6 +253,7 @@ extension MakePlanViewController {
     func addNavigationBarItem() {
         view.backgroundColor = .white
         navigationController?.navigationBar.isHidden = false
+        navigationItem.title = "약속 수정"
         // 이전 VC 체크
         if let previousVC = navigationController?.viewControllers[navigationController!.viewControllers.count - 2] {
             if previousVC is TimeShareViewController {
