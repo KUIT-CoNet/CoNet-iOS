@@ -88,11 +88,12 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         $0.layer.masksToBounds = true
     }
     
+    var planName = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        planName = planNameTextField.text ?? ""
         addNavigationBarItem()
-        
         addView()
         layoutConstraints()
         buttonActions()
@@ -203,8 +204,9 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
     private func updateMakeButtonState() {
         let isPlanNameFilled = !(planNameTextField.text?.isEmpty ?? true)
         let isPlanStartDateFilled = !(planStartDateField.text?.isEmpty ?? true)
+        let isPlanNameChanged = planName == planNameTextField.text ? true : false
         
-        if isPlanNameFilled && isPlanStartDateFilled {
+        if isPlanNameFilled && isPlanStartDateFilled && !isPlanNameChanged {
             makeButton.backgroundColor = UIColor.purpleMain
         } else {
             makeButton.backgroundColor = UIColor.gray200
