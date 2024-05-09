@@ -242,7 +242,15 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    private func addNavigationBarItem() {
+    // 텍스트필드 외의 화면 클릭시 키보드 숨김
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+}
+
+// addview, layout
+extension MakePlanViewController {
+    func addNavigationBarItem() {
         view.backgroundColor = .white
         navigationController?.navigationBar.isHidden = false
         // 이전 VC 체크
@@ -259,14 +267,6 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         navigationItem.leftBarButtonItem = leftbarButtonItem
     }
     
-    // 텍스트필드 외의 화면 클릭시 키보드 숨김
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-    }
-}
-
-// addview, layout
-extension MakePlanViewController {
     func addView() {
         view.addSubview(planNameLabel)
         view.addSubview(xNameButton)
