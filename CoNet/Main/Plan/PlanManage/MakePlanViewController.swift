@@ -19,12 +19,6 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         $0.setImage(UIImage(named: "prevBtn"), for: .normal)
     }
     
-    let titleLabel = UILabel().then {
-        $0.text = "약속 만들기"
-        $0.font = UIFont.headline3Bold
-        $0.textColor = UIColor.textHigh
-    }
-    
     let planNameLabel = UILabel().then {
         $0.text = "약속 이름"
         $0.font = UIFont.body2Bold
@@ -96,9 +90,6 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        navigationController?.navigationBar.isHidden = false
-        navigationItem.title = "약속 만들기"
         
         addNavigationBarItem()
         
@@ -250,6 +241,17 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func addNavigationBarItem() {
+        view.backgroundColor = .white
+        navigationController?.navigationBar.isHidden = false
+        // 이전 VC 체크
+        if let previousVC = navigationController?.viewControllers[navigationController!.viewControllers.count - 2] {
+            if previousVC is TimeShareViewController {
+                navigationItem.title = "약속 수정"
+            } else {
+                navigationItem.title = "약속 만들기"
+            }
+        }
+        
         // 뒤로가기 버튼 추가
         let leftbarButtonItem = UIBarButtonItem(customView: backButton)
         navigationItem.leftBarButtonItem = leftbarButtonItem

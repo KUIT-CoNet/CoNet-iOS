@@ -295,8 +295,6 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     
     // 약속 수정페이지 설정
     func setupEditPlanPage(_ viewController: MakePlanViewController) {
-        viewController.titleLabel.text = "약속 수정하기"
-        
         viewController.planNameTextField.text = planName
         viewController.planStartDateField.text = sendDate[0].replacingOccurrences(of: "-", with: ". ")
         viewController.planStartDateField.textColor = UIColor.textDisabled
