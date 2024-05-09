@@ -303,6 +303,9 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
         viewController.cautionLabel.text = "약속 기간은 수정할 수 없습니다."
         viewController.cautionLabel.textColor = UIColor.textDisabled
         viewController.cautionImage.isHidden = true
+        viewController.cautionLabel.snp.makeConstraints { make in
+            make.leading.equalTo(viewController.view.snp.leading).offset(24)
+        }
         
         viewController.planStartDateField.isUserInteractionEnabled = false
         viewController.makeButton.setTitle("수정", for: .normal)
