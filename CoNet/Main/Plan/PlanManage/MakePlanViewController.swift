@@ -19,12 +19,6 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         $0.setImage(UIImage(named: "prevBtn"), for: .normal)
     }
     
-    let titleLabel = UILabel().then {
-        $0.text = "약속 만들기"
-        $0.font = UIFont.headline3Bold
-        $0.textColor = UIColor.textHigh
-    }
-    
     let planNameLabel = UILabel().then {
         $0.text = "약속 이름"
         $0.font = UIFont.body2Bold
@@ -94,14 +88,12 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         $0.layer.masksToBounds = true
     }
     
+    var planName = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        navigationController?.navigationBar.isHidden = false
-        navigationItem.title = "약속 만들기"
-        
+        planName = planNameTextField.text ?? ""
         addNavigationBarItem()
-        
         addView()
         layoutConstraints()
         buttonActions()
@@ -212,8 +204,9 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
     private func updateMakeButtonState() {
         let isPlanNameFilled = !(planNameTextField.text?.isEmpty ?? true)
         let isPlanStartDateFilled = !(planStartDateField.text?.isEmpty ?? true)
+        let isPlanNameChanged = planName == planNameTextField.text ? true : false
         
-        if isPlanNameFilled && isPlanStartDateFilled {
+        if isPlanNameFilled && isPlanStartDateFilled && !isPlanNameChanged {
             makeButton.backgroundColor = UIColor.purpleMain
         } else {
             makeButton.backgroundColor = UIColor.gray200
@@ -249,12 +242,6 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    private func addNavigationBarItem() {
-        // 뒤로가기 버튼 추가
-        let leftbarButtonItem = UIBarButtonItem(customView: backButton)
-        navigationItem.leftBarButtonItem = leftbarButtonItem
-    }
-    
     // 텍스트필드 외의 화면 클릭시 키보드 숨김
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
@@ -263,6 +250,24 @@ class MakePlanViewController: UIViewController, UITextFieldDelegate {
 
 // addview, layout
 extension MakePlanViewController {
+    func addNavigationBarItem() {
+        view.backgroundColor = .white
+        navigationController?.navigationBar.isHidden = false
+        navigationItem.title = "약속 수정"
+        // 이전 VC 체크
+        if let previousVC = navigationController?.viewControllers[navigationController!.viewControllers.count - 2] {
+            if previousVC is TimeShareViewController {
+                navigationItem.title = "약속 수정"
+            } else {
+                navigationItem.title = "약속 만들기"
+            }
+        }
+        
+        // 뒤로가기 버튼 추가
+        let leftbarButtonItem = UIBarButtonItem(customView: backButton)
+        navigationItem.leftBarButtonItem = leftbarButtonItem
+    }
+    
     func addView() {
         view.addSubview(planNameLabel)
         view.addSubview(xNameButton)
