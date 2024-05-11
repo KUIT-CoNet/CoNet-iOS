@@ -56,12 +56,12 @@ class DecidedPlanListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = false
-        navigationItem.title = "확정된 약속"
+        navigationItem.title = "약속"
         
         view.backgroundColor = UIColor.gray50
         
         addView()
-        buttonClicks()
+        buttonActions()
         layoutConstriants()
         setupCollectionView()
         setupselectedTabIndicator()
@@ -77,7 +77,7 @@ class DecidedPlanListViewController: UIViewController {
         updateUnderlinePosition(index: selectedIndex)
     }
     
-    func buttonClicks() {
+    func buttonActions() {
         upcomingButton.addTarget(self, action: #selector(upcomingTapped), for: .touchUpInside)
         pastButton.addTarget(self, action: #selector(pastTapped), for: .touchUpInside)
         filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
@@ -114,12 +114,7 @@ class DecidedPlanListViewController: UIViewController {
             period = "past"
         }
         
-        var status: Bool = false
-        if filterButton.isSelected {
-            status = true
-        } else {
-            status = false
-        }
+        let status = filterButton.isSelected ? true : false
         
         PlanAPI().getDecidedPlansAtMeeting(meetingId: meetingId, period: period, status: status) { count, plans in
             self.plansCount = count
@@ -151,7 +146,7 @@ extension DecidedPlanListViewController: UICollectionViewDelegate, UICollectionV
         
         cell.dateLabel.text = decidedPlanData[indexPath.item].date
         cell.timeLabel.text = decidedPlanData[indexPath.item].time
-        cell.leftDateLabel.text = "\(decidedPlanData[indexPath.item].dday)일 남았습니다."
+        cell.leftDateLabel.text = upcomingButton.isSelected ? "\(decidedPlanData[indexPath.item].dday)일 남았습니다." : ""
         cell.planTitleLabel.text = decidedPlanData[indexPath.item].planName
         
         return cell
