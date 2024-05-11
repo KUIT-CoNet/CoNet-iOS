@@ -149,7 +149,10 @@ class TimeInputViewController: UIViewController {
             self.availableTimeRegisteredStatus = availableTimeRegisteredStatus
             
             // 입력한 시간 있을 때만 배열 초기화
-            if self.availableTimeRegisteredStatus == 2 {
+            if self.availableTimeRegisteredStatus == 1 {
+                self.timeImpossibleButton.setImage(UIImage(named: "timeImpossibleSelected"), for: .normal)
+                self.timeImpossibleLabel.textColor = UIColor.purpleMain
+            } else if self.availableTimeRegisteredStatus == 2 {
                 self.possibleTime = possibleTime
             }
             
