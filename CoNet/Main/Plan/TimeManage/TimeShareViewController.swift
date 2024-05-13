@@ -161,12 +161,16 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
                 if sectionMemberCounts.section1 + 1 < sectionMemberCounts.section2 {
                     self.sectionMemberCount[2] += "-\(sectionMemberCounts.section2)"
                 }
+            } else {
+                self.colorExampleView.color3.isHidden = true
             }
             if sectionMemberCounts.section2 != sectionMemberCounts.section3 {
                 self.sectionMemberCount[3] = String(sectionMemberCounts.section2+1)
                 if sectionMemberCounts.section2 + 1 < sectionMemberCounts.section3 {
                     self.sectionMemberCount[3] += "-\(sectionMemberCounts.section3)"
                 }
+            } else {
+                self.colorExampleView.color4.isHidden = true
             }
             self.showDateMoveButton()
         }
