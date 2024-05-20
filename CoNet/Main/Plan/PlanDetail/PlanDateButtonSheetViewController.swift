@@ -47,7 +47,6 @@ class PlanDateButtonSheetViewController: UIViewController {
         layoutConstraints()
         buttonActions()
         
-        // PlanDateButtonSheetViewController의 인스턴스를 CalendarViewController의 프로퍼티에 할당
         calendarVC.makePlanDateSheetVC = self
         dataExchange()
     }
@@ -113,7 +112,7 @@ extension PlanDateButtonSheetViewController {
         }
         calendarVC.didMove(toParent: self)
         calendarVC.view.snp.makeConstraints { make in
-            make.height.equalTo(350)
+            make.height.equalTo(365)
             make.top.equalTo(grayLine.snp.bottom).offset(5)
             make.horizontalEdges.equalTo(bottomSheetView.snp.horizontalEdges)
         }
