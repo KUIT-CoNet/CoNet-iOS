@@ -35,7 +35,15 @@ class NoticeItem: UICollectionViewCell {
         $0.font = UIFont.body2Medium
         $0.textColor = .textHigh
         $0.isHidden = true
+        $0.numberOfLines = 0
     }
+    
+    let bottomLine = UIView().then {
+        $0.backgroundColor = UIColor.gray100
+    }
+    
+    var showNoticeContents: ((CGFloat) -> Void)?
+    var noticeContentsHeight: CGFloat = 0.0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -59,10 +67,13 @@ class NoticeItem: UICollectionViewCell {
         if arrowImage.currentImage == UIImage(named: "arrow_down_gray") {
             arrowImage.setImage(UIImage(named: "arrow_up_gray"), for: .normal)
             contents.isHidden = false
+            noticeContentsHeight = contents.frame.height
         } else if arrowImage.currentImage == UIImage(named: "arrow_up_gray") {
             arrowImage.setImage(UIImage(named: "arrow_down_gray"), for: .normal)
             contents.isHidden = true
+            noticeContentsHeight = 0.0
         }
+        showNoticeContents?(noticeContentsHeight)
     }
 }
 
@@ -73,6 +84,7 @@ extension NoticeItem {
         background.addSubview(title)
         background.addSubview(arrowImage)
         background.addSubview(contents)
+        background.addSubview(bottomLine)
     }
     
     func layoutContraints() {
@@ -94,6 +106,11 @@ extension NoticeItem {
         contents.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.top.equalTo(title.snp.bottom).offset(12)
+        }
+        bottomLine.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.width.equalToSuperview()
+            make.bottom.equalToSuperview().offset(10)
         }
     }
 }
