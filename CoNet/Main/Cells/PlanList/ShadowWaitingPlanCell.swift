@@ -17,13 +17,8 @@ class ShadowWaitingPlanCell: UICollectionViewCell {
         $0.backgroundColor = UIColor.grayWhite
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
-        
-//        $0.layer.borderColor = UIColor.black.withAlphaComponent(0.1).cgColor
-//        $0.layer.borderWidth = 1
-        
         $0.layer.borderColor = UIColor.clear.cgColor
         $0.layer.borderWidth = 1
-
         $0.layer.masksToBounds = false
         $0.layer.shadowOffset = CGSize(width: 0, height: 4)
         $0.layer.shadowColor = UIColor.black.cgColor
@@ -52,6 +47,8 @@ class ShadowWaitingPlanCell: UICollectionViewCell {
     // 세로 구분선
     let verticalDivider = UIView().then { $0.backgroundColor = UIColor.iconDisabled }
     
+    let planInfo = UIView()
+    
     // 약속 이름
     let planTitleLabel = UILabel().then {
         $0.numberOfLines = 2
@@ -61,14 +58,37 @@ class ShadowWaitingPlanCell: UICollectionViewCell {
         $0.lineBreakMode = .byWordWrapping
     }
     
+    let groupName = UILabel().then {
+        $0.text = "iOS 스터디"
+        $0.font = UIFont.body2Medium
+        $0.textColor = UIColor.textMedium
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        addView()
         layoutContraints()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        addView()
         layoutContraints()
+    }
+    
+}
+
+extension ShadowWaitingPlanCell {
+    func addView() {
+        addSubview(background)
+        dateView.addSubview(startDateLabel)
+        dateView.addSubview(finishDateLabel)
+        dateView.addSubview(divider)
+        background.addSubview(dateView)
+        background.addSubview(verticalDivider)
+        background.addSubview(planInfo)
+        planInfo.addSubview(planTitleLabel)
+        planInfo.addSubview(groupName)
     }
     
     // 전체 constraints
@@ -76,37 +96,32 @@ class ShadowWaitingPlanCell: UICollectionViewCell {
         backgroundConstraints()
         dateViewConstraints()
         verticalDividerConstraints()
-        planTitleConstraints()
+        planInfoConstraints()
     }
     
     private func backgroundConstraints() {
-        addSubview(background)
         background.snp.makeConstraints { make in
             make.edges.equalTo(0)
         }
     }
     
     private func dateViewConstraints() {
-        dateView.addSubview(startDateLabel)
         startDateLabel.snp.makeConstraints { make in
             make.height.equalTo(16)
             make.top.equalTo(dateView.snp.top)
             make.centerX.equalToSuperview()
         }
         
-        dateView.addSubview(finishDateLabel)
         finishDateLabel.snp.makeConstraints { make in
             make.height.equalTo(16)
             make.bottom.equalTo(dateView.snp.bottom)
             make.centerX.equalToSuperview()
         }
         
-        dateView.addSubview(divider)
         divider.snp.makeConstraints { make in
             make.center.equalTo(dateView.snp.center)
         }
         
-        background.addSubview(dateView)
         dateView.snp.makeConstraints { make in
             make.width.equalTo(88)
             make.height.equalTo(background).offset(-40)
@@ -116,7 +131,6 @@ class ShadowWaitingPlanCell: UICollectionViewCell {
     }
     
     private func verticalDividerConstraints() {
-        background.addSubview(verticalDivider)
         verticalDivider.snp.makeConstraints { make in
             make.height.equalTo(26)
             make.width.equalTo(1)
@@ -125,13 +139,19 @@ class ShadowWaitingPlanCell: UICollectionViewCell {
         }
     }
     
-    private func planTitleConstraints() {
-        background.addSubview(planTitleLabel)
-        planTitleLabel.snp.makeConstraints { make in
-            make.height.equalTo(52)
-            make.centerY.equalTo(background.snp.centerY)
+    private func planInfoConstraints() {
+        planInfo.snp.makeConstraints { make in
+            make.top.bottom.trailing.equalTo(background).inset(20)
             make.leading.equalTo(verticalDivider.snp.trailing).offset(20)
-            make.trailing.equalTo(background.snp.trailing).offset(-20)
+        }
+        
+        planTitleLabel.snp.makeConstraints { make in
+            make.height.equalTo(24)
+            make.top.leading.equalToSuperview()
+        }
+        groupName.snp.makeConstraints { make in
+            make.top.equalTo(planTitleLabel.snp.bottom).offset(4)
+            make.leading.equalToSuperview()
         }
     }
 }
