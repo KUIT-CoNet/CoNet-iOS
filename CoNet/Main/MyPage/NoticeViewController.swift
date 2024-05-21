@@ -81,7 +81,11 @@ extension NoticeViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         cell.showNoticeContents = { height in
             self.noticeCellHeight[indexPath.item] = height
-            collectionView.collectionViewLayout.invalidateLayout()
+            // 애니메이션 효과
+            collectionView.performBatchUpdates {
+                // 셀 크기 변경사항 반영
+                collectionView.collectionViewLayout.invalidateLayout()
+            }
         }
         
         return cell

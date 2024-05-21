@@ -34,7 +34,8 @@ class NoticeItem: UICollectionViewCell {
         $0.text = "내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요."
         $0.font = UIFont.body2Medium
         $0.textColor = .textHigh
-        $0.isHidden = true
+        $0.alpha = 0
+//        $0.isHidden = true
         $0.numberOfLines = 0
     }
     
@@ -66,11 +67,17 @@ class NoticeItem: UICollectionViewCell {
     @objc func didClickArrowButton() {
         if arrowImage.currentImage == UIImage(named: "arrow_down_gray") {
             arrowImage.setImage(UIImage(named: "arrow_up_gray"), for: .normal)
-            contents.isHidden = false
+            // contents 페이드 인
+            UILabel.animate(withDuration: 1.0) {
+                self.contents.alpha = 1
+            }
             noticeContentsHeight = contents.frame.height
         } else if arrowImage.currentImage == UIImage(named: "arrow_up_gray") {
             arrowImage.setImage(UIImage(named: "arrow_down_gray"), for: .normal)
-            contents.isHidden = true
+            // contents 페이드 아웃
+            UILabel.animate(withDuration: 0.3) {
+                self.contents.alpha = 0
+            }
             noticeContentsHeight = 0.0
         }
         showNoticeContents?(noticeContentsHeight)
