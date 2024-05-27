@@ -16,6 +16,8 @@ class NoticeViewController: UIViewController {
     
     private lazy var noticeCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     var noticeData: [NoticeResponse] = []
+    let noticeItem = NoticeItem()
+    var noticeCellHeight: [CGFloat] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +52,7 @@ class NoticeViewController: UIViewController {
     private func noticeAPI() {
         NoticeAPI().getNotice { notices in
             self.noticeData = notices ?? []
+            self.noticeCellHeight = Array(repeating: 0.0, count: self.noticeData.count)
             self.noticeCollectionView.reloadData()
         }
     }
@@ -76,10 +79,14 @@ extension NoticeViewController: UICollectionViewDelegate, UICollectionViewDataSo
         cell.title.text = noticeData[indexPath.item].title
         cell.contents.text = noticeData[indexPath.item].content
         
-        let bottomLine = CALayer()
-        bottomLine.frame = CGRect(x: 0.0, y: cell.frame.height - 1, width: cell.frame.width, height: 1.0)
-        bottomLine.backgroundColor = UIColor.gray100?.cgColor
-        cell.layer.addSublayer(bottomLine)
+        cell.showNoticeContents = { height in
+            self.noticeCellHeight[indexPath.item] = height
+            // 애니메이션 효과
+            collectionView.performBatchUpdates {
+                // 셀 크기 변경사항 반영
+                collectionView.collectionViewLayout.invalidateLayout()
+            }
+        }
         
         return cell
     }
@@ -87,8 +94,7 @@ extension NoticeViewController: UICollectionViewDelegate, UICollectionViewDataSo
     // 셀 크기
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width - 48
-
-        return CGSize(width: width, height: 70)
+        return CGSize(width: width, height: noticeCellHeight[indexPath.item]+50)
     }
     
     // 셀 사이의 위아래 간격

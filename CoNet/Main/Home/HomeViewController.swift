@@ -47,6 +47,7 @@ class HomeViewController: UIViewController {
     private lazy var dayPlanCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.isScrollEnabled = false
+        $0.contentInset = UIEdgeInsets.init(top: 5, left: 0, bottom: 10, right: 0)
     }
     
     // 오늘 약속 데이터
@@ -329,7 +330,7 @@ extension HomeViewController {
         // label: 대기 중 약속
         waitingPlanLabel.snp.makeConstraints { make in
             make.leading.equalTo(contentView.snp.leading).offset(24)
-            make.top.equalTo(dayPlanCollectionView.snp.bottom).offset(40)
+            make.top.equalTo(dayPlanCollectionView.snp.bottom).offset(30)
         }
         
         planNumCircle2.snp.makeConstraints { make in
