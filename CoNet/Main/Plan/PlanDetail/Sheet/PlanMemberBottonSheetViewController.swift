@@ -32,7 +32,6 @@ class PlanMemberBottomSheetViewController: UIViewController {
     }
     
     lazy var memberCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
-        $0.isScrollEnabled = false
         $0.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
     }
     
@@ -192,31 +191,22 @@ extension PlanMemberBottomSheetViewController {
     }
     
     private func applyConstraintsToComponents() {
-        let safeArea = view.safeAreaLayoutGuide
-        
         grayLine.snp.makeConstraints { make in
             make.width.equalTo(36)
             make.height.equalTo(3)
             make.top.equalTo(bottomSheet.snp.top).offset(10)
             make.centerX.equalToSuperview()
         }
-        
-        memberCollectionView.snp.makeConstraints { make in
-            make.width.equalToSuperview().offset(-48)
-            
-            let memberRow = ceil(Double(allMembers.count) / 2.0)
-            let height = (memberRow * 42) + ((memberRow - 1) * 10)
-            make.height.equalTo(height)
-            
-            make.top.equalTo(grayLine.snp.bottom).offset(44)
-            make.leading.trailing.equalToSuperview().inset(24)
-        }
-        
         addButton.snp.makeConstraints { make in
             make.height.equalTo(44)
             make.centerX.equalTo(bottomSheet.snp.centerX)
             make.horizontalEdges.equalTo(bottomSheet.snp.horizontalEdges).inset(24)
             make.bottom.equalTo(view.snp.bottom).offset(-45)
+        }
+        memberCollectionView.snp.makeConstraints { make in
+            make.bottom.equalTo(addButton.snp.top).offset(-10)
+            make.top.equalTo(grayLine.snp.bottom).offset(44)
+            make.leading.trailing.equalToSuperview().inset(24)
         }
     }
 }
