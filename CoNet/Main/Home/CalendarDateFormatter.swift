@@ -18,7 +18,7 @@ class CalendarDateFormatter {
         dateFormatter.timeZone = TimeZone(abbreviation: "KST")
         calendar.locale = Locale(identifier: "ko_KR")
         calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
-        
+        updateCurrentMonthDays()
         configureCalendar()
     }
     
@@ -112,6 +112,12 @@ class CalendarDateFormatter {
         return getYearMonthText()
     }
     
+    func updateCalendarHeight() -> Int {
+        var height = (days.count/7)*50 + 148
+        height += days.count%7==0 ? 0 : 50
+        return height
+    }
+    
     func moveDate(year: Int, month: Int) -> String {
         let addYear = year - Int(currentYear())!
         let addMonth = month - Int(currentMonth())!
@@ -143,7 +149,7 @@ class CalendarDateFormatter {
     }
 }
 
-private extension CalendarDateFormatter {
+extension CalendarDateFormatter {
     // 해당 달의 1일 요일 반환
     func getStartingDayOfWeek() -> Int {
         return calendar.component(.weekday, from: nowCalendarDate) - 1

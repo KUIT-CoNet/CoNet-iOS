@@ -80,6 +80,7 @@ class HomeViewController: UIViewController {
     private var waitingPlanData: [WaitingPlan] = []
     
     let calendarDateFormatter = CalendarDateFormatter()
+    var calendarHeightConstraint: Constraint?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -299,7 +300,7 @@ extension HomeViewController {
         calendarVC.view.snp.makeConstraints { make in
             make.top.equalTo(logoImage.snp.bottom).offset(5)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(448)
+            calendarHeightConstraint = make.height.equalTo(448).constraint
         }
         
         // label: 오늘의 약속
