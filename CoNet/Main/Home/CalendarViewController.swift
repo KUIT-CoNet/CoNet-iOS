@@ -165,6 +165,7 @@ class CalendarViewController: UIViewController {
     // 달 이동 후 캘린더 업데이트
     func updateCalendar(header: String) {
         homeVC?.calendarHeightConstraint?.update(offset: calendarDateFormatter.updateCalendarHeight())  // update calendar height
+        meetingMainVC?.calendarHeightConstraint?.update(offset: calendarDateFormatter.updateCalendarHeight())
         updateCalendarData() // days 배열 update
         calendarCollectionView.reloadData() // collectionView reload
         yearMonth.setTitle(header, for: .normal) // yearMonth update
