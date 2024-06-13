@@ -226,6 +226,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             cell.startDateLabel.text = waitingPlanData[indexPath.item].startDate
             cell.finishDateLabel.text = waitingPlanData[indexPath.item].endDate
             cell.planTitleLabel.text = waitingPlanData[indexPath.item].planName
+            cell.groupName.text = waitingPlanData[indexPath.item].teamName
             
             return cell
         }
