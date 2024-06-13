@@ -108,6 +108,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         getMemberPossibleTimeAPI()
+        navigationBarSetting()
     }
     
     override func viewWillLayoutSubviews() {
