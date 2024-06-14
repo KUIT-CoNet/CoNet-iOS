@@ -15,6 +15,8 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
     private var planDetail: [PlanDetail] = []
     var members: [PlanDetailMember] = []
     
+    weak var delegate: PlanInfoEditViewControllerDelegate?
+    
     let backButton = UIButton().then {
         $0.setImage(UIImage(named: "prevBtn"), for: .normal)
     }
@@ -231,7 +233,7 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
     @objc private func backButtonTapped() {
         self.dismiss(animated: true, completion: nil)
     }
-    
+
     @objc private func updatePlan() {
         date = planDateTextField.text?.replacingOccurrences(of: ". ", with: "-") ?? ""
         updateUserId()
@@ -239,6 +241,7 @@ class PlanInfoEditViewController: UIViewController, UITextFieldDelegate {
         PlanAPI().updatePlan(planId: planId, planName: planNameTextField.text ?? "", date: date, time: planTimeTextField.text ?? "", members: userIds) { isSuccess in
             if isSuccess {
                 NotificationCenter.default.post(name: NSNotification.Name("PlanInfoUpdated"), object: nil, userInfo: ["planName": self.planNameTextField.text ?? "", "date": self.date, "time": self.planTimeTextField.text ?? "", "members": self.members])
+                self.delegate?.didUpdatePlan()
                 self.dismiss(animated: true, completion: nil)
             }
         }
@@ -516,4 +519,8 @@ extension PlanInfoEditViewController: PlanMemberBottomSheetViewControllerDelegat
         self.updateUserId()
         self.memberCollectionView.reloadData()
     }
+}
+
+protocol PlanInfoEditViewControllerDelegate: AnyObject {
+    func didUpdatePlan()
 }
