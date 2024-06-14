@@ -76,13 +76,12 @@ class PlanEditDelBottomSheetViewController: UIViewController {
     }
     
     @objc func showPlanEditVC() {
-        let popUpVC = PlanInfoEditViewController()
-        popUpVC.planId = planId
+        let planInfoEditVC = PlanInfoEditViewController()
+        planInfoEditVC.planId = planId
+        planInfoEditVC.delegate = self
         
-        // 모달로 표시될 뷰 컨트롤러를 네비게이션 컨트롤러에 임베딩
-        let navigationController = UINavigationController(rootViewController: popUpVC)
-        
-        navigationController.modalPresentationStyle = .overCurrentContext
+        let navigationController = UINavigationController(rootViewController: planInfoEditVC)
+        navigationController.modalPresentationStyle = .fullScreen
         navigationController.modalTransitionStyle = .crossDissolve
         present(navigationController, animated: true, completion: nil)
     }
@@ -166,6 +165,21 @@ extension PlanEditDelBottomSheetViewController {
             make.width.equalTo(28)
             make.centerY.equalTo(delView)
             make.leading.equalTo(editView.snp.trailing).offset(6)
+        }
+    }
+}
+
+extension PlanEditDelBottomSheetViewController: PlanInfoEditViewControllerDelegate {
+    func didUpdatePlan() {
+        dismiss(animated: true) {
+            if let navController = self.presentingViewController as? UINavigationController {
+                for controller in navController.viewControllers {
+                    if let decidedPlanInfoVC = controller as? DecidedPlanInfoViewController {
+                        navController.popToViewController(decidedPlanInfoVC, animated: true)
+                        return
+                    }
+                }
+            }
         }
     }
 }
