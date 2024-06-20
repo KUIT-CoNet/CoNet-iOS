@@ -9,6 +9,8 @@ import UIKit
 
 class TimeTableViewCell: UICollectionViewCell {
     static let identifier = "\(TimeTableViewCell.self)"
+    var cellColor = UIColor.grayWhite?.cgColor
+    var enableTouchEvents = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -21,7 +23,7 @@ class TimeTableViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // 셀 클릭 시 background color 바꾸기
     func changeCellColor() -> Int {
         if contentView.layer.backgroundColor == UIColor.grayWhite?.cgColor {
@@ -32,7 +34,7 @@ class TimeTableViewCell: UICollectionViewCell {
             return 0
         }
     }
-    
+
     // 인원수에 따른 셀 색
     func showCellColor(section: Int) {
         if section == 0 {
@@ -45,5 +47,30 @@ class TimeTableViewCell: UICollectionViewCell {
             contentView.layer.backgroundColor = UIColor.mainSub1?.withAlphaComponent(0.8).cgColor
         }
     }
-    
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        if enableTouchEvents {
+            cellColor = contentView.layer.backgroundColor == UIColor.grayWhite?.cgColor ? UIColor.mainSub1?.withAlphaComponent(0.5).cgColor : UIColor.grayWhite?.cgColor
+        }
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+        if enableTouchEvents {
+            handleTouch(touches)
+        }
+    }
+
+    private func handleTouch(_ touches: Set<UITouch>) {
+        guard let collectionView = superview as? UICollectionView, let touch = touches.first
+        else { return }
+
+        let location = touch.location(in: collectionView)
+        if let indexPath = collectionView.indexPathForItem(at: location),
+           let cell = collectionView.cellForItem(at: indexPath) as? TimeTableViewCell
+        {
+            cell.contentView.layer.backgroundColor = cellColor
+        }
+    }
 }

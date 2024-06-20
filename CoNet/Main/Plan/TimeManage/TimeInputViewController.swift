@@ -271,7 +271,6 @@ extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewD
         if availableTimeRegisteredStatus != 1 {
             // change cell background color
             let cell = collectionView.cellForItem(at: indexPath) as! TimeTableViewCell
-            print(cell.contentView.backgroundColor ?? UIColor.red)
             let num = cell.changeCellColor()
             // 클릭 시 possibleTime 배열에 추가/삭제
             if num == 1 {
@@ -314,6 +313,7 @@ extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimeTableViewCell.identifier, for: indexPath) as? TimeTableViewCell else { return UICollectionViewCell() }
+        cell.enableTouchEvents = true
         
         // 가능한 시간 없음 버튼 클릭 여부 체크
         if availableTimeRegisteredStatus == 1 {
