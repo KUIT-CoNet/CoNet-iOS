@@ -142,6 +142,7 @@ extension ShadowWaitingPlanCell {
     private func planInfoConstraints() {
         planInfo.snp.makeConstraints { make in
             make.top.bottom.trailing.equalTo(background).inset(20)
+            make.centerY.equalTo(background.snp.centerY)
             make.leading.equalTo(verticalDivider.snp.trailing).offset(20)
         }
         
@@ -150,7 +151,7 @@ extension ShadowWaitingPlanCell {
             make.top.leading.trailing.equalToSuperview()
         }
         groupName.snp.makeConstraints { make in
-            make.top.equalTo(planTitleLabel.snp.bottom).offset(4)
+            make.top.equalTo(planTitleLabel.snp.bottom).offset(2)
             make.leading.trailing.equalToSuperview()
         }
     }

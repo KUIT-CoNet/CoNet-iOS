@@ -155,7 +155,7 @@ extension DecidedPlanListViewController: UICollectionViewDelegate, UICollectionV
     // 셀 크기
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width
-        return CGSize.init(width: width, height: 110)
+        return CGSize.init(width: width, height: 90)
     }
     
     // 셀 사이의 위아래 간격

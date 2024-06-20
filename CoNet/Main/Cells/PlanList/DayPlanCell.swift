@@ -104,6 +104,7 @@ class DayPlanCell: UICollectionViewCell {
         background.addSubview(planInfo)
         planInfo.snp.makeConstraints { make in
             make.top.bottom.trailing.equalTo(background).inset(20)
+            make.centerY.equalTo(background.snp.centerY)
             make.leading.equalTo(verticalDivider.snp.trailing).offset(20)
         }
         
@@ -116,7 +117,7 @@ class DayPlanCell: UICollectionViewCell {
         planInfo.addSubview(groupNameLabel)
         groupNameLabel.snp.makeConstraints { make in
             make.height.equalTo(18)
-            make.top.equalTo(planTitleLabel.snp.bottom).offset(4)
+            make.top.equalTo(planTitleLabel.snp.bottom).offset(2)
             make.leading.trailing.equalToSuperview()
         }
     }
