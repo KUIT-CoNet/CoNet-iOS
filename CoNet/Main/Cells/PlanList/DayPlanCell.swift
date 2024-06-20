@@ -45,7 +45,7 @@ class DayPlanCell: UICollectionViewCell {
         $0.text = "1차 스터디"
         $0.font = UIFont.body1Bold
         $0.textColor = UIColor.textHigh
-        $0.lineBreakMode = .byWordWrapping
+        $0.lineBreakMode = .byTruncatingTail
     }
     
     // 그룹 이름
@@ -104,20 +104,21 @@ class DayPlanCell: UICollectionViewCell {
         background.addSubview(planInfo)
         planInfo.snp.makeConstraints { make in
             make.top.bottom.trailing.equalTo(background).inset(20)
+            make.centerY.equalTo(background.snp.centerY)
             make.leading.equalTo(verticalDivider.snp.trailing).offset(20)
         }
         
         planInfo.addSubview(planTitleLabel)
         planTitleLabel.snp.makeConstraints { make in
             make.height.equalTo(20)
-            make.top.leading.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
         }
         
         planInfo.addSubview(groupNameLabel)
         groupNameLabel.snp.makeConstraints { make in
             make.height.equalTo(18)
-            make.top.equalTo(planTitleLabel.snp.bottom).offset(4)
-            make.leading.equalToSuperview()
+            make.top.equalTo(planTitleLabel.snp.bottom).offset(2)
+            make.leading.trailing.equalToSuperview()
         }
     }
 }

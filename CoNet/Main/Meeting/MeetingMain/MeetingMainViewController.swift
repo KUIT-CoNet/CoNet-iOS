@@ -96,6 +96,7 @@ class MeetingMainViewController: UIViewController {
     
     // 오늘 약속 데이터
     private var dayPlanData: [MeetingDayPlan] = []
+    var calendarHeightConstraint: Constraint?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,6 +107,7 @@ class MeetingMainViewController: UIViewController {
         // navigation bar title "iOS 스터디"로 지정
         navigationController?.navigationBar.isHidden = false
         navigationItem.title = ""
+        calendarVC.meetingMainVC = self
         
         // 네비게이션 바 item 추가 - 뒤로가기, 사이드바 버튼
         addNavigationBarItem()
@@ -540,8 +542,8 @@ extension MeetingMainViewController {
     func calendarViewConstraints() {
         calendarVC.view.snp.makeConstraints { make in
             make.top.equalTo(memberImage.snp.bottom).offset(40)
-            make.leading.trailing.equalTo(contentView)
-            make.height.equalTo(443)
+            make.horizontalEdges.equalToSuperview()
+            calendarHeightConstraint = make.height.equalTo(443).constraint
         }
     }
     

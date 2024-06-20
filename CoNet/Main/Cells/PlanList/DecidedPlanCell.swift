@@ -41,7 +41,7 @@ class DecidedPlanCell: UICollectionViewCell {
     // 남은 날짜
     let leftDateLabel = UILabel().then {
         $0.text = "3일 남았습니다."
-        $0.font = UIFont.body2Medium
+        $0.font = UIFont.body3Medium
         $0.textColor = UIColor.textMedium
     }
     
@@ -132,7 +132,7 @@ class DecidedPlanCell: UICollectionViewCell {
         
         leftDateLabel.snp.makeConstraints { make in
             make.height.equalTo(18)
-            make.bottom.equalTo(planTitleLabel.snp.top).offset(-4)
+            make.bottom.equalTo(planTitleLabel.snp.top).offset(-2)
             make.leading.equalTo(planTitleLabel.snp.leading)
         }
     }

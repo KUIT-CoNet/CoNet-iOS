@@ -146,7 +146,8 @@ extension DecidedPlanListViewController: UICollectionViewDelegate, UICollectionV
         
         cell.dateLabel.text = decidedPlanData[indexPath.item].date
         cell.timeLabel.text = decidedPlanData[indexPath.item].time
-        cell.leftDateLabel.text = upcomingButton.isSelected ? "\(decidedPlanData[indexPath.item].dday)일 남았습니다." : ""
+        var leftDateString = decidedPlanData[indexPath.item].dday==0 ? "D-DAY" : "\(decidedPlanData[indexPath.item].dday)일 남았습니다."
+        cell.leftDateLabel.text = upcomingButton.isSelected ? leftDateString : ""
         cell.planTitleLabel.text = decidedPlanData[indexPath.item].planName
         
         return cell
@@ -155,7 +156,7 @@ extension DecidedPlanListViewController: UICollectionViewDelegate, UICollectionV
     // 셀 크기
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width
-        return CGSize.init(width: width, height: 110)
+        return CGSize.init(width: width, height: 90)
     }
     
     // 셀 사이의 위아래 간격
