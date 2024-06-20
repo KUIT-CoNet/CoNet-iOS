@@ -119,7 +119,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
     }
     
     func navigationBarSetting() {
-        self.navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.isHidden = false
         navigationItem.title = planName
         
         let leftbarButtonItem = UIBarButtonItem(customView: xButton)
@@ -158,7 +158,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
                 self.sectionMemberCount[1] += "-\(sectionMemberCounts.section1)"
             }
             if sectionMemberCounts.section1 != sectionMemberCounts.section2 {
-                self.sectionMemberCount[2] = String(sectionMemberCounts.section1+1)
+                self.sectionMemberCount[2] = String(sectionMemberCounts.section1 + 1)
                 if sectionMemberCounts.section1 + 1 < sectionMemberCounts.section2 {
                     self.sectionMemberCount[2] += "-\(sectionMemberCounts.section2)"
                 }
@@ -166,7 +166,7 @@ class TimeShareViewController: UIViewController, TimeShareProtocol {
                 self.colorExampleView.color3.isHidden = true
             }
             if sectionMemberCounts.section2 != sectionMemberCounts.section3 {
-                self.sectionMemberCount[3] = String(sectionMemberCounts.section2+1)
+                self.sectionMemberCount[3] = String(sectionMemberCounts.section2 + 1)
                 if sectionMemberCounts.section2 + 1 < sectionMemberCounts.section3 {
                     self.sectionMemberCount[3] += "-\(sectionMemberCounts.section3)"
                 }

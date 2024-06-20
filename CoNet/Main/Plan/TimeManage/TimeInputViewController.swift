@@ -271,7 +271,6 @@ extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewD
         if availableTimeRegisteredStatus != 1 {
             // change cell background color
             let cell = collectionView.cellForItem(at: indexPath) as! TimeTableViewCell
-            print(cell.contentView.backgroundColor ?? UIColor.red)
             let num = cell.changeCellColor()
             // 클릭 시 possibleTime 배열에 추가/삭제
             if num == 1 {
