@@ -45,7 +45,7 @@ class DayPlanCell: UICollectionViewCell {
         $0.text = "1차 스터디"
         $0.font = UIFont.body1Bold
         $0.textColor = UIColor.textHigh
-        $0.lineBreakMode = .byWordWrapping
+        $0.lineBreakMode = .byTruncatingTail
     }
     
     // 그룹 이름
