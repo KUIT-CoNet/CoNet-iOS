@@ -16,6 +16,8 @@ class MeetingCollectionViewCell: UICollectionViewCell {
 
     let imageView = UIImageView().then {
         $0.image = UIImage(named: "uploadImageWithNoDescription")
+        $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
     }
     
     // label: 모임제목

@@ -30,6 +30,7 @@ class MeetingMainViewController: UIViewController {
     let meetingImage = UIImageView().then {
         $0.image = UIImage(named: "uploadImage")
         $0.clipsToBounds = true
+        $0.contentMode = .scaleAspectFill
     }
     
     // 즐겨찾기 버튼
