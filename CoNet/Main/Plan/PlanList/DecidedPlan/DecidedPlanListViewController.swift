@@ -146,7 +146,8 @@ extension DecidedPlanListViewController: UICollectionViewDelegate, UICollectionV
         
         cell.dateLabel.text = decidedPlanData[indexPath.item].date
         cell.timeLabel.text = decidedPlanData[indexPath.item].time
-        cell.leftDateLabel.text = upcomingButton.isSelected ? "\(decidedPlanData[indexPath.item].dday)일 남았습니다." : ""
+        var leftDateString = decidedPlanData[indexPath.item].dday==0 ? "D-DAY" : "\(decidedPlanData[indexPath.item].dday)일 남았습니다."
+        cell.leftDateLabel.text = upcomingButton.isSelected ? leftDateString : ""
         cell.planTitleLabel.text = decidedPlanData[indexPath.item].planName
         
         return cell
