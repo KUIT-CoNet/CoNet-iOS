@@ -55,7 +55,7 @@ class ShadowWaitingPlanCell: UICollectionViewCell {
         $0.text = "제목은 최대 두 줄, 더 늘어나면 말줄임표로"
         $0.font = UIFont.body1Medium
         $0.textColor = UIColor.textHigh
-        $0.lineBreakMode = .byWordWrapping
+        $0.lineBreakMode = .byTruncatingTail
     }
     
     let groupName = UILabel().then {
@@ -147,11 +147,11 @@ extension ShadowWaitingPlanCell {
         
         planTitleLabel.snp.makeConstraints { make in
             make.height.equalTo(24)
-            make.top.leading.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
         }
         groupName.snp.makeConstraints { make in
             make.top.equalTo(planTitleLabel.snp.bottom).offset(4)
-            make.leading.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
         }
     }
 }

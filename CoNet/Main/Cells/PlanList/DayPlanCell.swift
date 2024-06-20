@@ -110,14 +110,14 @@ class DayPlanCell: UICollectionViewCell {
         planInfo.addSubview(planTitleLabel)
         planTitleLabel.snp.makeConstraints { make in
             make.height.equalTo(20)
-            make.top.leading.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
         }
         
         planInfo.addSubview(groupNameLabel)
         groupNameLabel.snp.makeConstraints { make in
             make.height.equalTo(18)
             make.top.equalTo(planTitleLabel.snp.bottom).offset(4)
-            make.leading.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
         }
     }
 }
