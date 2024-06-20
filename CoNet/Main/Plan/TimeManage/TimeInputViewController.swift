@@ -313,6 +313,7 @@ extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimeTableViewCell.identifier, for: indexPath) as? TimeTableViewCell else { return UICollectionViewCell() }
+        cell.enableTouchEvents = true
         
         // 가능한 시간 없음 버튼 클릭 여부 체크
         if availableTimeRegisteredStatus == 1 {

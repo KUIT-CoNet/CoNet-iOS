@@ -10,6 +10,7 @@ import UIKit
 class TimeTableViewCell: UICollectionViewCell {
     static let identifier = "\(TimeTableViewCell.self)"
     var cellColor = UIColor.grayWhite?.cgColor
+    var enableTouchEvents = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,12 +50,16 @@ class TimeTableViewCell: UICollectionViewCell {
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        cellColor = contentView.layer.backgroundColor == UIColor.grayWhite?.cgColor ? UIColor.mainSub1?.withAlphaComponent(0.5).cgColor : UIColor.grayWhite?.cgColor
+        if enableTouchEvents {
+            cellColor = contentView.layer.backgroundColor == UIColor.grayWhite?.cgColor ? UIColor.mainSub1?.withAlphaComponent(0.5).cgColor : UIColor.grayWhite?.cgColor
+        }
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
-        handleTouch(touches)
+        if enableTouchEvents {
+            handleTouch(touches)
+        }
     }
 
     private func handleTouch(_ touches: Set<UITouch>) {
