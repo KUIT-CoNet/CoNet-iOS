@@ -301,14 +301,16 @@ class MeetingViewController: UIViewController {
             }
         }
     }
-    
+
     @objc func didTapparticipateButton(_ sender: Any) {
         let popupVC = MeetingAddViewController()
+        popupVC.delegate = self
         presentPopUpViewController(popupVC)
     }
 
     @objc func didTapPeopleButton(_ sender: Any) {
         let addVC = MeetingCodeViewController()
+        addVC.delegate = self
         presentPopUpViewController(addVC)
     }
 }
@@ -434,5 +436,17 @@ extension MeetingViewController: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let _: CGFloat = (collectionView.frame.width / 2) - 17
         return CGSize(width: 164, height: 232)
+    }
+}
+
+extension MeetingViewController: MeetingCodeViewControllerDelegate {
+    func didJoinMeeting() {
+        getAllMeetings()
+    }
+}
+
+extension MeetingViewController: MeetingAddViewControllerDelegate {
+    func didCreateMeeting() {
+        getAllMeetings()
     }
 }

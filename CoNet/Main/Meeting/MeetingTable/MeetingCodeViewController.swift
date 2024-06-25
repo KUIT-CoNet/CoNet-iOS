@@ -10,6 +10,7 @@ import Then
 import UIKit
 
 class MeetingCodeViewController: UIViewController {
+    weak var delegate: MeetingCodeViewControllerDelegate?
 
     // 검은색 배경 - 투명도 50%
     let background = UIView().then {
@@ -115,6 +116,7 @@ class MeetingCodeViewController: UIViewController {
         
         MeetingAPI().postParticipateMeeting(code: code) { isSuccess, status in
             if isSuccess {
+                self.delegate?.didJoinMeeting()
                 self.xButtonTapped()
             } else {
                 switch status {
@@ -248,4 +250,8 @@ extension MeetingCodeViewController {
     
 enum ParticipateMeetingStatus {
     case valid, invalidFormat, isNotExist, alreadyJoined, expired
+}
+
+protocol MeetingCodeViewControllerDelegate: AnyObject {
+    func didJoinMeeting()
 }
