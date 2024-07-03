@@ -11,12 +11,14 @@ class TimeTableViewCell: UICollectionViewCell {
     static let identifier = "\(TimeTableViewCell.self)"
     var cellColor = UIColor.grayWhite?.cgColor
     var enableTouchEvents = false
+    var selectedTime: [PossibleTime] = []
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.layer.borderWidth = 1
         contentView.layer.borderColor = UIColor.gray100?.cgColor
         contentView.backgroundColor = UIColor.grayWhite
+        selectedTime = TimeInputViewController.shared.possibleTime
     }
 
     @available(*, unavailable)
@@ -71,6 +73,17 @@ class TimeTableViewCell: UICollectionViewCell {
            let cell = collectionView.cellForItem(at: indexPath) as? TimeTableViewCell
         {
             cell.contentView.layer.backgroundColor = cellColor
+            if cellColor == UIColor.mainSub1?.withAlphaComponent(0.5).cgColor {
+                let idx = TimeInputViewController.shared.page*3 + indexPath.section
+                selectedTime[idx].availableTimes = Array(Set(selectedTime[idx].availableTimes).union([indexPath.row]))
+            } else {
+                selectedTime[TimeInputViewController.shared.page*3 + indexPath.section].availableTimes.removeAll { $0 == indexPath.row }
+            }
+            TimeInputViewController.shared.availableTimeRegisteredStatus = 2
+            DispatchQueue.main.async {
+                TimeInputViewController.shared.changeSaveButtonColor()
+            }
+            NotificationCenter.default.post(name: NSNotification.Name("selectedTimeToTimeInputVC"), object: nil, userInfo: ["selectedTime": selectedTime])
         }
     }
 }

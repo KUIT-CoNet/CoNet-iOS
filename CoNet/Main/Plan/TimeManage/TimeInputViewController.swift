@@ -8,6 +8,12 @@
 import UIKit
 
 class TimeInputViewController: UIViewController {
+    static let shared: TimeInputViewController = {
+        let instance = TimeInputViewController()
+        instance.loadViewIfNeeded() // 뷰를 명시적으로 로드
+        return instance
+    }()
+
     var planId: Int = 0
     
     // 이전 화면 버튼
@@ -81,7 +87,13 @@ class TimeInputViewController: UIViewController {
     
     // 나의 가능한 시간 조회 시
     // 0: 입력한 적 없는 초기 상태, 1: 가능한 시간 없음 버튼 클릭 상태, 2: 시간 있음
-    var availableTimeRegisteredStatus: Int = 0
+    var availableTimeRegisteredStatus: Int = 0 {
+        didSet {
+            DispatchQueue.main.async {
+                self.changeSaveButtonColor()
+            }
+        }
+    }
     
     // 현재 페이지
     var page: Int = 0
@@ -107,6 +119,7 @@ class TimeInputViewController: UIViewController {
         timeTableSetting()
         
         buttonActions()
+        receiveNotification()
         
         for index in 0 ..< 7 {
             possibleTime[index].date = sendDate[index]
@@ -121,7 +134,7 @@ class TimeInputViewController: UIViewController {
     }
     
     func navigationBarSetting() {
-        self.navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.isHidden = false
         navigationItem.title = "내 시간 입력하기"
         
         let leftbarButtonItem = UIBarButtonItem(customView: prevButton)
@@ -140,6 +153,10 @@ class TimeInputViewController: UIViewController {
         prevDayBtn.addTarget(self, action: #selector(didClickPrevDayButton), for: .touchUpInside)
         nextDayBtn.addTarget(self, action: #selector(didClickNextDayButton), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(didClickSaveButton), for: .touchUpInside)
+    }
+    
+    func receiveNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(receiveDataFromTimeTableViewCell(notification:)), name: NSNotification.Name("selectedTimeToTimeInputVC"), object: nil)
     }
     
     func getMyPossibleTimeAPI() {
@@ -191,6 +208,8 @@ class TimeInputViewController: UIViewController {
     }
     
     func changeSaveButtonColor() {
+        guard isViewLoaded else { return }
+        print("ca", availableTimeRegisteredStatus)
         // 저장 버튼 색
         if availableTimeRegisteredStatus == 0 || availableTimeRegisteredStatus == -1 {
             saveButton.backgroundColor = UIColor.gray200
@@ -260,6 +279,17 @@ class TimeInputViewController: UIViewController {
         }
     }
     
+    @objc func receiveDataFromTimeTableViewCell(notification: Notification) {
+        // 드래그로 선택한 시간 받아서 저장
+        if let data = notification.userInfo?["selectedTime"] as? [PossibleTime] {
+            possibleTime = data
+            if possibleTime[0].date == "07.03" {
+                for index in 0 ..< 7 {
+                    possibleTime[index].date = sendDate[index]
+                }
+            }
+        }
+    }
 }
 
 extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
