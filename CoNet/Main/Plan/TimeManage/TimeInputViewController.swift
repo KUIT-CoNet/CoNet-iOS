@@ -87,13 +87,14 @@ class TimeInputViewController: UIViewController {
     
     // 나의 가능한 시간 조회 시
     // 0: 입력한 적 없는 초기 상태, 1: 가능한 시간 없음 버튼 클릭 상태, 2: 시간 있음
-    var availableTimeRegisteredStatus: Int = 0 {
-        didSet {
-            DispatchQueue.main.async {
-                self.changeSaveButtonColor()
-            }
-        }
-    }
+    var availableTimeRegisteredStatus: Int = 0
+//    {
+//        didSet {
+//            DispatchQueue.main.async {
+//                self.changeSaveButtonColor()
+//            }
+//        }
+//    }
     
     // 현재 페이지
     var page: Int = 0
@@ -209,7 +210,6 @@ class TimeInputViewController: UIViewController {
     
     func changeSaveButtonColor() {
         guard isViewLoaded else { return }
-        print("buttoncolor", availableTimeRegisteredStatus)
         // 저장 버튼 색
         saveButton.backgroundColor = availableTimeRegisteredStatus == 2 ? UIColor.purpleMain : UIColor.gray200
     }
@@ -286,13 +286,12 @@ class TimeInputViewController: UIViewController {
                 possibleTime[index].date = sendDate[index]
             }
             availableTimeRegisteredStatus = timeIsEmpty() ? 0 : 2
+            changeSaveButtonColor()
         }
     }
     
     private func timeIsEmpty() -> Bool {
-        for index in 0..<7 {
-            if !possibleTime[index].availableTimes.isEmpty { return false }
-        }
+        for index in 0..<7 where !possibleTime[index].availableTimes.isEmpty { return false }
         return true
     }
 }
