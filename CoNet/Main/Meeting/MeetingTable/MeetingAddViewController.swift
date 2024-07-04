@@ -10,6 +10,8 @@ import Then
 import UIKit
 
 class MeetingAddViewController: UIViewController, UITextFieldDelegate {
+    weak var delegate: MeetingAddViewControllerDelegate?
+    
     let xButton = UIButton().then {
         $0.setImage(UIImage(named: "closeBtn"), for: .normal)
     }
@@ -181,6 +183,7 @@ class MeetingAddViewController: UIViewController, UITextFieldDelegate {
         guard let selectedImage = photoImageView.image else { return }
         MeetingAPI().createMeeting(name: newName, image: selectedImage) { isSuccess in
             if isSuccess {
+                self.delegate?.didCreateMeeting()
                 self.dismiss(animated: true)
             }
         }
@@ -305,4 +308,8 @@ extension MeetingAddViewController {
             make.centerX.equalTo(photoImageView.snp.centerX)
         }
     }
+}
+
+protocol MeetingAddViewControllerDelegate: AnyObject {
+    func didCreateMeeting()
 }
