@@ -211,7 +211,7 @@ class TimeInputViewController: UIViewController {
     func changeSaveButtonColor() {
         guard isViewLoaded else { return }
         // 저장 버튼 색
-        saveButton.backgroundColor = availableTimeRegisteredStatus == 2 ? UIColor.purpleMain : UIColor.gray200
+        saveButton.backgroundColor = availableTimeRegisteredStatus == 0 ? UIColor.gray200 : UIColor.purpleMain 
     }
     
     // timePossible 배열에 time 정보가 비었는지 확인
