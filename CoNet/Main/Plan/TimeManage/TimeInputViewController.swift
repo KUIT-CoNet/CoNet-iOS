@@ -106,7 +106,7 @@ class TimeInputViewController: UIViewController {
     let weekDay = ["일", "월", "화", "수", "목", "금", "토"]
     
     // 가능한 시간 저장할 배열 초기화
-    var possibleTime: [PossibleTime] = [PossibleTime(date: "", availableTimes: []), PossibleTime(date: "", availableTimes: []), PossibleTime(date: "", availableTimes: []), PossibleTime(date: "", availableTimes: []), PossibleTime(date: "", availableTimes: []), PossibleTime(date: "", availableTimes: []), PossibleTime(date: "", availableTimes: [])]
+    var possibleTime: [PossibleTime] = Array(repeating: PossibleTime(date: "", availableTimes: []), count: 7)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -209,13 +209,9 @@ class TimeInputViewController: UIViewController {
     
     func changeSaveButtonColor() {
         guard isViewLoaded else { return }
-        print("ca", availableTimeRegisteredStatus)
+        print("buttoncolor", availableTimeRegisteredStatus)
         // 저장 버튼 색
-        if availableTimeRegisteredStatus == 0 || availableTimeRegisteredStatus == -1 {
-            saveButton.backgroundColor = UIColor.gray200
-        } else {
-            saveButton.backgroundColor = UIColor.purpleMain
-        }
+        saveButton.backgroundColor = availableTimeRegisteredStatus == 2 ? UIColor.purpleMain : UIColor.gray200
     }
     
     // timePossible 배열에 time 정보가 비었는지 확인
@@ -281,21 +277,30 @@ class TimeInputViewController: UIViewController {
     
     @objc func receiveDataFromTimeTableViewCell(notification: Notification) {
         // 드래그로 선택한 시간 받아서 저장
-        if let data = notification.userInfo?["selectedTime"] as? [PossibleTime] {
-            possibleTime = data
-            if possibleTime[0].date == "07.03" {
-                for index in 0 ..< 7 {
-                    possibleTime[index].date = sendDate[index]
-                }
+        if let selectedTime = notification.userInfo?["selectedTime"] as? [PossibleTime],
+            let removedTime = notification.userInfo?["removedTime"] as? [PossibleTime] {
+            
+            for index in 0..<7 {
+                possibleTime[index].availableTimes = Array(Set(possibleTime[index].availableTimes).union(Set(selectedTime[index].availableTimes)))
+                possibleTime[index].availableTimes = Array(Set(possibleTime[index].availableTimes).subtracting(Set(removedTime[index].availableTimes)))
+                possibleTime[index].date = sendDate[index]
             }
+            availableTimeRegisteredStatus = timeIsEmpty() ? 0 : 2
         }
+    }
+    
+    private func timeIsEmpty() -> Bool {
+        for index in 0..<7 {
+            if !possibleTime[index].availableTimes.isEmpty { return false }
+        }
+        return true
     }
 }
 
 extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     // 셀 클릭 시 이벤트 처리
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Selected cell at indexPath: \(indexPath)")
+//        print("Selected cell at indexPath: \(indexPath)")
         
         // 가능한 시간 없은 버튼 체크하지 않은 경우만
         if availableTimeRegisteredStatus != 1 {
