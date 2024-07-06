@@ -65,7 +65,8 @@ class TimeTableView: UIView {
         timeTableCollectionView.snp.makeConstraints { make in
             make.leading.equalTo(hourStackView.snp.trailing).offset(10)
             make.top.equalTo(hourStackView.snp.top).offset(6)
-            make.bottom.trailing.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalTo(hourStackView.snp.bottom).offset(-4)
         }
     }
 }
