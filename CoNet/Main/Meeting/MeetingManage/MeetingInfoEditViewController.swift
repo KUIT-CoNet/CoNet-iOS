@@ -9,7 +9,7 @@ import SnapKit
 import Then
 import UIKit
 
-class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
+class MeetingInfoEditViewController: UIViewController {
     var meetingId: Int = 0
     
     let xButton = UIButton().then {
@@ -190,7 +190,7 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
     }
 }
 
-extension MeetingInfoEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension MeetingInfoEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
             photoImageView.image = selectedImage
@@ -202,6 +202,11 @@ extension MeetingInfoEditViewController: UIImagePickerControllerDelegate, UINavi
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard textField.text!.count < 20 else { return false } // 20 글자로 제한
+        return true
     }
 }
 
