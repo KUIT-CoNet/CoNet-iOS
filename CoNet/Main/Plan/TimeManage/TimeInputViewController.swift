@@ -387,7 +387,7 @@ extension TimeInputViewController {
         prevDayBtn.snp.makeConstraints { make in
             make.height.width.equalTo(16)
             make.leading.equalTo(view.snp.leading).offset(44)
-            make.top.equalTo(safeArea.snp.top).offset(29)
+            make.top.equalTo(safeArea.snp.top).offset(20)
         }
         
         // 날짜 3개
@@ -418,7 +418,7 @@ extension TimeInputViewController {
         saveButton.snp.makeConstraints { make in
             make.height.equalTo(52)
             make.leading.trailing.equalToSuperview().inset(24)
-            make.bottom.equalTo(safeArea.snp.bottom).offset(-35)
+            make.bottom.equalTo(safeArea.snp.bottom).offset(-10)
         }
         
         // 타임테이블
@@ -426,20 +426,19 @@ extension TimeInputViewController {
             make.leading.equalTo(view.snp.leading).offset(0)
             make.trailing.equalTo(timeTable.snp.leading).offset(300)
             make.top.equalTo(prevDayBtn.snp.bottom).offset(7)
-            make.bottom.equalTo(saveButton.snp.top).offset(-10)
-        }
-        
-        // 가능한 시간 없음 버튼
-        timeImpossibleButton.snp.makeConstraints { make in
-            make.trailing.equalTo(view.snp.trailing).offset(-33)
-            make.top.equalTo(nextDayBtn.snp.bottom).offset(507)
         }
         
         // 가능한 시간 없음 label
         timeImpossibleLabel.snp.makeConstraints { make in
             make.height.equalTo(12)
-            make.trailing.equalTo(view.snp.trailing).offset(-22)
-            make.top.equalTo(timeImpossibleButton.snp.bottom).offset(5)
+            make.leading.equalTo(timeTable.snp.trailing).offset(5)
+            make.bottom.equalTo(timeTable.timeTableCollectionView.snp.bottom)
+        }
+        
+        // 가능한 시간 없음 버튼
+        timeImpossibleButton.snp.makeConstraints { make in
+            make.centerX.equalTo(timeImpossibleLabel.snp.centerX)
+            make.bottom.equalTo(timeImpossibleLabel.snp.top).offset(-5)
         }
     }
 }

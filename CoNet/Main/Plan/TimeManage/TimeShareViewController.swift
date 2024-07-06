@@ -369,7 +369,8 @@ extension TimeShareViewController: UICollectionViewDataSource, UICollectionViewD
     
     // 셀 사이즈 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 80, height: 24)
+        let width = collectionView.frame.width/3
+        return CGSize(width: width, height: 24)
     }
     
     // 위 아래 space zero로 설정
@@ -415,7 +416,7 @@ extension TimeShareViewController {
         prevBtn.snp.makeConstraints { make in
             make.height.width.equalTo(16)
             make.leading.equalTo(safeArea.snp.leading).offset(44)
-            make.top.equalTo(safeArea.snp.top).offset(29)
+            make.top.equalTo(safeArea.snp.top).offset(20)
         }
         
         // 날짜 3개
@@ -446,7 +447,7 @@ extension TimeShareViewController {
         inputTimeButton.snp.makeConstraints { make in
             make.height.equalTo(52)
             make.leading.trailing.equalToSuperview().inset(24)
-            make.bottom.equalTo(safeArea.snp.bottom).offset(-35)
+            make.bottom.equalTo(safeArea.snp.bottom).offset(-10)
         }
         
         // 타임테이블
@@ -454,7 +455,6 @@ extension TimeShareViewController {
             make.leading.equalTo(safeArea.snp.leading)
             make.trailing.equalTo(timeTable.snp.leading).offset(300)
             make.top.equalTo(prevBtn.snp.bottom).offset(7)
-            make.bottom.equalTo(inputTimeButton.snp.top).offset(-10)
         }
         
         colorExampleView.snp.makeConstraints { make in
