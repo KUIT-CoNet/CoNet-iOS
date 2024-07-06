@@ -369,7 +369,8 @@ extension TimeShareViewController: UICollectionViewDataSource, UICollectionViewD
     
     // 셀 사이즈 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 80, height: 24)
+        let width = collectionView.frame.width/3
+        return CGSize(width: width, height: 24)
     }
     
     // 위 아래 space zero로 설정
@@ -446,7 +447,7 @@ extension TimeShareViewController {
         inputTimeButton.snp.makeConstraints { make in
             make.height.equalTo(52)
             make.leading.trailing.equalToSuperview().inset(24)
-            make.bottom.equalTo(safeArea.snp.bottom).offset(-35)
+            make.bottom.equalTo(safeArea.snp.bottom).offset(-10)
         }
         
         // 타임테이블

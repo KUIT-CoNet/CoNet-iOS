@@ -418,7 +418,7 @@ extension TimeInputViewController {
         saveButton.snp.makeConstraints { make in
             make.height.equalTo(52)
             make.leading.trailing.equalToSuperview().inset(24)
-            make.bottom.equalTo(safeArea.snp.bottom).offset(-35)
+            make.bottom.equalTo(safeArea.snp.bottom).offset(-10)
         }
         
         // 타임테이블
