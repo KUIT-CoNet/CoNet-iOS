@@ -159,7 +159,8 @@ extension MonthViewController: UICollectionViewDataSource, UICollectionViewDeleg
     
     // 셀 사이즈 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 99, height: 38)
+        let width = collectionView.frame.width
+        return CGSize(width: (width-12)/3, height: 38)
     }
     
     // 위 아래 space 설정

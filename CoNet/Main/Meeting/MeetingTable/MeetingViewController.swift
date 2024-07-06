@@ -434,8 +434,8 @@ extension MeetingViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     // 셀 크기
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let _: CGFloat = (collectionView.frame.width / 2) - 17
-        return CGSize(width: 164, height: 232)
+        let width: CGFloat = (collectionView.frame.width - 17) / 2
+        return CGSize(width: width, height: 232)
     }
 }
 

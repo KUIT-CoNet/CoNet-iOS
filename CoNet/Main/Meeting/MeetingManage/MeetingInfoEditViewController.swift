@@ -9,7 +9,7 @@ import SnapKit
 import Then
 import UIKit
 
-class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
+class MeetingInfoEditViewController: UIViewController {
     var meetingId: Int = 0
     
     let xButton = UIButton().then {
@@ -97,7 +97,7 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
+        view.backgroundColor = .white
         
         addView()
         layoutConstriants()
@@ -107,7 +107,7 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.meetingnameTextField.becomeFirstResponder()
+        meetingnameTextField.becomeFirstResponder()
         MeetingAPI().getMeetingDetailInfo(teamId: meetingId) { meeting in
             self.meetingnameTextField.text = meeting.name
             guard let url = URL(string: meeting.imgUrl) else { return }
@@ -118,7 +118,7 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
+        view.endEditing(true)
     }
     
     // 버튼 addTarget
@@ -190,7 +190,7 @@ class MeetingInfoEditViewController: UIViewController, UITextFieldDelegate {
     }
 }
 
-extension MeetingInfoEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension MeetingInfoEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
             photoImageView.image = selectedImage
@@ -203,24 +203,37 @@ extension MeetingInfoEditViewController: UIImagePickerControllerDelegate, UINavi
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // 백스페이스 처리
+        if let char = string.cString(using: String.Encoding.utf8) {
+            let isBackSpace = strcmp(char, "\\b")
+            if isBackSpace == -92 {
+                return true
+            }
+        }
+        
+        guard textField.text!.count < 20 else { return false } // 20 글자로 제한
+        return true
+    }
 }
 
 // addView, layout
 extension MeetingInfoEditViewController {
     func addView() {
-        self.view.addSubview(xButton)
-        self.view.addSubview(meetingInfoEditLabel)
-        self.view.addSubview(completionButton)
-        self.view.addSubview(meetingnameLabel)
-        self.view.addSubview(xnameButton)
-        self.view.addSubview(meetingnameTextField)
-        self.view.addSubview(grayLine)
-        self.view.addSubview(textCountLabel)
-        self.view.addSubview(meetingphotoLabel)
-        self.view.addSubview(photoImageView)
-        self.view.addSubview(photoUploadImage)
-        self.view.addSubview(photoUploadLabel)
-        self.view.addSubview(photoEditButton)
+        view.addSubview(xButton)
+        view.addSubview(meetingInfoEditLabel)
+        view.addSubview(completionButton)
+        view.addSubview(meetingnameLabel)
+        view.addSubview(xnameButton)
+        view.addSubview(meetingnameTextField)
+        view.addSubview(grayLine)
+        view.addSubview(textCountLabel)
+        view.addSubview(meetingphotoLabel)
+        view.addSubview(photoImageView)
+        view.addSubview(photoUploadImage)
+        view.addSubview(photoUploadLabel)
+        view.addSubview(photoEditButton)
     }
     
     func layoutConstriants() {
