@@ -299,7 +299,7 @@ class TimeInputViewController: UIViewController {
 extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     // 셀 클릭 시 이벤트 처리
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        print("Selected cell at indexPath: \(indexPath)")
+        print("Selected cell at indexPath: \(indexPath)")
         
         // 가능한 시간 없은 버튼 체크하지 않은 경우만
         if availableTimeRegisteredStatus != 1 {
@@ -332,7 +332,8 @@ extension TimeInputViewController: UICollectionViewDataSource, UICollectionViewD
     
     // 셀 사이즈 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 80, height: 24)
+        let width = collectionView.frame.width/3
+        return CGSize(width: width, height: 24)
     }
     
     // 위 아래 space zero로 설정
@@ -426,6 +427,7 @@ extension TimeInputViewController {
             make.leading.equalTo(view.snp.leading).offset(0)
             make.trailing.equalTo(timeTable.snp.leading).offset(300)
             make.top.equalTo(prevDayBtn.snp.bottom).offset(7)
+            make.height.equalTo(24*24)
         }
         
         // 가능한 시간 없음 label
