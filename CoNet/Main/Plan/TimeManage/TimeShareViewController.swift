@@ -455,6 +455,7 @@ extension TimeShareViewController {
             make.leading.equalTo(safeArea.snp.leading)
             make.trailing.equalTo(timeTable.snp.leading).offset(300)
             make.top.equalTo(prevBtn.snp.bottom).offset(7)
+            make.height.equalTo(24*24)
         }
         
         colorExampleView.snp.makeConstraints { make in
