@@ -133,7 +133,7 @@ class HomeViewController: UIViewController {
             self.planNum.text = String(count)
             self.dayPlanData = plans
             self.dayPlanCollectionView.reloadData()
-            self.layoutConstraints()
+            self.updataPlanCollectionViewHeight()
         }
     }
     
@@ -143,7 +143,7 @@ class HomeViewController: UIViewController {
             self.waitingPlanNum.text = String(count)
             self.waitingPlanData = plans
             self.waitingPlanCollectionView.reloadData()
-            self.layoutConstraints()
+            self.updataPlanCollectionViewHeight()
         }
     }
     
@@ -171,6 +171,19 @@ class HomeViewController: UIViewController {
             dayPlanLabel.text = "오늘의 약속"
         } else {
             dayPlanLabel.text = month + "월 " + day + "일의 약속"
+        }
+    }
+    
+    // 높이 업데이트
+    func updataPlanCollectionViewHeight() {
+        let dayPlanHeight = (dayPlanData.count - 1) * 100 + 90
+        dayPlanCollectionView.snp.updateConstraints { make in
+            make.height.equalTo(dayPlanHeight)
+        }
+        
+        let waitingPlanHeight = waitingPlanData.count * 100 - 1
+        waitingPlanCollectionView.snp.updateConstraints { make in
+            make.height.equalTo(waitingPlanHeight)
         }
     }
 }
