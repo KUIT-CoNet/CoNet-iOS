@@ -138,7 +138,11 @@ class MeetingMainViewController: UIViewController {
         format.locale = Locale(identifier: "ko_KR")
         format.timeZone = TimeZone(abbreviation: "KST")
         
-        dayPlanAPI(date: format.string(from: Date()))
+        if let selectedDate = calendarVC.selectedDate {
+            dayPlanAPI(date: selectedDate)
+        } else {
+            dayPlanAPI(date: format.string(from: Date()))
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
