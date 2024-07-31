@@ -54,6 +54,7 @@ class TermRow: UIView {
     
     private func buttonActions() {
         checkButton.addTarget(self, action: #selector(toggleStatus), for: .touchUpInside)
+        linkButton.addTarget(self, action: #selector(openUrl), for: .touchUpInside)
     }
     
     var checkButtonAction: () -> Void = { }
@@ -80,11 +81,21 @@ class TermRow: UIView {
         label.text = title
     }
     
-    func showLinkButton() {
+    private var url: String = ""
+    func setLink(_ urlString: String) {
         background.addSubview(linkButton)
+        
         linkButton.snp.makeConstraints { make in
             make.leading.equalTo(label.snp.trailing).offset(10)
             make.centerY.equalToSuperview()
+        }
+        
+        url = urlString
+    }
+    
+    @objc private func openUrl() {
+        if let url = URL(string: self.url) {
+            UIApplication.shared.open(url)
         }
     }
 }
@@ -94,6 +105,7 @@ extension TermRow {
         addSubview(background)
         background.addSubview(checkButton)
         background.addSubview(label)
+        
     }
     
     private func layoutConstraints() {
