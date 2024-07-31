@@ -67,6 +67,7 @@ class MyPageViewController: UIViewController {
         noticeView.addTarget(self, action: #selector(showNoticeViewController), for: .touchUpInside)
         inquireView.addTarget(self, action: #selector(showInquireViewController), for: .touchUpInside)
         logoutView.addTarget(self, action: #selector(showLogoutPopup), for: .touchUpInside)
+        termView.addTarget(self, action: #selector(openTermsURL), for: .touchUpInside)
     }
     
     @objc private func showUserInfoViewController(_ sender: UIView) {
@@ -79,6 +80,12 @@ class MyPageViewController: UIViewController {
     
     @objc private func showInquireViewController(_ sender: UIView) {
         showViewController(InquireViewController())
+    }
+    
+    @objc private func openTermsURL() {
+        if let url = URL(string: "https://conet.notion.site/f94cdd700d5e4ce3a38bffaa9719df07?pvs=4") {
+            UIApplication.shared.open(url)
+        }
     }
     
     // 다음 VC를 보여주는 공통 code
