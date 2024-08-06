@@ -106,6 +106,7 @@ class MeetingAddViewController: UIViewController, UITextFieldDelegate {
         buttonActions()
         
         meetingnameTextField.delegate = self
+        hideKeyboard()  // 외부 터치 시 키보드 내리기
     }
     
     // 버튼 addTarget
