@@ -11,7 +11,7 @@ import UIKit
 
 class CalendarViewController: UIViewController {
     var meetingId = 0
-    
+    var selectedDate: String?
     // MARK: UIComponents
 
     // 이전 달로 이동 버튼
@@ -76,7 +76,8 @@ class CalendarViewController: UIViewController {
         format.dateFormat = "yyyy. MM"
         
         // api 호출
-        getMonthPlanAPI(date: format.string(from: Date()))
+        getMonthPlanAPI(date: format.string(from: calendarDateFormatter.nowCalendarDate))
+        
     }
     
     private func setupCollectionView() {
@@ -176,6 +177,22 @@ class CalendarViewController: UIViewController {
         
         // api: 특정 달 약속 조회
         getMonthPlanAPI(date: changedHeader)
+        
+        // 캘린더에서 날짜 선택
+        selectDateOnCalendar()
+    }
+    
+    func selectDateOnCalendar() {
+        if let selectedDate = selectedDate {
+            let dateComponents = selectedDate.split(separator: ".").map { String($0) }
+            if dateComponents.count == 3 {
+                let day = dateComponents[2]
+                if let index = calendarDateFormatter.days.firstIndex(of: day) {
+                    let indexPath = IndexPath(item: index, section: 0)
+                    calendarCollectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+                }
+            }
+        }
     }
 }
 
@@ -206,6 +223,8 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
         
         // yyyy. MM. dd 형식
         let clickDate = calendarDateFormatter.changeDateType(date: calendarDate) + calendarDay
+        
+        selectedDate = clickDate
         
         if let parentVC = parent {
             if parentVC is HomeViewController {
@@ -280,6 +299,12 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
             cell.configurePlan()
         } else {
             cell.reloadPlanMark()
+        }
+        
+        // 셀의 날짜가 선택된 날짜와 일치하는지 확인
+        let cellDate = calendarDateFormatter.changeDateType(date: calendarDate) + calendarDateFormatter.formatNumberToTwoDigit(Int(cellDay) ?? 0)
+        if cellDate == selectedDate {
+            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
         }
         
         return cell

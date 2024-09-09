@@ -138,7 +138,11 @@ class MeetingMainViewController: UIViewController {
         format.locale = Locale(identifier: "ko_KR")
         format.timeZone = TimeZone(abbreviation: "KST")
         
-        dayPlanAPI(date: format.string(from: Date()))
+        if let selectedDate = calendarVC.selectedDate {
+            dayPlanAPI(date: selectedDate)
+        } else {
+            dayPlanAPI(date: format.string(from: Date()))
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -185,7 +189,7 @@ class MeetingMainViewController: UIViewController {
             self.planNum.text = String(count)
             self.dayPlanData = plans
             self.dayPlanCollectionView.reloadData()
-            self.layoutContraints()
+            self.updataPlanCollectionViewHeight()
         }
     }
     
@@ -311,6 +315,13 @@ class MeetingMainViewController: UIViewController {
         getMemberBottomSheet.presentationController?.delegate = self
         
         present(getMemberBottomSheet, animated: true, completion: nil)
+    }
+    
+    func updataPlanCollectionViewHeight() {
+        let dayPlanHeight = dayPlanData.count * 80 - 1
+        dayPlanCollectionView.snp.updateConstraints { make in
+            make.height.equalTo(dayPlanHeight)
+        }
     }
 }
 
