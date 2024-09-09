@@ -44,13 +44,13 @@ class TermsOfUseViewController: UIViewController {
     // 서비스 이용약관
     let serviceTermRow = TermRow().then {
         $0.setTitle("[필수] 서비스 이용약관")
-        $0.showLinkButton()
+        $0.setLink("https://conet.notion.site/f94cdd700d5e4ce3a38bffaa9719df07?pvs=4")
     }
     
     // 개인정보 처리방침
     let personalTermRow = TermRow().then {
         $0.setTitle("[필수] 개인정보 처리방침")
-        $0.showLinkButton()
+        $0.setLink("https://conet.notion.site/86061acd8cbe4b2ebfbdff96470b34d7?pvs=4")
     }
     
     // 다음 버튼
